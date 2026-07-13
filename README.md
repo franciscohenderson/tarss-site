@@ -16,11 +16,18 @@ Landing page para ofrecer:
 - `scripts.js`
 
 ## Sitio público
-El sitio ya está desplegado en Cloudflare Pages:
+El sitio ya está desplegado en Cloudflare Pages y listo para promoción:
 - https://tarss-site.pages.dev/
-- Página de contacto: https://tarss-site.pages.dev/contacto
-- Página de gracias: https://tarss-site.pages.dev/gracias
-- Página 404: https://tarss-site.pages.dev/404
+- Contacto directo: https://tarss-site.pages.dev/contacto
+- Gracias: https://tarss-site.pages.dev/gracias
+- 404 personalizada: https://tarss-site.pages.dev/404
+
+## Dominio personalizado
+Si querés usar un dominio propio, agregá el dominio en Cloudflare Pages y configura un registro CNAME que apunte a `tarss-site.pages.dev`.
+
+## SEO básico
+- Cada página incluye `meta description`, `og:title`, `og:description`, `og:url` y `canonical`.
+- Cambia los textos y meta tags según tu oferta real para mejorar la visibilidad.
 
 ## Blog
 El sitio incluye una página de blog con ideas de contenido para atraer clientes y mostrar tu experiencia.

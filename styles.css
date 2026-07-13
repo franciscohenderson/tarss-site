@@ -531,11 +531,32 @@ a {
   z-index: 1;
 }
 
-.card a {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: #72d6ff;
+.promo-card {
+  background: rgba(20, 24, 44, 0.95);
+  border: 1px solid rgba(114, 214, 255, 0.18);
+  border-radius: 28px;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: 0 34px 120px rgba(114, 214, 255, 0.14);
+  max-width: 840px;
+  margin: 0 auto;
+}
+
+.promo-card h2 {
+  margin-bottom: 1rem;
+  font-size: clamp(2rem, 2.5vw, 2.75rem);
+}
+
+.promo-card p {
+  margin: 0 auto 1.5rem;
+  color: var(--text-muted);
+  max-width: 700px;
+}
+
+.promo-card .button {
+  padding: 1rem 2.25rem;
+}
+
   font-weight: 700;
   transition: color 0.2s ease, transform 0.2s ease;
 }

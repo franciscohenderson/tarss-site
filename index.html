@@ -3,10 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Tarss ofrece sitios web, mantenimiento digital, redes sociales y asesoría para pymes y emprendedores." />
+  <meta name="description" content="Tarss crea sitios web, soporte digital y marketing para emprendedores que quieren vender más y crecer rápido." />
+  <meta name="keywords" content="sitios web, mantenimiento web, marketing digital, redes sociales, pymes, emprendedores" />
   <meta name="theme-color" content="#07070d" />
   <meta property="og:title" content="Tarss | Soluciones Digitales" />
-  <meta property="og:description" content="Tarss ofrece sitios web, mantenimiento digital, redes sociales y asesoría para pymes y emprendedores." />
+  <link rel="canonical" href="https://tarss-site.pages.dev/" />
+  <meta property="og:description" content="Tarss crea sitios web, soporte digital y marketing para emprendedores que quieren vender más online." />
   <meta property="og:image" content="favicon.svg" />
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="es_ES" />
@@ -38,8 +40,8 @@
   <header id="inicio" class="hero">
     <div class="container">
       <p class="eyebrow">Tarss</p>
-      <h1>Convierto visitas en clientes con sitios web, soporte y marketing digital moderno.</h1>
-      <p class="hero-text">Diseño de sitios web, mantenimiento técnico, gestión de redes sociales y asesoría digital para emprendedores y pymes.</p>
+      <h1>Creo sitios web de venta para emprendedores que quieren crecer online.</h1>
+      <p class="hero-text">Lanzá tu presencia digital con un sitio rápido, claro y optimizado para convertir clientes. Oferta inicial desde USD 149.</p>
       <div class="hero-actions">
         <a class="button" href="mailto:Franciscohenderson456@gmail.com">Cotizar ahora</a>
         <a class="button button-alt" href="https://wa.me/5492617459362" target="_blank" rel="noopener noreferrer">WhatsApp</a>
@@ -95,16 +97,24 @@
       <div class="grid">
         <article class="card">
           <h3>Pack inicial</h3>
-          <p>Landing page simple + contacto directo.</p>
+          <p>Landing page de venta en 1-2 secciones, con formulario y WhatsApp directo.</p>
         </article>
         <article class="card">
           <h3>Pack recomendado</h3>
-          <p>Sitio completo + soporte mensual básico.</p>
+          <p>Sitio de 3-5 páginas + soporte básico + optimización móvil y velocidad.</p>
         </article>
         <article class="card">
           <h3>Pack full</h3>
-          <p>Web + redes + asesoría personalizada.</p>
+          <p>Web completa + blog + gestión de redes + asesoría para tu estrategia digital.</p>
         </article>
+      </div>
+    </section>
+
+    <section class="section container">
+      <div class="promo-card">
+        <h2>Oferta de lanzamiento</h2>
+        <p>Primera web profesional desde USD 149 para emprendedores que quieren empezar rápido. Incluye diseño, formulario, WhatsApp y soporte inicial.</p>
+        <a class="button button-alt" href="contacto.html">Aprovechar oferta</a>
       </div>
     </section>
 
@@ -156,15 +166,18 @@
     <section id="contacto" class="section cta-section">
       <div class="container cta-box">
         <h2>Contáctame</h2>
-        <p>Escríbeme a <a href="mailto:Franciscohenderson456@gmail.com">Franciscohenderson456@gmail.com</a> o completa el formulario.</p>
-        <form action="https://formspree.io/f/your-form-id" method="POST" class="contact-form">
+        <p>Escríbeme a <a href="mailto:Franciscohenderson456@gmail.com">Franciscohenderson456@gmail.com</a> o envía tu consulta directo por el formulario.</p>
+        <form action="https://formspree.io/f/xojgqzdb" method="POST" class="contact-form">
+          <input type="hidden" name="_subject" value="Nuevo mensaje desde Tarss" />
+          <input type="hidden" name="_language" value="es" />
+          <input type="hidden" name="_next" value="https://tarss-site.pages.dev/gracias" />
           <label>
             Nombre
             <input type="text" name="name" required />
           </label>
           <label>
             Email
-            <input type="email" name="email" required />
+            <input type="email" name="_replyto" required />
           </label>
           <label>
             Mensaje
