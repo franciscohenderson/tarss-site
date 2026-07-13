@@ -80,3 +80,11 @@ El menú superior funciona en mobile con un botón hamburguesa para abrir y cerr
 - Ajusta los textos y servicios según tu oferta real.
 - Cambia el email por tu correo si lo deseas.
 - Agrega más casos de éxito y un portafolio real.
+
+## Mensajes para compartir
+- WhatsApp:
+  "Hola, soy [Nombre] y quiero un sitio web para mi negocio de [tipo de negocio]. Busco una web que venda más y tenga contacto directo por WhatsApp. ¿Podés enviarme una propuesta?"
+- Publicación para redes:
+  "Lanzá tu web profesional con Tarss. Diseño rápido, optimizado para ventas y desde USD 149. Contacto directo por WhatsApp."
+- Mensaje corto:
+  "¿Querés una web que convierta? Tarss hace sitios modernos para emprendedores y responde en menos de 24 horas."

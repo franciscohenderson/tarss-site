@@ -64,8 +64,11 @@ if (topbar) {
 }
 
 if (contactForm && contactStatus) {
+  const submitButton = contactForm.querySelector('button[type="submit"]');
+
   contactForm.addEventListener('submit', async (event) => {
     event.preventDefault();
+    if (submitButton) submitButton.disabled = true;
     contactStatus.textContent = 'Enviando mensaje...';
 
     const formData = new FormData(contactForm);
@@ -81,12 +84,17 @@ if (contactForm && contactStatus) {
       if (response.ok) {
         contactStatus.textContent = 'Gracias. Tu mensaje fue enviado correctamente.';
         contactForm.reset();
+        setTimeout(() => {
+          window.location.href = 'https://tarss-site.pages.dev/gracias';
+        }, 900);
       } else {
         const data = await response.json();
         contactStatus.textContent = data?.error || 'Hubo un problema. Intenta de nuevo.';
+        if (submitButton) submitButton.disabled = false;
       }
     } catch (error) {
       contactStatus.textContent = 'Error al enviar. Verifica tu conexión o intenta más tarde.';
+      if (submitButton) submitButton.disabled = false;
     }
   });
 }
