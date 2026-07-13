@@ -84,7 +84,20 @@ El menú superior funciona en mobile con un botón hamburguesa para abrir y cerr
 ## Mensajes para compartir
 - WhatsApp:
   "Hola, soy [Nombre] y quiero un sitio web para mi negocio de [tipo de negocio]. Busco una web que venda más y tenga contacto directo por WhatsApp. ¿Podés enviarme una propuesta?"
+- Email comercial:
+  Asunto: Necesito una web que venda más
+
+  Hola,
+
+  Estoy buscando un diseñador web para mi negocio de [tipo de negocio]. Necesito una página clara, rápida y enfocada en convertir clientes. Mi presupuesto aproximado es [presupuesto].
+
+  ¿Podés enviarme una propuesta con tiempos y precio?
+
+  Gracias,
+  [Nombre]
 - Publicación para redes:
   "Lanzá tu web profesional con Tarss. Diseño rápido, optimizado para ventas y desde USD 149. Contacto directo por WhatsApp."
+- Mensaje para Instagram/Facebook:
+  "¿Querés una web que convierta? Tarss hace sitios modernos para emprendedores, entrega rápido y responde en menos de 24 horas."
 - Mensaje corto:
-  "¿Querés una web que convierta? Tarss hace sitios modernos para emprendedores y responde en menos de 24 horas."
+  "Diseño web desde USD 149 para emprendedores que quieren vender más online. Contacto rápido por WhatsApp."

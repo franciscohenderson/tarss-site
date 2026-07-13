@@ -82,11 +82,11 @@ if (contactForm && contactStatus) {
       });
 
       if (response.ok) {
-        contactStatus.textContent = 'Gracias. Tu mensaje fue enviado correctamente.';
+        contactStatus.textContent = 'Gracias. Tu mensaje fue enviado correctamente. Te redirijo a la página de confirmación...';
         contactForm.reset();
         setTimeout(() => {
           window.location.href = 'https://tarss-site.pages.dev/gracias';
-        }, 900);
+        }, 1200);
       } else {
         const data = await response.json();
         contactStatus.textContent = data?.error || 'Hubo un problema. Intenta de nuevo.';
