@@ -1,0 +1,27 @@
+# Template wrangler.toml — fill values before using with Cloudflare Workers
+# This file is optional. Use it if you want to pair Cloudflare Pages with a Worker.
+
+name = "tarss-site-worker"
+main = "./worker/index.js"
+# Change to your account id when you want to publish:
+account_id = "<YOUR_ACCOUNT_ID>"
+workers_dev = false
+compatibility_date = "2026-07-13"
+
+[site]
+bucket = "public"
+# If your Pages site is the root of the repo, change bucket to "."
+# Example: bucket = "."
+
+[build]
+command = ""
+
+# Routes example (uncomment and adapt if you use Workers for routing)
+# [[routes]]
+# pattern = "example.com/*"
+# script = "tarss-site-worker"
+
+# To publish with Wrangler:
+# 1. Install Wrangler: `npm i -g wrangler` or use `npm run` script.
+# 2. Run `wrangler login` and set your account.
+# 3. Update `account_id` and `main` as needed, then `wrangler publish`.
