@@ -376,6 +376,99 @@ function initRunawayButton() {
 }
 
 /* --------------------------------------------------------------------------
+   Micro-interacciones con el mouse (spotlight + botones magnéticos)
+   --------------------------------------------------------------------------
+   Solo tienen sentido con un mouse real: `(hover: hover) and (pointer: fine)`
+   es verdadero en compu con mouse/trackpad y falso en celulares y tablets
+   (el dedo no "pasa por encima"). En táctil no se registra ningún listener.
+
+   Patrón de rendimiento que usan las dos: pointermove puede dispararse más
+   de 100 veces por segundo, pero la pantalla se dibuja ~60. En vez de tocar
+   el DOM en cada evento, guardamos el último evento y agendamos UN solo
+   cálculo con requestAnimationFrame (se ejecuta justo antes del próximo
+   dibujado). Si llegan 3 eventos entre dos cuadros, se calcula una sola vez
+   con el más reciente.
+   -------------------------------------------------------------------------- */
+const hasFinePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+// Envuelve un handler para que corra como máximo una vez por cuadro.
+function rafThrottle(handler) {
+  let frame = null;
+  let lastEvent = null;
+  return (event) => {
+    lastEvent = event;
+    if (frame) return; // ya hay un cálculo agendado para este cuadro
+    frame = requestAnimationFrame(() => {
+      frame = null;
+      handler(lastEvent);
+    });
+  };
+}
+
+/* 1. Spotlight: un brillo circular que sigue al cursor dentro de la tarjeta.
+   El JS solo publica la posición del mouse como variables CSS
+   (--mouse-x / --mouse-y, relativas a la esquina de la tarjeta) y el CSS
+   dibuja el radial-gradient en ese punto (ver .has-spotlight::after). */
+function initSpotlightCards() {
+  if (!hasFinePointer) return;
+
+  document.querySelectorAll('.card, .case-card, .cta-box').forEach((card) => {
+    card.classList.add('has-spotlight'); // activa los estilos del efecto
+
+    card.addEventListener('pointermove', rafThrottle((event) => {
+      // clientX/Y es la posición en la ventana; restando el borde de la
+      // tarjeta obtenemos la posición DENTRO de ella.
+      const rect = card.getBoundingClientRect();
+      card.style.setProperty('--mouse-x', `${event.clientX - rect.left}px`);
+      card.style.setProperty('--mouse-y', `${event.clientY - rect.top}px`);
+    }));
+  });
+}
+
+/* 2. Botones magnéticos: mientras el cursor está encima, el botón se corre
+   hacia él (como si lo atrajera), hasta MAX_PULL px. Al salir vuelve a su
+   lugar con la transición elástica del CSS.
+   El JS NO escribe `transform` directo (pisaría el efecto de :hover): solo
+   actualiza --mag-x / --mag-y y el CSS los combina con la elevación. */
+function initMagneticButtons() {
+  if (!hasFinePointer || prefersReducedMotion) return;
+
+  const MAX_PULL = 12;  // px de desplazamiento máximo
+  const STRENGTH = 0.3; // qué fracción de la distancia al centro se sigue
+
+  // .runaway-button (404) ya se mueve solo: si también fuera magnético, los
+  // dos efectos se pelearían por el mismo transform.
+  document.querySelectorAll('.button:not(.button-small):not(.runaway-button)').forEach((button) => {
+    const clamp = (value) => Math.max(-MAX_PULL, Math.min(MAX_PULL, value));
+
+    button.addEventListener('pointermove', rafThrottle((event) => {
+      if (button.getAttribute('aria-disabled') === 'true') return;
+      // getBoundingClientRect da la posición YA corrida por el efecto. Hay
+      // que restarle el corrimiento para medir desde el lugar original (si
+      // no, el botón "perseguiría" su propio movimiento). Ojo: mientras la
+      // transición elástica está en curso, el corrimiento REAL no es el valor
+      // final de --mag-x sino uno intermedio. getComputedStyle(...).transform
+      // devuelve ese valor real del instante como matriz; m41/m42 son sus
+      // desplazamientos X/Y. (El scale del hover no mueve el centro.)
+      const rect = button.getBoundingClientRect();
+      const matrix = new DOMMatrixReadOnly(getComputedStyle(button).transform);
+      const centerX = rect.left + rect.width / 2 - matrix.m41;
+      const centerY = rect.top + rect.height / 2 - matrix.m42;
+
+      button.style.setProperty('--mag-x', `${clamp((event.clientX - centerX) * STRENGTH)}px`);
+      button.style.setProperty('--mag-y', `${clamp((event.clientY - centerY) * STRENGTH)}px`);
+    }));
+
+    // pointerleave: el cursor salió -> volvemos a 0 y la transición elástica
+    // (cubic-bezier con rebote) lo devuelve a su lugar.
+    button.addEventListener('pointerleave', () => {
+      button.style.setProperty('--mag-x', '0px');
+      button.style.setProperty('--mag-y', '0px');
+    });
+  });
+}
+
+/* --------------------------------------------------------------------------
    5. Scroll reveal con IntersectionObserver (ya existía; mejorado)
    --------------------------------------------------------------------------
    IntersectionObserver le pide al navegador: "avisame cuando este elemento
@@ -554,5 +647,7 @@ initThemeToggle();
 initTypewriter();
 initQuoteCalculator();
 initRunawayButton();
+initSpotlightCards();
+initMagneticButtons();
 initScrollReveal();
 initContactForm();

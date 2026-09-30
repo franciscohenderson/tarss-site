@@ -132,6 +132,26 @@
     </div>
   </header>
 
+  <!-- Cinta infinita (CSS puro, ver .marquee-* en styles.css). Hay dos copias
+       idénticas de la lista para que el loop no tenga corte; la segunda lleva
+       aria-hidden="true" para que los lectores de pantalla la lean una sola vez. -->
+  <div class="marquee-container" role="region" aria-label="Por qué elegir Tars 2.0">
+    <ul class="marquee-group">
+      <li>✨ Sitios Ultra Rápidos</li>
+      <li>📱 100% Adaptables</li>
+      <li>🚀 Optimización SEO</li>
+      <li>🔒 Seguros</li>
+      <li>📈 Enfocados en Ventas</li>
+    </ul>
+    <ul class="marquee-group" aria-hidden="true">
+      <li>✨ Sitios Ultra Rápidos</li>
+      <li>📱 100% Adaptables</li>
+      <li>🚀 Optimización SEO</li>
+      <li>🔒 Seguros</li>
+      <li>📈 Enfocados en Ventas</li>
+    </ul>
+  </div>
+
   <main id="main-content" role="main">
     <section id="servicios" class="section container">
       <h2>Servicios</h2>
