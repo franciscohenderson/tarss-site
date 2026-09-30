@@ -81,6 +81,7 @@ a {
 .brand {
   font-size: 1.25rem;
   font-weight: 800;
+  white-space: nowrap;
   letter-spacing: 0.22em;
   text-transform: uppercase;
   background: linear-gradient(120deg, #72d6ff, #c48bff 60%, #f9faff);

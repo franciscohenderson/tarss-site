@@ -1,4 +1,4 @@
-# Tarss — Soluciones Digitales
+# Tars 2.0 — Soluciones Digitales
 
 Landing page para ofrecer:
 - creación de sitios web
