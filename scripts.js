@@ -14,6 +14,46 @@
 
 const WHATSAPP_NUMBER = '5492617459362';
 
+/* --------------------------------------------------------------------------
+   Medición (Google Tag Manager)
+   --------------------------------------------------------------------------
+   GTM lee una lista global llamada dataLayer: cada objeto con `event` que se
+   agrega ahí es un "evento" que en tagmanager.google.com se puede usar como
+   activador (ej. "cuando llegue generate_lead, disparar la conversión de
+   Google Ads / el Lead del píxel de Meta").
+   `window.dataLayer = window.dataLayer || []` crea la lista si GTM todavía no
+   cargó (o si un bloqueador de anuncios lo frenó): el sitio nunca se rompe
+   por la medición.
+   Eventos que manda el sitio:
+     generate_lead   formulario de contacto enviado con éxito
+     quote_request   clic en "Solicitar este presupuesto" del cotizador
+     whatsapp_click  clic en cualquier otro link de WhatsApp
+     email_click     clic en un link de mail
+   -------------------------------------------------------------------------- */
+function trackEvent(event, params = {}) {
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({ event, ...params });
+}
+
+/* Delegación de eventos a nivel documento: un solo listener cubre todos los
+   links de WhatsApp y mail de la página (menú, botón flotante, footer...).
+   closest('a') sube desde el elemento clickeado hasta el <a> que lo contiene
+   (el clic puede caer en un <span> dentro del link). */
+function initLinkTracking() {
+  document.addEventListener('click', (event) => {
+    const link = event.target.closest('a[href]');
+    if (!link) return;
+    const href = link.getAttribute('href');
+
+    // El botón del cotizador ya manda su propio evento (quote_request).
+    if (href.includes('wa.me/') && !link.matches('#quote-request')) {
+      trackEvent('whatsapp_click', { link_text: link.textContent.trim().slice(0, 60), page_path: location.pathname });
+    } else if (href.startsWith('mailto:')) {
+      trackEvent('email_click', { page_path: location.pathname });
+    }
+  });
+}
+
 /* Lo usan varios módulos: si la persona pidió "reducir movimiento" en su
    sistema operativo, apagamos las animaciones que no son esenciales. */
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -289,7 +329,19 @@ function initQuoteCalculator() {
   // Un <a> sin href no navega, pero igual bloqueamos el clic por las dudas
   // (y el submit del form con Enter no tiene que recargar la página).
   requestButton.addEventListener('click', (event) => {
-    if (requestButton.getAttribute('aria-disabled') === 'true') event.preventDefault();
+    if (requestButton.getAttribute('aria-disabled') === 'true') {
+      event.preventDefault();
+      return;
+    }
+    // Evento para GTM: qué servicios y cuánto (value = pagos únicos, en USD;
+    // el mensual va aparte para no mezclar importes de distinta naturaleza).
+    const services = selectedServices();
+    trackEvent('quote_request', {
+      currency: 'USD',
+      value: services.filter((s) => !s.monthly).reduce((sum, s) => sum + s.price, 0),
+      monthly_value: services.filter((s) => s.monthly).reduce((sum, s) => sum + s.price, 0),
+      services: services.map((s) => s.name).join(', '),
+    });
   });
   form.addEventListener('submit', (event) => event.preventDefault());
 
@@ -615,6 +667,9 @@ function initContactForm() {
       if (response.ok) {
         showToast('¡Mensaje enviado! Te llevo a la confirmación...', { type: 'success' });
         contactForm.reset();
+        // Conversión para GTM. Los 2 segundos antes de ir a gracias.html
+        // también le dan tiempo a las etiquetas de GTM a dispararse.
+        trackEvent('generate_lead', { form_id: 'contacto', page_path: location.pathname });
         // 2 segundos para que se lea el toast y después a gracias.html.
         // Esa página es la que cuenta la conversión: ahí van los píxeles
         // de Google Ads / Meta.
@@ -643,6 +698,7 @@ function initContactForm() {
 
 /* Arranque: cada init revisa si su parte existe en esta página. */
 initNavigation();
+initLinkTracking();
 initThemeToggle();
 initTypewriter();
 initQuoteCalculator();
