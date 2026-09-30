@@ -1,12 +1,76 @@
+/* ==========================================================================
+   Paleta de colores (tema claro / oscuro)
+   --------------------------------------------------------------------------
+   :root = tema CLARO. [data-theme="dark"] = tema OSCURO (el look original).
+   El atributo data-theme lo pone en <html> el script chiquito del <head> de
+   cada página (antes de pintar, así no hay "destello") y lo cambia el botón
+   de tema (ver initThemeToggle en scripts.js).
+   Todo color del sitio sale de estas variables: para retocar un tema, se
+   cambia acá y no en cada regla.
+   ========================================================================== */
 :root {
+  color-scheme: light;
+  --bg: #f5f7fc;
+  --page-bg: radial-gradient(circle at top left, rgba(114, 214, 255, 0.22), transparent 22%),
+    radial-gradient(circle at 20% 80%, rgba(166, 124, 255, 0.14), transparent 24%),
+    linear-gradient(180deg, #f7f9ff 0%, #eaeef9 100%);
+  --bg-alt: #eaeef8;
+  --surface: rgba(255, 255, 255, 0.92);
+  --surface-strong: rgba(255, 255, 255, 0.97);
+  --surface-muted: #f0f3fa;
+  --input-bg: #ffffff;
+  --input-bg-focus: #ffffff;
+  --topbar-bg: linear-gradient(180deg, rgba(247, 249, 255, 0.96), rgba(247, 249, 255, 0.86));
+  --topbar-bg-scrolled: rgba(247, 249, 255, 0.98);
+  --menu-bg: rgba(247, 249, 255, 0.99);
+  --hero-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.85) 0%, rgba(240, 244, 253, 0.9) 100%);
+  --hero-title-gradient: linear-gradient(90deg, #101428, #1d4f8f, #5b35b0);
+  --hero-title-shadow: none;
+  --brand-gradient: linear-gradient(120deg, #0a8fd1, #7b4de0 60%, #1b1f3b);
+  --text: #141a33;
+  --text-muted: #4a5578;
+  --border: rgba(20, 26, 51, 0.12);
+  --border-soft: rgba(20, 26, 51, 0.08);
+  --accent: #0a7fb5;
+  --accent-alt: #7b4de0;
+  --button-bg: linear-gradient(135deg, #72d6ff 0%, #a67cff 100%);
+  --button-text: #07070d;
+  --button-alt: rgba(20, 26, 51, 0.05);
+  --button-alt-border: rgba(20, 26, 51, 0.16);
+  --button-alt-hover: rgba(20, 26, 51, 0.09);
+  --shadow: 0 30px 80px rgba(30, 40, 90, 0.12);
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
   --bg: #07070d;
+  --page-bg: radial-gradient(circle at top left, rgba(114, 214, 255, 0.16), transparent 18%),
+    radial-gradient(circle at 20% 80%, rgba(166, 124, 255, 0.14), transparent 20%),
+    linear-gradient(180deg, #07070d 0%, #0f1120 100%);
   --bg-alt: rgba(16, 16, 28, 0.95);
+  --surface: rgba(20, 24, 44, 0.92);
+  --surface-strong: rgba(20, 24, 44, 0.95);
+  --surface-muted: #111111;
+  --input-bg: rgba(12, 14, 26, 0.96);
+  --input-bg-focus: rgba(16, 19, 40, 0.98);
+  --topbar-bg: linear-gradient(180deg, rgba(7, 7, 13, 0.96), rgba(7, 7, 13, 0.82));
+  --topbar-bg-scrolled: rgba(5, 7, 15, 0.96);
+  --menu-bg: rgba(0, 0, 0, 0.98);
+  --hero-bg: linear-gradient(180deg, rgba(10, 12, 25, 0.96) 0%, rgba(10, 12, 25, 0.95) 100%);
+  --hero-title-gradient: linear-gradient(90deg, #ffffff, #c6e8ff, #d4b4ff);
+  --hero-title-shadow: 0 18px 30px rgba(0, 0, 0, 0.25);
+  --brand-gradient: linear-gradient(120deg, #72d6ff, #c48bff 60%, #f9faff);
   --text: #f4f7ff;
   --text-muted: #b8c2ff;
   --border: rgba(255, 255, 255, 0.12);
+  --border-soft: rgba(255, 255, 255, 0.08);
+  --accent: #72d6ff;
+  --accent-alt: #a67cff;
   --button-bg: linear-gradient(135deg, #72d6ff 0%, #a67cff 100%);
   --button-text: #07070d;
   --button-alt: rgba(255, 255, 255, 0.08);
+  --button-alt-border: rgba(255, 255, 255, 0.14);
+  --button-alt-hover: rgba(255, 255, 255, 0.12);
   --shadow: 0 35px 120px rgba(0, 0, 0, 0.35);
 }
 
@@ -23,15 +87,15 @@ html {
 
 body {
   font-family: Inter, system-ui, sans-serif;
-  background: radial-gradient(circle at top left, rgba(114, 214, 255, 0.16), transparent 18%),
-    radial-gradient(circle at 20% 80%, rgba(166, 124, 255, 0.14), transparent 20%),
-    linear-gradient(180deg, #07070d 0%, #0f1120 100%);
+  background: var(--page-bg);
+  background-color: var(--bg);
   background-attachment: fixed;
   color: var(--text);
   line-height: 1.7;
   min-height: 100vh;
   padding-top: 72px;
   overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 body::before {
@@ -56,16 +120,16 @@ a {
 .topbar {
   position: fixed;
   inset: 0 0 auto 0;
-  background: linear-gradient(180deg, rgba(7, 7, 13, 0.96), rgba(7, 7, 13, 0.82));
+  background: var(--topbar-bg);
   backdrop-filter: blur(18px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid var(--border-soft);
   z-index: 50;
   box-shadow: 0 28px 70px rgba(0, 0, 0, 0.2);
   transition: background 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
 }
 
 .topbar.scrolled {
-  background: rgba(5, 7, 15, 0.96);
+  background: var(--topbar-bg-scrolled);
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.28);
   border-bottom-color: rgba(114, 214, 255, 0.12);
 }
@@ -84,10 +148,42 @@ a {
   white-space: nowrap;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  background: linear-gradient(120deg, #72d6ff, #c48bff 60%, #f9faff);
+  background: var(--brand-gradient);
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
+}
+
+/* Botón de tema + hamburguesa van juntos. En escritorio, `order` los manda
+   al final de la barra (después de los links); en celular quedan a la derecha
+   del logo. */
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  order: 3;
+}
+
+.theme-toggle {
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  border: 1px solid var(--button-alt-border);
+  background: var(--button-alt);
+  color: var(--text);
+  font-size: 1.15rem;
+  line-height: 1;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease;
+}
+
+.theme-toggle:hover {
+  background: var(--button-alt-hover);
+  border-color: rgba(114, 214, 255, 0.4);
+  transform: rotate(-15deg);
 }
 
 .nav-toggle {
@@ -132,6 +228,7 @@ a {
   flex-wrap: wrap;
   gap: 1rem;
   align-items: center;
+  margin-left: auto;
 }
 
 .nav-links a,
@@ -142,15 +239,9 @@ a {
 
 .nav-links a:hover,
 .nav-links .button-small:hover {
-  color: #72d6ff;
+  color: var(--accent);
   transform: translateY(-1px);
   opacity: 1;
-}
-
-.nav-links a:hover,
-.nav-links .button-small:hover {
-  color: #72d6ff;
-  transform: translateY(-1px);
 }
 
 .nav-open .nav-links {
@@ -167,11 +258,11 @@ a {
     top: 100%;
     left: 0;
     right: 0;
-    background: rgba(0, 0, 0, 0.98);
+    background: var(--menu-bg);
     flex-direction: column;
     align-items: stretch;
     padding: 1rem 1.25rem 1.5rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid var(--border-soft);
     display: none;
   }
 
@@ -206,8 +297,8 @@ a {
 
 .hero {
   padding: 5rem 0 4rem;
-  background: linear-gradient(180deg, rgba(10, 12, 25, 0.96) 0%, rgba(10, 12, 25, 0.95) 100%);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--hero-bg);
+  border-bottom: 1px solid var(--border-soft);
   position: relative;
   overflow: hidden;
 }
@@ -237,10 +328,36 @@ a {
 .hero h1 {
   position: relative;
   z-index: 1;
-  background: linear-gradient(90deg, #ffffff, #c6e8ff, #d4b4ff);
+  background: var(--hero-title-gradient);
   -webkit-background-clip: text;
+  background-clip: text;
   color: transparent;
-  text-shadow: 0 18px 30px rgba(0, 0, 0, 0.25);
+  text-shadow: var(--hero-title-shadow);
+}
+
+/* --- Efecto máquina de escribir (index.html) ------------------------------
+   La palabra que rota va en su propia línea (display: block + min-height):
+   así el título no cambia de alto mientras se escribe/borra y el resto de la
+   página no "salta". El cursor es un ::after con color propio, porque el h1
+   tiene color: transparent (el texto se pinta con el gradiente). */
+.typewriter {
+  display: block;
+  min-height: 1.2em;
+}
+
+.typewriter::after {
+  content: "";
+  display: inline-block;
+  width: 0.08em;
+  height: 0.9em;
+  margin-left: 0.08em;
+  vertical-align: -0.08em;
+  background: var(--accent);
+  animation: caretBlink 1s steps(1) infinite;
+}
+
+@keyframes caretBlink {
+  50% { opacity: 0; }
 }
 
 .hero-small {
@@ -389,17 +506,20 @@ a {
 }
 
 :focus-visible {
-  outline: 3px solid #72d6ff;
+  outline: 3px solid var(--accent);
   outline-offset: 4px;
 }
 
+/* color: var(--text) -- antes heredaba el texto oscuro de .button y en el
+   tema oscuro el botón alternativo (ej. "WhatsApp") casi no se leía. */
 .button-alt {
   background: var(--button-alt);
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: var(--text);
+  border: 1px solid var(--button-alt-border);
 }
 
 .button-alt:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--button-alt-hover);
   border-color: rgba(114, 214, 255, 0.3);
 }
 
@@ -413,10 +533,17 @@ a {
   background-position: 100% 0;
 }
 
+/* --- Scroll reveal (initScrollReveal en scripts.js) -----------------------
+   Estado inicial: invisible y 30px más abajo. Cuando el elemento entra en
+   pantalla, JS le agrega .reveal-active y la transición lo lleva a su lugar.
+   --reveal-delay (lo calcula JS) escalona las tarjetas de una misma grilla
+   para que aparezcan una detrás de otra en vez de todas juntas.
+   La clase .reveal la pone JS: sin JS, nada queda oculto. */
 .reveal {
   opacity: 0;
   transform: translateY(30px);
   transition: opacity 0.8s ease, transform 0.8s ease;
+  transition-delay: var(--reveal-delay, 0ms);
   will-change: opacity, transform;
 }
 
@@ -445,8 +572,8 @@ a {
 
 .dark-section {
   background: var(--bg-alt);
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid var(--border-soft);
+  border-bottom: 1px solid var(--border-soft);
 }
 
 @keyframes driftSection {
@@ -482,8 +609,8 @@ a {
 .feature,
 .case-card,
 .cta-box {
-  background: rgba(20, 24, 44, 0.92);
-  border: 1px solid rgba(255, 255, 255, 0.09);
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 22px;
   padding: 1.75rem;
   backdrop-filter: blur(12px);
@@ -535,7 +662,7 @@ a {
   margin: 0.75rem 0 0.25rem;
   font-size: 2rem;
   font-weight: 800;
-  color: #72d6ff;
+  color: var(--accent);
   position: relative;
   z-index: 1;
 }
@@ -553,7 +680,7 @@ a {
 }
 
 .promo-card {
-  background: rgba(20, 24, 44, 0.95);
+  background: var(--surface-strong);
   border: 1px solid rgba(114, 214, 255, 0.18);
   border-radius: 28px;
   padding: 2rem;
@@ -578,12 +705,19 @@ a {
   padding: 1rem 2.25rem;
 }
 
+/* Este bloque había perdido su selector (quedaban `font-weight` y
+   `transition` sueltos, que el navegador ignoraba). */
+.card a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--accent);
   font-weight: 700;
   transition: color 0.2s ease, transform 0.2s ease;
 }
 
 .card a:hover {
-  color: #a67cff;
+  color: var(--accent-alt);
   transform: translateX(3px);
 }
 
@@ -594,7 +728,7 @@ a {
 }
 
 .how-section {
-  background: #111111;
+  background: var(--surface-muted);
   border: 1px solid var(--border);
   border-radius: 18px;
   padding: 2rem;
@@ -638,19 +772,14 @@ a {
   text-align: left;
 }
 
+/* Antes los labels arrancaban con opacity: 0 SIEMPRE: si el JS no cargaba,
+   el formulario quedaba sin etiquetas visibles. Ahora el ocultamiento inicial
+   lo da .reveal, que solo existe si el JS corrió. */
 label {
   display: grid;
   gap: 0.5rem;
   color: var(--text);
   font-weight: 600;
-  opacity: 0;
-  transform: translateY(18px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
-}
-
-label.reveal-active {
-  opacity: 1;
-  transform: translateY(0);
 }
 
 input,
@@ -658,8 +787,8 @@ textarea {
   width: 100%;
   padding: 1rem;
   border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(12, 14, 26, 0.96);
+  border: 1px solid var(--border);
+  background: var(--input-bg);
   color: var(--text);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
   transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, transform 0.2s ease;
@@ -675,14 +804,14 @@ textarea:focus {
   outline: none;
   border-color: rgba(114, 214, 255, 0.7);
   box-shadow: 0 0 0 4px rgba(114, 214, 255, 0.1);
-  background: rgba(16, 19, 40, 0.98);
+  background: var(--input-bg-focus);
 }
 
 input:focus-visible,
 textarea:focus-visible,
 button:focus-visible,
 a:focus-visible {
-  outline: 3px solid #72d6ff;
+  outline: 3px solid var(--accent);
   outline-offset: 4px;
 }
 
@@ -700,7 +829,7 @@ textarea {
 
 .footer {
   padding: 3rem 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid var(--border-soft);
   background: var(--bg-alt);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
 }
@@ -725,7 +854,7 @@ textarea {
 }
 
 #faq .card {
-  background: #111111;
+  background: var(--surface-muted);
   border: 1px solid var(--border);
 }
 
@@ -741,15 +870,157 @@ textarea {
 
 .status-message {
   margin-top: 1rem;
-  color: #d1e8ff;
+  color: var(--text-muted);
   font-size: 0.95rem;
   opacity: 0.95;
 }
 
+/* --- Cotizador (servicios.html, initQuoteCalculator en scripts.js) ------ */
+.quote-form {
+  display: grid;
+  gap: 1.5rem;
+  max-width: 720px;
+}
+
+.quote-options {
+  border: none;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.quote-options legend {
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+/* Cada opción es un <label> que envuelve al checkbox: toda la fila es
+   clickeable. :has() resalta la fila cuando su checkbox está marcado. */
+.quote-option {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--surface);
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+
+.quote-option:hover {
+  border-color: rgba(114, 214, 255, 0.45);
+  transform: translateY(-1px);
+}
+
+.quote-option:has(input:checked) {
+  border-color: var(--accent);
+  background: linear-gradient(135deg, rgba(114, 214, 255, 0.12), rgba(166, 124, 255, 0.1));
+}
+
+.quote-option input {
+  width: 1.25rem;
+  height: 1.25rem;
+  accent-color: var(--accent);
+  flex-shrink: 0;
+}
+
+.quote-option-name {
+  flex: 1;
+  font-weight: 600;
+}
+
+.quote-option-price {
+  font-weight: 800;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.quote-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  border-radius: 20px;
+  background: var(--surface-strong);
+  border: 1px solid rgba(114, 214, 255, 0.25);
+}
+
+.quote-total {
+  font-size: 1.1rem;
+}
+
+.quote-total output {
+  display: inline-block;
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--accent);
+  margin-left: 0.5rem;
+}
+
+/* "Pop" del total cada vez que cambia: JS saca y vuelve a poner la clase. */
+.quote-total output.bump {
+  animation: totalBump 0.35s ease;
+}
+
+@keyframes totalBump {
+  40% { transform: scale(1.12); }
+}
+
+.button[aria-disabled="true"] {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.quote-hint {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+/* --- Easter egg 404 (initRunawayButton en scripts.js) --------------------
+   El botón se mueve con transform (no top/left): no empuja al resto del
+   layout y la transición es suave. */
+.runaway-button {
+  position: relative;
+  z-index: 2;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.runaway-message {
+  min-height: 1.7em;
+  margin-top: 1.25rem;
+  color: var(--text-muted);
+}
+
+/* Quien pidió menos movimiento en su sistema no ve animaciones ni efectos
+   de aparición: todo queda visible y quieto. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 @media (max-width: 860px) {
   .nav-container {
-    flex-direction: column;
-    align-items: stretch;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .nav-actions {
+    order: 0;
   }
 
   .hero-actions,

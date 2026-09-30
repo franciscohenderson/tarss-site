@@ -3,6 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>
+    /* Aplica el tema ANTES de pintar la página (evita un destello del tema
+       equivocado): el guardado por el botón, o si no hay, el del sistema.
+       El botón y el resto de la lógica están en scripts.js (initThemeToggle). */
+    (function () {
+      var theme;
+      try { theme = localStorage.getItem('theme'); } catch (e) {}
+      if (theme !== 'light' && theme !== 'dark') {
+        theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
   <meta name="description" content="Tars 2.0 ofrece diseño web, soporte digital, redes sociales y asesoría clara para que tu negocio crezca en internet." />
   <meta name="keywords" content="diseño web, mantenimiento web, redes sociales, asesoría digital, pymes" />
   <meta name="theme-color" content="#07070d" />
@@ -28,11 +41,15 @@
   <nav class="topbar" role="navigation" aria-label="Menú principal">
     <div class="container nav-container">
       <a class="brand" href="index.html">Tars 2.0</a>
-      <button class="nav-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="primary-navigation"><span></span></button>
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Cambiar a modo oscuro" title="Modo oscuro"><span aria-hidden="true">🌙</span></button>
+        <button class="nav-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="primary-navigation"><span></span></button>
+      </div>
       <div class="nav-links" id="primary-navigation">
         <a href="index.html#servicios">Servicios</a>
         <a href="index.html#paquetes">Paquetes</a>
         <a href="index.html#casos">Casos</a>
+        <a href="#cotizador">Cotizador</a>
         <a href="blog.html">Blog</a>
         <a href="contacto.html">Contacto</a>
         <a class="button button-small" aria-current="page" href="servicios.html">Servicios detallados</a>
@@ -161,6 +178,42 @@
           </article>
         </div>
       </div>
+    </section>
+
+    <!-- Cotizador (initQuoteCalculator en scripts.js). Para cambiar un precio o sumar un
+         servicio alcanza con editar/copiar un <label class="quote-option">: el JS lee
+         value (nombre que va al WhatsApp) y data-price (precio en USD) de cada checkbox. -->
+    <section id="cotizador" class="section container">
+      <h2>Armá tu presupuesto</h2>
+      <p class="hero-text">Marcá lo que necesitás y mirá el total al instante. Después mandanos el presupuesto por WhatsApp con un clic.</p>
+      <form id="quote-form" class="quote-form">
+        <fieldset class="quote-options">
+          <legend>Servicios</legend>
+          <label class="quote-option">
+            <input type="checkbox" name="service" value="Landing Page" data-price="149" />
+            <span class="quote-option-name">Landing Page</span>
+            <span class="quote-option-price">USD 149</span>
+          </label>
+          <label class="quote-option">
+            <input type="checkbox" name="service" value="Mantenimiento" data-price="50" />
+            <span class="quote-option-name">Mantenimiento</span>
+            <span class="quote-option-price">USD 50</span>
+          </label>
+          <label class="quote-option">
+            <input type="checkbox" name="service" value="SEO Local" data-price="80" />
+            <span class="quote-option-name">SEO Local</span>
+            <span class="quote-option-price">USD 80</span>
+          </label>
+        </fieldset>
+
+        <div class="quote-summary">
+          <!-- <output> es el elemento semántico para "resultado de un cálculo";
+               aria-live="polite" hace que el lector de pantalla anuncie el total nuevo. -->
+          <p class="quote-total">Total: <output id="quote-total" aria-live="polite">USD 0</output></p>
+          <a id="quote-request" class="button" aria-disabled="true" target="_blank" rel="noopener noreferrer">Solicitar este presupuesto</a>
+        </div>
+        <p id="quote-hint" class="quote-hint">Elegí al menos un servicio para armar tu presupuesto.</p>
+      </form>
     </section>
 
     <section class="section cta-section">

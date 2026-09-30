@@ -3,6 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>
+    /* Aplica el tema ANTES de pintar la página (evita un destello del tema
+       equivocado): el guardado por el botón, o si no hay, el del sistema.
+       El botón y el resto de la lógica están en scripts.js (initThemeToggle). */
+    (function () {
+      var theme;
+      try { theme = localStorage.getItem('theme'); } catch (e) {}
+      if (theme !== 'light' && theme !== 'dark') {
+        theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
   <meta name="description" content="Tars 2.0 crea sitios web, soporte digital y marketing para emprendedores que quieren vender más y crecer rápido." />
   <meta name="keywords" content="sitios web, mantenimiento web, marketing digital, redes sociales, pymes, emprendedores" />
   <meta name="theme-color" content="#07070d" />
@@ -46,7 +59,10 @@
   <nav class="topbar" role="navigation" aria-label="Menú principal">
     <div class="container nav-container">
       <a class="brand" href="index.html">Tars 2.0</a>
-      <button class="nav-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="primary-navigation"><span></span></button>
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Cambiar a modo oscuro" title="Modo oscuro"><span aria-hidden="true">🌙</span></button>
+        <button class="nav-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="primary-navigation"><span></span></button>
+      </div>
       <div class="nav-links" id="primary-navigation">
         <a href="index.html#servicios">Servicios</a>
         <a href="index.html#paquetes">Paquetes</a>
@@ -63,7 +79,11 @@
   <header id="inicio" class="hero">
     <div class="container">
       <p class="eyebrow">Tars 2.0</p>
-      <h1>Creo sitios web de venta para emprendedores que quieren crecer online.</h1>
+      <!-- Typewriter: el span trae la 1ª palabra escrita (sin JS o para Google el título
+           igual tiene sentido) y data-words las palabras que rotan (initTypewriter en
+           scripts.js). El aria-label le da a los lectores de pantalla la frase completa y
+           fija, y aria-hidden evita que lean cada letra que se escribe o borra. -->
+      <h1 aria-label="Ayudamos a tu negocio a vender más, destacar online y automatizarse.">Ayudamos a tu negocio a: <span class="typewriter" aria-hidden="true" data-words='["vender más", "destacar online", "automatizarse"]'>vender más</span></h1>
       <p class="hero-text">Lanzá tu presencia digital con un sitio rápido, claro y optimizado para convertir clientes. Oferta inicial desde USD 149.</p>
       <div class="hero-actions">
         <a class="button" href="mailto:Franciscohenderson456@gmail.com">Cotizar ahora</a>

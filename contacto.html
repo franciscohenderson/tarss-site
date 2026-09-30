@@ -3,6 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>
+    /* Aplica el tema ANTES de pintar la página (evita un destello del tema
+       equivocado): el guardado por el botón, o si no hay, el del sistema.
+       El botón y el resto de la lógica están en scripts.js (initThemeToggle). */
+    (function () {
+      var theme;
+      try { theme = localStorage.getItem('theme'); } catch (e) {}
+      if (theme !== 'light' && theme !== 'dark') {
+        theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
   <meta name="description" content="Contacto Tars 2.0: envía un email o chatea por WhatsApp para pedir tu propuesta de sitio web y servicios digitales." />
   <meta name="theme-color" content="#07070d" />
   <meta property="og:title" content="Tars 2.0 | Contacto" />
@@ -27,7 +40,10 @@
   <nav class="topbar" role="navigation" aria-label="Menú principal">
     <div class="container nav-container">
       <a class="brand" href="index.html">Tars 2.0</a>
-      <button class="nav-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="primary-navigation"><span></span></button>
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Cambiar a modo oscuro" title="Modo oscuro"><span aria-hidden="true">🌙</span></button>
+        <button class="nav-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="primary-navigation"><span></span></button>
+      </div>
       <div class="nav-links" id="primary-navigation">
         <a href="index.html#servicios">Servicios</a>
         <a href="index.html#paquetes">Paquetes</a>

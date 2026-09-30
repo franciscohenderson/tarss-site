@@ -3,6 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>
+    /* Aplica el tema ANTES de pintar la página (evita un destello del tema
+       equivocado): el guardado por el botón, o si no hay, el del sistema.
+       El botón y el resto de la lógica están en scripts.js (initThemeToggle). */
+    (function () {
+      var theme;
+      try { theme = localStorage.getItem('theme'); } catch (e) {}
+      if (theme !== 'light' && theme !== 'dark') {
+        theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
   <meta name="description" content="Página no encontrada de Tars 2.0. Regresa al inicio o contáctame para tu proyecto digital." />
   <meta name="theme-color" content="#07070d" />
   <meta property="og:title" content="Tars 2.0 | 404 Página no encontrada" />
@@ -18,22 +31,25 @@
   <meta property="og:type" content="website" />
   <meta property="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@tarss" />
-  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
-  <link rel="apple-touch-icon" href="favicon.svg" />
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/favicon.svg" />
+  <link rel="stylesheet" href="/styles.css" />
   <title>Tars 2.0 | 404 Página no encontrada</title>
 </head>
 <body>
   <a class="skip-link" href="#main-content">Saltar al contenido</a>
   <nav class="topbar" role="navigation" aria-label="Menú principal">
     <div class="container nav-container">
-      <a class="brand" href="index.html">Tars 2.0</a>
-      <button class="nav-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="primary-navigation"><span></span></button>
+      <a class="brand" href="/">Tars 2.0</a>
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Cambiar a modo oscuro" title="Modo oscuro"><span aria-hidden="true">🌙</span></button>
+        <button class="nav-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="primary-navigation"><span></span></button>
+      </div>
       <div class="nav-links" id="primary-navigation">
-        <a href="index.html">Inicio</a>
-        <a href="servicios.html">Servicios</a>
-        <a href="blog.html">Blog</a>
-        <a href="contacto.html">Contacto</a>
+        <a href="/">Inicio</a>
+        <a href="/servicios">Servicios</a>
+        <a href="/blog">Blog</a>
+        <a href="/contacto">Contacto</a>
       </div>
     </div>
   </nav>
@@ -44,10 +60,15 @@
         <p class="eyebrow">404</p>
         <h1>Página no encontrada</h1>
         <p class="hero-text">Lo siento, la ruta que buscás no existe o fue movida. Volvé al inicio o escribime por WhatsApp.</p>
+        <!-- Easter egg (initRunawayButton en scripts.js): con mouse, "Volver al inicio"
+             se escapa 4 veces y después se deja clickear. Con dedo o teclado funciona normal.
+             Las rutas de esta página son absolutas (/, /styles.css...) porque Cloudflare la
+             muestra en CUALQUIER ruta inexistente, también en /algo/mas/profundo. -->
         <div class="hero-actions">
-          <a class="button" href="index.html">Inicio</a>
-          <a class="button button-alt" href="contacto.html">Contacto</a>
+          <a class="button runaway-button" href="/">Volver al inicio</a>
+          <a class="button button-alt" href="/contacto">Contacto</a>
         </div>
+        <p class="runaway-message" aria-live="polite"></p>
       </div>
     </section>
   </main>
@@ -64,13 +85,13 @@
       </div>
       <div>
         <h3>Enlaces</h3>
-        <p><a href="index.html">Inicio</a></p>
-        <p><a href="contacto.html">Contacto</a></p>
+        <p><a href="/">Inicio</a></p>
+        <p><a href="/contacto">Contacto</a></p>
       </div>
     </div>
   </footer>
 
   <a class="floating-contact" href="https://wa.me/5492617459362" target="_blank" rel="noopener noreferrer">WhatsApp</a>
-  <script src="scripts.js" defer></script>
+  <script src="/scripts.js" defer></script>
 </body>
 </html>
