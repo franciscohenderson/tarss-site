@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>
+    /* Aplica el tema ANTES de pintar la página (evita un destello del tema
+       equivocado): el que la persona eligió con el botón, o si nunca eligió,
+       OSCURO (el diseño principal). La lógica del botón: scripts.js (initThemeToggle). */
+    (function () {
+      var theme;
+      try { theme = localStorage.getItem('theme'); } catch (e) {}
+      document.documentElement.setAttribute('data-theme', theme === 'light' ? 'light' : 'dark');
+    })();
+  </script>
+  <!-- Google Tag Manager (GTM-WKXQ88DT): carga asíncrona, no frena la página.
+       Las etiquetas (Analytics, píxel de Meta, conversiones de Google Ads) se
+       configuran en tagmanager.google.com, no acá. Los eventos que manda el
+       sitio (generate_lead, quote_request, whatsapp_click, email_click) salen
+       de trackEvent() en scripts.js. -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-WKXQ88DT');</script>
+  <!-- End Google Tag Manager -->
+  <meta name="description" content="Política de privacidad de Tars 2.0: qué datos se recolectan en el sitio, para qué se usan y cómo ejercer tus derechos según la Ley 25.326." />
+  <meta name="theme-color" content="#07070d" />
+  <meta property="og:title" content="Tars 2.0 | Política de privacidad" />
+  <meta property="og:site_name" content="Tars 2.0" />
+  <link rel="canonical" href="https://tarss-site.pages.dev/privacidad" />
+  <meta property="og:description" content="Qué datos se recolectan en el sitio de Tars 2.0, para qué se usan y cómo ejercer tus derechos." />
+  <meta property="og:image" content="https://tarss-site.pages.dev/favicon.svg" />
+  <meta property="og:locale" content="es_ES" />
+  <meta property="og:url" content="https://tarss-site.pages.dev/privacidad" />
+  <meta property="og:type" content="website" />
+  <title>Tars 2.0 | Política de privacidad</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WKXQ88DT"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+  <a class="skip-link" href="#main-content">Saltar al contenido</a>
+  <nav class="topbar" role="navigation" aria-label="Menú principal">
+    <div class="container nav-container">
+      <a class="brand" href="index.html">Tars 2.0</a>
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="Cambiar a modo oscuro" title="Modo oscuro"><span aria-hidden="true">🌙</span></button>
+        <button class="nav-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="primary-navigation"><span></span></button>
+      </div>
+      <div class="nav-links" id="primary-navigation">
+        <a href="index.html">Inicio</a>
+        <a href="servicios.html">Servicios</a>
+        <a href="blog.html">Blog</a>
+        <a href="contacto.html">Contacto</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero hero-small">
+    <div class="container">
+      <p class="eyebrow">Legal</p>
+      <h1>Política de privacidad</h1>
+      <p class="hero-text">Qué datos se recolectan en este sitio, para qué los uso y cómo podés pedir que los corrija o los borre. Última actualización: 30 de septiembre de 2026.</p>
+    </div>
+  </header>
+
+  <main id="main-content" role="main">
+    <!-- Página de texto largo: .legal limita el ancho de línea para que se lea
+         cómodo (ver styles.css). Cada sección tiene id para poder enlazarla. -->
+    <section class="section container legal">
+      <h2 id="responsable">1. Quién es responsable de tus datos</h2>
+      <p>El responsable del tratamiento de los datos que se recolectan en <strong>tarss-site.pages.dev</strong> es <strong>Tars 2.0</strong>. Para cualquier consulta sobre esta política o sobre tus datos, escribime a <a href="mailto:Franciscohenderson456@gmail.com">Franciscohenderson456@gmail.com</a>.</p>
+
+      <h2 id="que-datos">2. Qué datos se recolectan</h2>
+      <h3>Datos que me das vos</h3>
+      <ul>
+        <li><strong>Formulario de contacto:</strong> nombre, email, y opcionalmente el nombre de tu empresa o negocio, un presupuesto aproximado y el mensaje que escribas.</li>
+        <li><strong>WhatsApp y email:</strong> si me escribís por esos medios, recibo los datos que incluyas en el mensaje y tu número o dirección.</li>
+        <li><strong>Cotizador:</strong> los servicios que elegís solo se usan para armar el mensaje de WhatsApp; no se guardan en el sitio.</li>
+      </ul>
+      <h3>Datos que se recolectan automáticamente</h3>
+      <ul>
+        <li><strong>Estadísticas de uso (Google Analytics 4, a través de Google Tag Manager):</strong> páginas visitadas, tiempo en el sitio, tipo de dispositivo y navegador, ubicación aproximada (país y ciudad, deducida de la conexión) y acciones como enviar el formulario, pedir un presupuesto o hacer clic en WhatsApp o en el email. Google Analytics usa cookies propias para distinguir visitas; no me da tu nombre ni tu email.</li>
+        <li><strong>Registros del servidor (Cloudflare):</strong> el proveedor que aloja el sitio registra datos técnicos de cada visita, como la dirección IP y el navegador, para funcionar y protegerse de ataques.</li>
+        <li><strong>Preferencia de tema:</strong> si elegís el modo claro u oscuro, esa elección se guarda en tu propio navegador (almacenamiento local). No se envía a ningún servidor.</li>
+      </ul>
+
+      <h2 id="para-que">3. Para qué los uso</h2>
+      <ul>
+        <li>Responder tus consultas y enviarte la propuesta o el presupuesto que pediste.</li>
+        <li>Entender cómo se usa el sitio (qué páginas sirven, desde dónde llegan las visitas) para mejorarlo.</li>
+        <li>Medir el resultado de la publicidad, si en algún momento la hago (por ejemplo, cuántas consultas llegan desde un anuncio).</li>
+      </ul>
+      <p>No vendo ni alquilo tus datos, y no los uso para nada distinto de lo que se describe acá.</p>
+
+      <h2 id="con-quien">4. Con quién se comparten</h2>
+      <p>Para que el sitio funcione se usan estos proveedores, que tratan los datos por cuenta mía y bajo sus propias políticas de privacidad:</p>
+      <ul>
+        <li><strong>Formspree</strong> (<a href="https://formspree.io/legal/privacy-policy" target="_blank" rel="noopener noreferrer">política</a>): recibe los mensajes del formulario y me los reenvía por email.</li>
+        <li><strong>Google</strong> (<a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">política</a>): Google Analytics y Google Tag Manager, para las estadísticas.</li>
+        <li><strong>Cloudflare</strong> (<a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener noreferrer">política</a>): aloja el sitio y lo protege.</li>
+        <li><strong>WhatsApp / Meta</strong> (<a href="https://www.whatsapp.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer">política</a>): solo si elegís escribirme por WhatsApp.</li>
+      </ul>
+      <p>Algunos de estos proveedores guardan los datos en servidores fuera de Argentina (principalmente en Estados Unidos). Al usar el formulario o el sitio, aceptás esa transferencia internacional, que se hace con proveedores que aplican medidas de seguridad reconocidas.</p>
+
+      <h2 id="cuanto-tiempo">5. Cuánto tiempo se guardan</h2>
+      <ul>
+        <li><strong>Consultas:</strong> mientras dure la conversación o el trabajo, y hasta 2 años después para poder retomar el contacto, salvo que me pidas antes que los borre.</li>
+        <li><strong>Estadísticas de Google Analytics:</strong> 2 meses (el plazo que Google aplica por defecto a los datos a nivel de visitante).</li>
+      </ul>
+
+      <h2 id="derechos">6. Tus derechos</h2>
+      <p>Según la Ley 25.326 de Protección de Datos Personales, podés pedirme en cualquier momento <strong>acceder</strong> a tus datos, <strong>corregirlos</strong>, <strong>actualizarlos</strong> o <strong>borrarlos</strong>. Escribime a <a href="mailto:Franciscohenderson456@gmail.com">Franciscohenderson456@gmail.com</a> y te respondo dentro de los plazos de la ley (10 días corridos para el acceso y 5 días hábiles para corrección o supresión).</p>
+      <p>Si no querés que Google Analytics registre tus visitas, podés usar el <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener noreferrer">complemento de inhabilitación de Google Analytics</a> o bloquear las cookies desde la configuración de tu navegador. El sitio funciona igual.</p>
+      <p class="legal-notice">El titular de los datos personales tiene la facultad de ejercer el derecho de acceso a los mismos en forma gratuita a intervalos no inferiores a seis meses, salvo que se acredite un interés legítimo al efecto conforme lo establecido en el artículo 14, inciso 3 de la Ley Nº 25.326.</p>
+      <p class="legal-notice">La AGENCIA DE ACCESO A LA INFORMACIÓN PÚBLICA, en su carácter de Órgano de Control de la Ley Nº 25.326, tiene la atribución de atender las denuncias y reclamos que interpongan quienes resulten afectados en sus derechos por incumplimiento de las normas vigentes en materia de protección de datos personales.</p>
+
+      <h2 id="seguridad">7. Seguridad</h2>
+      <p>El sitio funciona siempre con conexión cifrada (HTTPS) y los datos del formulario viajan cifrados hasta Formspree. Ningún sistema es 100% infalible, pero uso proveedores reconocidos y solo yo tengo acceso a las consultas.</p>
+
+      <h2 id="menores">8. Menores de edad</h2>
+      <p>Los servicios de este sitio están pensados para emprendedores y negocios. No recolecto a sabiendas datos de menores de 18 años; si sos madre, padre o tutor y creés que un menor me envió sus datos, escribime y los borro.</p>
+
+      <h2 id="cambios">9. Cambios en esta política</h2>
+      <p>Si cambio la forma en que uso tus datos (por ejemplo, si agrego nuevas herramientas de medición o publicidad), voy a actualizar esta página y la fecha de "Última actualización" de arriba.</p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div>
+        <p class="eyebrow">Tars 2.0</p>
+        <p>Soluciones digitales para emprendimientos y pequeños negocios.</p>
+      </div>
+      <div>
+        <h3>Contacto</h3>
+        <p><a href="mailto:Franciscohenderson456@gmail.com">Franciscohenderson456@gmail.com</a></p>
+      </div>
+      <div>
+        <h3>Enlaces</h3>
+        <p><a href="index.html">Inicio</a></p>
+        <p><a href="contacto.html">Contacto</a></p>
+      </div>
+    </div>
+    <p class="container footer-copy">© 2026 Tars 2.0. Todos los derechos reservados. · <a href="privacidad.html">Política de privacidad</a></p>
+  </footer>
+
+  <a class="floating-contact" href="https://wa.me/5492617459362" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+  <script src="scripts.js" defer></script>
+</body>
+</html>
