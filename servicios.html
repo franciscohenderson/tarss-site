@@ -5,15 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>
     /* Aplica el tema ANTES de pintar la página (evita un destello del tema
-       equivocado): el guardado por el botón, o si no hay, el del sistema.
-       El botón y el resto de la lógica están en scripts.js (initThemeToggle). */
+       equivocado): el que la persona eligió con el botón, o si nunca eligió,
+       OSCURO (el diseño principal). La lógica del botón: scripts.js (initThemeToggle). */
     (function () {
       var theme;
       try { theme = localStorage.getItem('theme'); } catch (e) {}
-      if (theme !== 'light' && theme !== 'dark') {
-        theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-      }
-      document.documentElement.setAttribute('data-theme', theme);
+      document.documentElement.setAttribute('data-theme', theme === 'light' ? 'light' : 'dark');
     })();
   </script>
   <meta name="description" content="Tars 2.0 ofrece diseño web, soporte digital, redes sociales y asesoría clara para que tu negocio crezca en internet." />
@@ -148,7 +145,7 @@
         <div class="grid">
           <article class="card price-card">
             <h3>🚀 Starter</h3>
-            <p class="price">USD 199</p>
+            <p class="price">USD 149</p>
             <p class="price-note">Ideal para nuevos proyectos y emprendedores.</p>
             <ul>
               <li>Landing page de una sección</li>
@@ -185,7 +182,7 @@
          value (nombre que va al WhatsApp) y data-price (precio en USD) de cada checkbox. -->
     <section id="cotizador" class="section container">
       <h2>Armá tu presupuesto</h2>
-      <p class="hero-text">Marcá lo que necesitás y mirá el total al instante. Después mandanos el presupuesto por WhatsApp con un clic.</p>
+      <p class="hero-text">Marcá lo que necesitás y mirá el total al instante. Después mandame el presupuesto por WhatsApp con un clic.</p>
       <form id="quote-form" class="quote-form">
         <fieldset class="quote-options">
           <legend>Servicios</legend>
@@ -195,9 +192,9 @@
             <span class="quote-option-price">USD 149</span>
           </label>
           <label class="quote-option">
-            <input type="checkbox" name="service" value="Mantenimiento" data-price="50" />
+            <input type="checkbox" name="service" value="Mantenimiento" data-price="50" data-billing="monthly" />
             <span class="quote-option-name">Mantenimiento</span>
-            <span class="quote-option-price">USD 50</span>
+            <span class="quote-option-price">USD 50 /mes</span>
           </label>
           <label class="quote-option">
             <input type="checkbox" name="service" value="SEO Local" data-price="80" />

@@ -5,15 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>
     /* Aplica el tema ANTES de pintar la página (evita un destello del tema
-       equivocado): el guardado por el botón, o si no hay, el del sistema.
-       El botón y el resto de la lógica están en scripts.js (initThemeToggle). */
+       equivocado): el que la persona eligió con el botón, o si nunca eligió,
+       OSCURO (el diseño principal). La lógica del botón: scripts.js (initThemeToggle). */
     (function () {
       var theme;
       try { theme = localStorage.getItem('theme'); } catch (e) {}
-      if (theme !== 'light' && theme !== 'dark') {
-        theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-      }
-      document.documentElement.setAttribute('data-theme', theme);
+      document.documentElement.setAttribute('data-theme', theme === 'light' ? 'light' : 'dark');
     })();
   </script>
   <meta name="description" content="Blog de Tars 2.0 con consejos rápidos para emprendedores que quieren mejorar su presencia digital." />

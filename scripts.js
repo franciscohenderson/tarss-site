@@ -66,10 +66,12 @@ function initNavigation() {
 /* --------------------------------------------------------------------------
    3. Modo claro / oscuro
    --------------------------------------------------------------------------
-   Cómo se decide el tema, en orden de prioridad:
+   Cómo se decide el tema:
      1. Lo que la persona eligió a mano con el botón (guardado en localStorage,
         que persiste entre páginas y visitas del mismo sitio).
-     2. Si nunca eligió: la preferencia de su sistema (prefers-color-scheme).
+     2. Si nunca eligió: OSCURO, el diseño principal de la marca. (A propósito
+        no se usa prefers-color-scheme: la primera impresión es siempre la
+        versión oscura.)
 
    El tema INICIAL no lo pone este archivo sino un <script> chiquito dentro
    del <head> de cada página. Motivo: este archivo corre al final (defer), y
@@ -120,9 +122,9 @@ function applyTheme(theme) {
 }
 
 function initThemeToggle() {
-  const systemDark = window.matchMedia('(prefers-color-scheme: dark)');
+  // Si por algún motivo el <head> no puso el atributo, vale el guardado o 'dark'.
   const currentTheme = () => document.documentElement.getAttribute('data-theme')
-    || (systemDark.matches ? 'dark' : 'light');
+    || getStoredTheme() || 'dark';
 
   // Sincroniza ícono y etiqueta del botón con el tema que puso el <head>.
   applyTheme(currentTheme());
@@ -131,14 +133,8 @@ function initThemeToggle() {
     button.addEventListener('click', () => {
       const next = currentTheme() === 'dark' ? 'light' : 'dark';
       applyTheme(next);
-      storeTheme(next); // elección manual: desde ahora manda sobre el sistema
+      storeTheme(next); // se recuerda para las próximas páginas y visitas
     });
-  });
-
-  // Si la persona cambia el tema de su sistema con la página abierta, lo
-  // seguimos... salvo que ya haya elegido a mano (eso tiene prioridad).
-  systemDark.addEventListener('change', (event) => {
-    if (!getStoredTheme()) applyTheme(event.matches ? 'dark' : 'light');
   });
 }
 
@@ -233,17 +229,28 @@ function initQuoteCalculator() {
     return Array.from(form.querySelectorAll('input[name="service"]:checked')).map((input) => ({
       name: input.value,
       price: Number(input.dataset.price) || 0,
+      // data-billing="monthly" marca los servicios que se cobran todos los
+      // meses (ej. Mantenimiento). Sin el atributo, es un pago único.
+      monthly: input.dataset.billing === 'monthly',
     }));
   }
 
-  function buildWhatsAppLink(services, total) {
-    const lines = services.map((s) => `• ${s.name}: ${formatUSD(s.price)}`);
+  // Un pago único y una cuota mensual no se pueden sumar en un solo número
+  // (USD 149 + USD 50/mes NO son "USD 199"): se muestran por separado.
+  function describeTotal(oneTime, monthly) {
+    if (oneTime && monthly) return `${formatUSD(oneTime)} + ${formatUSD(monthly)}/mes`;
+    if (monthly) return `${formatUSD(monthly)}/mes`;
+    return formatUSD(oneTime);
+  }
+
+  function buildWhatsAppLink(services, totalText) {
+    const lines = services.map((s) => `• ${s.name}: ${formatUSD(s.price)}${s.monthly ? '/mes' : ''}`);
     const message = [
       '¡Hola! Quiero solicitar este presupuesto de Tars 2.0:',
       '',
       ...lines,
       '',
-      `Total estimado: ${formatUSD(total)}`,
+      `Total estimado: ${totalText}`,
     ].join('\n');
     // encodeURIComponent convierte espacios, tildes, saltos de línea y
     // emojis a un formato válido dentro de una URL (ej. espacio -> %20).
@@ -253,9 +260,12 @@ function initQuoteCalculator() {
   function update() {
     const services = selectedServices();
     // reduce "acumula": arranca en 0 y le suma el precio de cada servicio.
-    const total = services.reduce((sum, s) => sum + s.price, 0);
+    // Se hace dos veces: una con los pagos únicos y otra con los mensuales.
+    const oneTime = services.filter((s) => !s.monthly).reduce((sum, s) => sum + s.price, 0);
+    const monthly = services.filter((s) => s.monthly).reduce((sum, s) => sum + s.price, 0);
+    const totalText = describeTotal(oneTime, monthly);
 
-    totalOutput.textContent = formatUSD(total);
+    totalOutput.textContent = totalText;
     // Truco para re-disparar una animación CSS: sacar la clase, forzar al
     // navegador a recalcular el layout (leer offsetWidth) y volver a ponerla.
     totalOutput.classList.remove('bump');
@@ -269,7 +279,7 @@ function initQuoteCalculator() {
     } else {
       const plural = services.length > 1 ? 's' : '';
       requestButton.removeAttribute('aria-disabled');
-      requestButton.href = buildWhatsAppLink(services, total);
+      requestButton.href = buildWhatsAppLink(services, totalText);
       hint.textContent = `${services.length} servicio${plural} seleccionado${plural}.`;
     }
   }
@@ -415,41 +425,113 @@ function initScrollReveal() {
 }
 
 /* --------------------------------------------------------------------------
-   Formulario de contacto (ya existía): envío a Formspree sin recargar.
+   Notificaciones toast
+   --------------------------------------------------------------------------
+   showToast('Texto', { type: 'success' | 'error' | 'info', duration: 4000 })
+
+   - El contenedor (.toast-region) se crea la primera vez que hace falta y se
+     reutiliza: cualquier página puede mostrar toasts sin tocar su HTML.
+   - role="status" + aria-live="polite": los lectores de pantalla anuncian el
+     mensaje sin interrumpir lo que la persona está haciendo.
+   - Mostrar/ocultar = poner/sacar la clase .is-visible; la transición CSS
+     hace la animación. Recién cuando TERMINA la transición de salida
+     (evento 'transitionend') se borra el elemento del DOM.
+   - duration: 0 = no se oculta solo (lo usamos para "Enviando..." y después
+     lo cerramos a mano con el objeto que devuelve la función).
+   -------------------------------------------------------------------------- */
+const TOAST_ICONS = { success: '✅', error: '⚠️', info: '⏳' };
+
+function getToastRegion() {
+  let region = document.querySelector('.toast-region');
+  if (!region) {
+    region = document.createElement('div');
+    region.className = 'toast-region';
+    region.setAttribute('role', 'status');
+    region.setAttribute('aria-live', 'polite');
+    document.body.appendChild(region);
+  }
+  return region;
+}
+
+function showToast(message, { type = 'info', duration = 4000 } = {}) {
+  const toast = document.createElement('div');
+  toast.className = `toast toast--${type}`;
+
+  // textContent (no innerHTML): el mensaje nunca se interpreta como HTML,
+  // así un texto que venga de afuera (ej. un error del servidor) no puede
+  // inyectar código en la página.
+  const icon = document.createElement('span');
+  icon.className = 'toast-icon';
+  icon.setAttribute('aria-hidden', 'true');
+  icon.textContent = TOAST_ICONS[type] || '';
+  const text = document.createElement('span');
+  text.textContent = message;
+  toast.append(icon, text);
+
+  getToastRegion().appendChild(toast);
+
+  // requestAnimationFrame: esperamos a que el navegador pinte el toast en su
+  // estado inicial (invisible) antes de agregar .is-visible. Si se agregara
+  // en el mismo instante, no habría "antes" y la transición no se vería.
+  requestAnimationFrame(() => toast.classList.add('is-visible'));
+
+  let hideTimer = null;
+  const hide = () => {
+    clearTimeout(hideTimer);
+    toast.classList.remove('is-visible');
+    // { once: true } borra el listener después de ejecutarse una vez. El
+    // setTimeout es un respaldo por si la transición no llega a dispararse
+    // (ej. con "reducir movimiento" activado).
+    toast.addEventListener('transitionend', () => toast.remove(), { once: true });
+    setTimeout(() => toast.remove(), 600);
+  };
+
+  if (duration > 0) hideTimer = setTimeout(hide, duration);
+  return { hide };
+}
+
+/* --------------------------------------------------------------------------
+   Formulario de contacto: envío a Formspree sin recargar la página.
+   fetch() manda el formulario "por detrás" (AJAX) y, según la respuesta,
+   mostramos un toast de éxito o de error. Sin JS, el formulario se envía de
+   la forma clásica y Formspree redirige a /gracias (campo oculto _next).
    -------------------------------------------------------------------------- */
 function initContactForm() {
   const contactForm = document.querySelector('#contact-form');
-  const contactStatus = document.querySelector('#contact-status');
-  if (!contactForm || !contactStatus) return;
+  if (!contactForm) return;
 
   const submitButton = contactForm.querySelector('button[type="submit"]');
 
   contactForm.addEventListener('submit', async (event) => {
-    event.preventDefault();
-    if (submitButton) submitButton.disabled = true;
-    contactStatus.textContent = 'Enviando mensaje...';
+    event.preventDefault(); // frena el envío clásico (que recargaría la página)
+    if (submitButton) submitButton.disabled = true; // evita doble envío
+    const sending = showToast('Enviando tu mensaje...', { type: 'info', duration: 0 });
 
+    // FormData junta todos los campos del form (incluidos los ocultos).
     const formData = new FormData(contactForm);
     try {
       const response = await fetch(contactForm.action, {
         method: 'POST',
         body: formData,
+        // Con este header Formspree responde JSON en vez de redirigir.
         headers: { Accept: 'application/json' },
       });
+      sending.hide();
 
       if (response.ok) {
-        contactStatus.textContent = 'Gracias. Tu mensaje fue enviado correctamente. Te redirijo a la página de confirmación...';
+        showToast('¡Mensaje enviado! Te respondo en menos de 24 horas.', { type: 'success' });
         contactForm.reset();
-        setTimeout(() => {
-          window.location.href = 'https://tarss-site.pages.dev/gracias';
-        }, 1200);
       } else {
-        const data = await response.json();
-        contactStatus.textContent = data?.error || 'Hubo un problema. Intenta de nuevo.';
-        if (submitButton) submitButton.disabled = false;
+        // .catch(() => null): si la respuesta de error no es JSON, no rompemos.
+        const data = await response.json().catch(() => null);
+        showToast(data?.error || 'Hubo un problema al enviar. Probá de nuevo.', { type: 'error' });
       }
     } catch (error) {
-      contactStatus.textContent = 'Error al enviar. Verifica tu conexión o intenta más tarde.';
+      // fetch solo "falla" así si no hubo conexión (no por un error 4xx/5xx).
+      sending.hide();
+      showToast('No se pudo enviar. Revisá tu conexión e intentá de nuevo.', { type: 'error' });
+    } finally {
+      // finally corre siempre, haya salido bien o mal.
       if (submitButton) submitButton.disabled = false;
     }
   });

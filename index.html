@@ -5,15 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>
     /* Aplica el tema ANTES de pintar la página (evita un destello del tema
-       equivocado): el guardado por el botón, o si no hay, el del sistema.
-       El botón y el resto de la lógica están en scripts.js (initThemeToggle). */
+       equivocado): el que la persona eligió con el botón, o si nunca eligió,
+       OSCURO (el diseño principal). La lógica del botón: scripts.js (initThemeToggle). */
     (function () {
       var theme;
       try { theme = localStorage.getItem('theme'); } catch (e) {}
-      if (theme !== 'light' && theme !== 'dark') {
-        theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-      }
-      document.documentElement.setAttribute('data-theme', theme);
+      document.documentElement.setAttribute('data-theme', theme === 'light' ? 'light' : 'dark');
     })();
   </script>
   <meta name="description" content="Tars 2.0 crea sitios web, soporte digital y marketing para emprendedores que quieren vender más y crecer rápido." />
@@ -34,19 +31,62 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "LocalBusiness",
+    "@type": "ProfessionalService",
     "name": "Tars 2.0",
-    "description": "Tars 2.0 crea sitios web y marketing digital para emprendedores que quieren vender más online.",
+    "description": "Desarrollo de sitios web de alta conversión para emprendedores y pequeños negocios: landing pages, mantenimiento, SEO local y asesoría digital.",
     "url": "https://tarss-site.pages.dev/",
+    "logo": "https://tarss-site.pages.dev/favicon.svg",
     "telephone": "+5492617459362",
     "email": "Franciscohenderson456@gmail.com",
+    "priceRange": "USD 149 - USD 599",
+    "currenciesAccepted": "USD",
+    "areaServed": "AR",
     "address": {
       "@type": "PostalAddress",
       "addressCountry": "AR"
     },
     "sameAs": [
       "https://wa.me/5492617459362"
-    ]
+    ],
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Servicios",
+      "itemListElement": [
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Landing Page"
+          },
+          "price": "149",
+          "priceCurrency": "USD"
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Mantenimiento web mensual"
+          },
+          "price": "50",
+          "priceCurrency": "USD",
+          "priceSpecification": {
+            "@type": "UnitPriceSpecification",
+            "price": "50",
+            "priceCurrency": "USD",
+            "unitCode": "MON"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "SEO Local"
+          },
+          "price": "80",
+          "priceCurrency": "USD"
+        }
+      ]
+    }
   }
   </script>
   <meta name="twitter:site" content="@tarss" />
@@ -83,7 +123,7 @@
            igual tiene sentido) y data-words las palabras que rotan (initTypewriter en
            scripts.js). El aria-label le da a los lectores de pantalla la frase completa y
            fija, y aria-hidden evita que lean cada letra que se escribe o borra. -->
-      <h1 aria-label="Ayudamos a tu negocio a vender más, destacar online y automatizarse.">Ayudamos a tu negocio a: <span class="typewriter" aria-hidden="true" data-words='["vender más", "destacar online", "automatizarse"]'>vender más</span></h1>
+      <h1 aria-label="Ayudo a tu negocio a vender más, destacar online y automatizarse.">Ayudo a tu negocio a: <span class="typewriter" aria-hidden="true" data-words='["vender más", "destacar online", "automatizarse"]'>vender más</span></h1>
       <p class="hero-text">Lanzá tu presencia digital con un sitio rápido, claro y optimizado para convertir clientes. Oferta inicial desde USD 149.</p>
       <div class="hero-actions">
         <a class="button" href="mailto:Franciscohenderson456@gmail.com">Cotizar ahora</a>
@@ -200,7 +240,7 @@
           </article>
           <article class="card">
             <h3>¿Puedo cambiar algo después de entregar el sitio?</h3>
-            <p>Sí, hacemos ajustes rápidos y también ofrezco paquetes de mantenimiento para cambios continuos.</p>
+            <p>Sí, hago ajustes rápidos y también ofrezco paquetes de mantenimiento para cambios continuos.</p>
           </article>
           <article class="card">
             <h3>¿Vale la pena invertir en una web ahora?</h3>
