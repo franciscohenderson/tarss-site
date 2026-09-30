@@ -41,6 +41,9 @@
   --button-alt-border: rgba(255, 255, 255, 0.14);
   --button-alt-hover: rgba(255, 255, 255, 0.12);
   --shadow: 0 35px 120px rgba(0, 0, 0, 0.35);
+  --selection-text: #07070d;
+  --scrollbar-thumb: rgba(114, 214, 255, 0.35);
+  --scrollbar-thumb-hover: rgba(114, 214, 255, 0.65);
 }
 
 [data-theme="light"] {
@@ -74,6 +77,9 @@
   --button-alt-border: rgba(20, 26, 51, 0.16);
   --button-alt-hover: rgba(20, 26, 51, 0.09);
   --shadow: 0 30px 80px rgba(30, 40, 90, 0.12);
+  --selection-text: #ffffff;
+  --scrollbar-thumb: rgba(10, 127, 181, 0.35);
+  --scrollbar-thumb-hover: rgba(10, 127, 181, 0.6);
 }
 
 * {
@@ -410,8 +416,12 @@ a {
   font-size: 0.9rem;
 }
 
+/* Tipografía fluida: clamp(mínimo, preferido, máximo). El valor preferido
+   mezcla vw (crece con el ancho de pantalla) con rem (base fija), así escala
+   parejo del celular al monitor grande sin saltos por media queries. */
 .hero h1 {
-  font-size: clamp(2.5rem, 4vw, 4rem);
+  font-size: clamp(2.5rem, 5vw + 1rem, 4.5rem);
+  line-height: 1.15;
   max-width: 800px;
   margin-bottom: 1.2rem;
 }
@@ -492,6 +502,25 @@ a {
   opacity: 0.95;
 }
 
+/* Hover premium del botón principal: además de elevarse, "se enciende" con
+   un halo de los dos colores del gradiente de la marca (celeste arriba,
+   violeta abajo) y un filo de luz de 1px. El botón alternativo y el
+   deshabilitado quedan afuera. */
+.button:not(.button-alt):not([aria-disabled="true"]):hover,
+.button-small:not(.button-alt):hover {
+  box-shadow:
+    0 0 0 1px rgba(114, 214, 255, 0.45),
+    0 10px 30px -6px rgba(114, 214, 255, 0.55),
+    0 18px 50px -10px rgba(166, 124, 255, 0.55);
+}
+
+/* Los botones del inicio tienen una animación de sombra infinita
+   (glowPulse); una animación le gana a :hover, así que se pausa mientras el
+   mouse está encima para que se vea el halo. */
+.hero .button:hover {
+  animation: none;
+}
+
 .skip-link {
   position: absolute;
   top: -999px;
@@ -507,9 +536,24 @@ a {
   top: 1rem;
 }
 
+/* --- Foco visible (navegación con teclado) --------------------------------
+   :focus-visible solo aparece al navegar con teclado (Tab), no al hacer clic
+   con el mouse: el anillo no molesta a quien usa mouse y es claro para quien
+   usa teclado. El outline sigue el border-radius del elemento (botones
+   redondos -> anillo redondo); a los links de texto se les da un radio chico
+   para que el anillo no quede con esquinas filosas. */
 :focus-visible {
-  outline: 3px solid var(--accent);
+  outline: 2px solid var(--accent);
   outline-offset: 4px;
+}
+
+a:not(.button):not(.button-small):focus-visible {
+  border-radius: 6px;
+}
+
+input:focus-visible,
+textarea:focus-visible {
+  outline-offset: 2px;
 }
 
 /* color: var(--text) -- antes heredaba el texto oscuro de .button y en el
@@ -584,7 +628,8 @@ a {
 }
 
 .section h2 {
-  font-size: clamp(2rem, 3vw, 2.75rem);
+  font-size: clamp(1.9rem, 2.5vw + 1rem, 2.9rem);
+  line-height: 1.2;
   margin-bottom: 1.5rem;
   letter-spacing: 0.03em;
   position: relative;
@@ -694,7 +739,7 @@ a {
 
 .promo-card h2 {
   margin-bottom: 1rem;
-  font-size: clamp(2rem, 2.5vw, 2.75rem);
+  font-size: clamp(1.9rem, 2.5vw + 1rem, 2.9rem);
 }
 
 .promo-card p {
@@ -809,13 +854,6 @@ textarea:focus {
   background: var(--input-bg-focus);
 }
 
-input:focus-visible,
-textarea:focus-visible,
-button:focus-visible,
-a:focus-visible {
-  outline: 3px solid var(--accent);
-  outline-offset: 4px;
-}
 
 textarea {
   resize: vertical;
@@ -844,6 +882,14 @@ textarea {
 
 .footer a {
   color: var(--text);
+}
+
+.footer-copy {
+  margin-top: 2rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border-soft);
+  color: var(--text-muted);
+  font-size: 0.875rem;
 }
 
 .faq-list {
@@ -1186,3 +1232,61 @@ textarea {
 
 .toast--success { border-left-color: #25d366; }
 .toast--error { border-left-color: #ff5c7a; }
+
+/* ==========================================================================
+   Selección de texto
+   --------------------------------------------------------------------------
+   Al resaltar texto, el fondo es el acento de la marca. --selection-text
+   cambia por tema para que el contraste sea suficiente en los dos (texto
+   oscuro sobre celeste en oscuro, blanco sobre azul en claro). El h1 y el
+   logo pintan su texto con un gradiente (color: transparent): hay que darles
+   un color de relleno propio al seleccionarlos, si no el texto desaparece.
+   ========================================================================== */
+::selection {
+  background: var(--accent);
+  color: var(--selection-text);
+}
+
+.hero h1::selection,
+.hero h1 *::selection,
+.brand::selection {
+  -webkit-text-fill-color: var(--selection-text);
+}
+
+/* ==========================================================================
+   Barra de scroll fina
+   --------------------------------------------------------------------------
+   Chrome/Edge/Safari usan los pseudo-elementos ::-webkit-scrollbar. Firefox
+   solo entiende las propiedades estándar (scrollbar-width/scrollbar-color);
+   van dentro de @supports not selector(::-webkit-scrollbar) porque, desde
+   Chrome 121, si un elemento tiene scrollbar-color, Chrome IGNORA los
+   ::-webkit-scrollbar y dibuja la barra estándar. Los colores salen de
+   variables, así que se adaptan solos al tema.
+   ========================================================================== */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box; /* el borde transparente la hace verse más fina */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+  background-clip: padding-box;
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) transparent;
+  }
+}

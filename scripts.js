@@ -506,6 +506,7 @@ function initContactForm() {
     event.preventDefault(); // frena el envío clásico (que recargaría la página)
     if (submitButton) submitButton.disabled = true; // evita doble envío
     const sending = showToast('Enviando tu mensaje...', { type: 'info', duration: 0 });
+    let redirecting = false;
 
     // FormData junta todos los campos del form (incluidos los ocultos).
     const formData = new FormData(contactForm);
@@ -519,8 +520,15 @@ function initContactForm() {
       sending.hide();
 
       if (response.ok) {
-        showToast('¡Mensaje enviado! Te respondo en menos de 24 horas.', { type: 'success' });
+        showToast('¡Mensaje enviado! Te llevo a la confirmación...', { type: 'success' });
         contactForm.reset();
+        // 2 segundos para que se lea el toast y después a gracias.html.
+        // Esa página es la que cuenta la conversión: ahí van los píxeles
+        // de Google Ads / Meta.
+        redirecting = true;
+        setTimeout(() => {
+          window.location.href = 'gracias.html';
+        }, 2000);
       } else {
         // .catch(() => null): si la respuesta de error no es JSON, no rompemos.
         const data = await response.json().catch(() => null);
@@ -531,8 +539,11 @@ function initContactForm() {
       sending.hide();
       showToast('No se pudo enviar. Revisá tu conexión e intentá de nuevo.', { type: 'error' });
     } finally {
-      // finally corre siempre, haya salido bien o mal.
-      if (submitButton) submitButton.disabled = false;
+      // finally corre SIEMPRE, haya salido bien o mal (incluso si hubiera un
+      // return dentro del try). Si nos estamos yendo a gracias.html dejamos
+      // el botón deshabilitado: así nadie manda el formulario dos veces
+      // durante esos 2 segundos.
+      if (submitButton && !redirecting) submitButton.disabled = false;
     }
   });
 }
