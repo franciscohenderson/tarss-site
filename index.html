@@ -8,7 +8,7 @@
   <script>
     /* Aplica el tema ANTES de pintar la página (evita un destello del tema
        equivocado): el que la persona eligió con el botón, o si nunca eligió,
-       OSCURO (el diseño principal). La lógica del botón: scripts.js (initThemeToggle). */
+       OSCURO (el diseño principal). La lógica del botón: riso.js (initThemeToggle). */
     (function () {
       var theme;
       try { theme = localStorage.getItem('theme'); } catch (e) {}
@@ -19,7 +19,7 @@
        Las etiquetas (Analytics, píxel de Meta, conversiones de Google Ads) se
        configuran en tagmanager.google.com, no acá. Los eventos que manda el
        sitio (generate_lead, quote_request, whatsapp_click, email_click) salen
-       de trackEvent() en scripts.js. -->
+       de trackEvent() en riso.js. -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
   new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
   j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=

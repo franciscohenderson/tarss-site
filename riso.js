@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Tars 2.0 — «Imprenta Riso» (comportamiento de index.html)
+   Tars 2.0 — «Imprenta Riso» (comportamiento de todo el sitio)
    --------------------------------------------------------------------------
    Módulos (cada init revisa si su parte existe en la página):
    1. Medición para Google Tag Manager (mismos eventos que antes).
@@ -8,6 +8,8 @@
    4. Motor de scroll: desregistro riso, cinta y afiches. Un solo rAF.
    5. Botones magnéticos con resorte (solo mouse).
    6. Registradora: ticket, contador mecánico y talón flotante.
+   7-8. Avisos (toasts) y formulario de contacto por fetch (contacto.html).
+   9. Easter egg del botón que se escapa (404.html).
    ========================================================================== */
 
 const WHATSAPP_NUMBER = '5492617459362';
@@ -158,6 +160,7 @@ function initRisoEngine() {
   }
 
   function updatePosters() {
+    if (posters.length === 0) return; // páginas sin afiches
     // Los afiches se fijan en «top» (0 en escritorio, 64px bajo la barra en
     // celular): el recorrido útil es desde el borde de abajo hasta ahí.
     const stick = parseFloat(getComputedStyle(posters[0]).top) || 0;
@@ -462,6 +465,149 @@ function initRegister() {
   render(false); // estado inicial (el navegador puede recordar teclas marcadas)
 }
 
+/* --- 7. Avisos (toasts) ----------------------------------------------------
+   Arriba al centro; la región es role="status" para que los lectores de
+   pantalla lean el mensaje. textContent (nunca innerHTML): un error que venga
+   del servidor no puede inyectar HTML. */
+function getToastRegion() {
+  let region = document.querySelector('.toast-region');
+  if (!region) {
+    region = document.createElement('div');
+    region.className = 'toast-region';
+    region.setAttribute('role', 'status');
+    region.setAttribute('aria-live', 'polite');
+    document.body.appendChild(region);
+  }
+  return region;
+}
+
+function showToast(message, { type = 'info', duration = 4000 } = {}) {
+  const toast = document.createElement('div');
+  toast.className = `toast toast--${type}`;
+  const icon = document.createElement('span');
+  icon.className = 'toast-icon';
+  icon.setAttribute('aria-hidden', 'true');
+  const text = document.createElement('span');
+  text.textContent = message;
+  toast.append(icon, text);
+  getToastRegion().appendChild(toast);
+  requestAnimationFrame(() => toast.classList.add('is-visible'));
+
+  let hideTimer = 0;
+  const hide = () => {
+    clearTimeout(hideTimer);
+    toast.classList.remove('is-visible');
+    toast.addEventListener('transitionend', () => toast.remove(), { once: true });
+    setTimeout(() => toast.remove(), 600); // respaldo si no hay transición
+  };
+  if (duration > 0) hideTimer = setTimeout(hide, duration);
+  return { hide };
+}
+
+/* --- 8. Formulario de contacto (contacto.html) -----------------------------
+   Se envía a Formspree por detrás (fetch) y se avisa con un toast. Sin JS,
+   el formulario se envía de la forma clásica y Formspree redirige a gracias
+   (campo oculto _next). gracias.html es la que cuenta la conversión. */
+function initContactForm() {
+  const form = document.querySelector('#contact-form');
+  if (!form) return;
+  const submit = form.querySelector('button[type="submit"]');
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (submit) submit.disabled = true; // evita doble envío
+    const sending = showToast('Enviando tu mensaje...', { type: 'info', duration: 0 });
+    let redirecting = false;
+
+    try {
+      const response = await fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { Accept: 'application/json' }, // Formspree responde JSON
+      });
+      sending.hide();
+
+      if (response.ok) {
+        showToast('¡Mensaje enviado! Te llevo a la confirmación...', { type: 'success' });
+        form.reset();
+        trackEvent('generate_lead', { form_id: 'contacto', page_path: location.pathname });
+        redirecting = true;
+        setTimeout(() => { window.location.href = 'gracias.html'; }, 2000);
+      } else {
+        const data = await response.json().catch(() => null);
+        showToast(data?.error || 'Hubo un problema al enviar. Probá de nuevo.', { type: 'error' });
+      }
+    } catch (error) {
+      sending.hide();
+      showToast('No se pudo enviar. Revisá tu conexión e intentá de nuevo.', { type: 'error' });
+    } finally {
+      if (submit && !redirecting) submit.disabled = false;
+    }
+  });
+}
+
+/* --- 9. Easter egg de la 404 -----------------------------------------------
+   Con MOUSE, «Volver al inicio» se escapa 4 veces y después se deja
+   clickear. Con dedo o teclado funciona normal (un botón que se mueve al
+   tocarlo sería imposible de usar). Con «reducir movimiento», no se mueve. */
+function initRunawayButton() {
+  const button = document.querySelector('.runaway-button');
+  if (!button) return;
+
+  const area = button.closest('.page-hero') || document.body;
+  const message = document.querySelector('.runaway-message');
+  const MAX_ESCAPES = 4;
+  const MIN_DISTANCE = 160;
+  const EDGE = 16;
+  const taunts = [
+    'Uy, casi 😏',
+    '¿Seguro que querés volver? 🙃',
+    'Un intento más...',
+    'Bueno, está bien, me rindo. Hacé clic 😅',
+  ];
+  let escapes = 0;
+  let offsetX = 0;
+  let offsetY = 0;
+
+  button.style.transition = 'transform 450ms cubic-bezier(0.34, 1.56, 0.64, 1)';
+
+  button.addEventListener('pointerenter', (event) => {
+    if (event.pointerType !== 'mouse' || escapes >= MAX_ESCAPES || prefersReducedMotion) return;
+
+    const areaRect = area.getBoundingClientRect();
+    const rect = button.getBoundingClientRect();
+    const baseLeft = rect.left - offsetX;
+    const baseTop = rect.top - offsetY;
+    const minX = areaRect.left + EDGE - baseLeft;
+    const maxX = areaRect.right - EDGE - rect.width - baseLeft;
+    const minY = areaRect.top + EDGE - baseTop;
+    const maxY = areaRect.bottom - EDGE - rect.height - baseTop;
+
+    // Varios lugares al azar: el primero lejos del cursor (o el más lejano).
+    let best = { x: offsetX, y: offsetY, distance: -1 };
+    for (let i = 0; i < 20; i += 1) {
+      const x = minX + Math.random() * Math.max(0, maxX - minX);
+      const y = minY + Math.random() * Math.max(0, maxY - minY);
+      const distance = Math.hypot(baseLeft + x + rect.width / 2 - event.clientX, baseTop + y + rect.height / 2 - event.clientY);
+      if (distance > best.distance) best = { x, y, distance };
+      if (distance >= MIN_DISTANCE) break;
+    }
+
+    offsetX = best.x;
+    offsetY = best.y;
+    button.style.transform = `translate(${offsetX}px, ${offsetY}px) rotate(${(Math.random() * 8 - 4).toFixed(1)}deg)`;
+    if (message) message.textContent = taunts[escapes] || '';
+    escapes += 1;
+  });
+
+  // Si cambia la ventana, los límites cambian: vuelve a su lugar.
+  window.addEventListener('resize', () => {
+    offsetX = 0;
+    offsetY = 0;
+    button.style.transform = '';
+  });
+}
+
 /* Mientras se ve el hero, el sello flotante de WhatsApp se esconde: el
    hero ya tiene su propio botón de WhatsApp y se pisarían. */
 function initHeroWatch() {
@@ -480,3 +626,5 @@ initRisoEngine();
 initMagnetic();
 initRegister();
 initHeroWatch();
+initContactForm();
+initRunawayButton();

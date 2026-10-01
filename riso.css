@@ -62,6 +62,7 @@
   --layer-blend: screen;      /* tinta fluo sobre fondo oscuro */
   --key-depth: var(--pink);
   --grain-opacity: 0.09;
+  --accent: var(--pink);      /* rosa como texto/línea: 5.97:1 sobre tinta */
 }
 
 [data-theme="light"] {
@@ -72,6 +73,30 @@
   --layer-blend: multiply;    /* tinta riso real sobre papel */
   --key-depth: var(--ink);
   --grain-opacity: 0.14;
+  /* El rosa fluo sobre papel da 2.62:1 (no pasa ni para títulos grandes):
+     para texto, líneas y foco se usa una tinta rosa más profunda (4.87:1).
+     Los rellenos (afiches, sellos, botones) siguen en fluo. */
+  --accent: #c8006a;
+}
+
+/* Tema claro: lo que es «papel sobre papel» o amarillo sobre papel necesita
+   un filo de tinta para no desaparecer contra el fondo. */
+[data-theme="light"] .poster--paper .poster-sheet {
+  box-shadow: inset 0 0 0 3px var(--ink);
+}
+
+[data-theme="light"] .ticket-rail {
+  filter: drop-shadow(0 0 1px var(--ink)) drop-shadow(0 0 1px var(--ink));
+}
+
+[data-theme="light"] .tape {
+  border-block: 2px solid var(--ink);
+}
+
+[data-theme="light"] .note--paper,
+[data-theme="light"] .stamp--price,
+[data-theme="light"] .btn-pink {
+  border: 2px solid var(--ink);
 }
 
 /* --- Base ----------------------------------------------------------------- */
@@ -134,7 +159,7 @@ svg {
 }
 
 :focus-visible {
-  outline: 3px solid var(--pink);
+  outline: 3px solid var(--accent);
   outline-offset: 3px;
 }
 
@@ -272,7 +297,7 @@ h3 {
 }
 
 .margin-brand span {
-  color: var(--pink);
+  color: var(--accent);
 }
 
 .margin-actions {
@@ -307,7 +332,7 @@ h3 {
 
 .margin-links a:hover,
 .margin-links a.is-active {
-  color: var(--pink);
+  color: var(--accent);
   text-shadow: 2px -2px 0 var(--blue);
 }
 
@@ -402,6 +427,7 @@ h3 {
 .riso-word::before,
 .riso-word::after {
   content: attr(data-text);
+  content: attr(data-text) / ""; /* capa decorativa: el lector de pantalla no la lee */
   position: absolute;
   inset: 0;
   z-index: -1;
@@ -495,6 +521,7 @@ h3 {
   padding: 0.6rem 0.9rem;
   background: var(--yellow);
   color: var(--ink);
+  border: 2px solid var(--ink);
   font-size: clamp(1.1rem, 1.8vw, 1.6rem);
   transform: rotate(-4deg);
 }
@@ -777,7 +804,7 @@ h3 {
 }
 
 .key input:focus-visible + .key-cap {
-  outline: 3px solid var(--pink);
+  outline: 3px solid var(--accent);
   outline-offset: 5px;
 }
 
@@ -986,7 +1013,7 @@ h3 {
   margin-bottom: 0.75rem;
 }
 
-.case p {
+.case p:not(.case-figure) {
   color: var(--muted);
   max-width: 44ch;
 }
@@ -1003,7 +1030,7 @@ h3 {
   font-weight: 900;
   font-size: clamp(8rem, 22vw, 20rem);
   line-height: 0.8;
-  color: var(--pink);
+  color: var(--accent);
   text-shadow: 6px 6px 0 var(--blue);
   margin-bottom: 1.5rem;
 }
@@ -1018,7 +1045,7 @@ h3 {
   transform: rotate(2.5deg);
 }
 
-.case--tilt p { color: #4a453d; }
+.case--tilt p:not(.case-figure) { color: #4a453d; } /* 8.4:1 sobre papel */
 
 .case--low {
   grid-column: 8 / 13;
@@ -1041,7 +1068,7 @@ h3 {
 }
 
 .method-line--pink {
-  color: var(--pink);
+  color: var(--accent);
   padding-left: 8vw;
 }
 
@@ -1106,7 +1133,7 @@ h3 {
   grid-column: 2 / 12;
   margin-top: 3rem;
   padding: 2rem;
-  border: 3px dashed var(--pink);
+  border: 3px dashed var(--accent);
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: end;
@@ -1120,7 +1147,7 @@ h3 {
   font-size: clamp(2.5rem, 6vw, 5rem);
   line-height: 0.9;
   text-transform: uppercase;
-  color: var(--pink);
+  color: var(--accent);
 }
 
 .offer p:not(.offer-title) {
@@ -1164,7 +1191,7 @@ h3 {
 @media (hover: hover) {
   .work-list li:hover h3 {
     transform: translateX(1.5rem);
-    color: var(--pink);
+    color: var(--accent);
     text-shadow: -4px 3px 0 var(--blue);
   }
 }
@@ -1190,6 +1217,16 @@ h3 {
   font-size: 1.2rem;
   font-weight: 600;
   line-height: 1.45;
+}
+
+.note h3 {
+  font-size: clamp(1.5rem, 2.2vw, 2rem);
+  margin-bottom: 0.6rem;
+}
+
+.note a {
+  font-weight: 800;
+  text-underline-offset: 3px;
 }
 
 .note figcaption {
@@ -1246,7 +1283,7 @@ h3 {
   top: 50%;
   width: 1.4rem;
   height: 3px;
-  background: var(--pink);
+  background: var(--accent);
   transition: transform 450ms var(--spring-fallback);
   transition: transform 450ms var(--spring);
 }
@@ -1300,7 +1337,7 @@ h3 {
   font-size: clamp(3.5rem, 8vw, 7rem);
   line-height: 0.9;
   text-transform: uppercase;
-  color: var(--pink);
+  color: var(--accent);
   text-decoration: none;
 }
 
@@ -1339,7 +1376,7 @@ h3 {
 
 .contact-form input:focus,
 .contact-form textarea:focus {
-  outline: 3px solid var(--pink);
+  outline: 3px solid var(--accent);
   outline-offset: 2px;
 }
 
@@ -1374,7 +1411,7 @@ h3 {
   font-weight: 900;
   font-size: calc((100vw - var(--margin-w)) * 0.24);
   line-height: 0.78;
-  color: var(--pink);
+  color: var(--accent);
   white-space: nowrap;
   margin-left: -0.03em;
 }
@@ -1395,7 +1432,7 @@ h3 {
   margin-bottom: 0.4rem;
 }
 
-.colophon p {
+.colophon p:not(.colophon-word) {
   color: var(--muted);
 }
 
@@ -1432,7 +1469,8 @@ h3 {
   .wa-stamp:hover { transform: rotate(0deg) scale(1.06); }
 }
 
-.hero-in-view .wa-stamp {
+.hero-in-view .wa-stamp,
+.hero-in-view .ticket-stub.is-shown {
   transform: translateY(180%) rotate(-12deg);
   visibility: hidden;
   transition: transform 500ms var(--ease-out), visibility 0s linear 500ms;
@@ -1660,6 +1698,552 @@ h3 {
     width: 64px;
     height: 64px;
     font-size: 0.8rem;
+  }
+}
+
+/* ==========================================================================
+   PÁGINAS SECUNDARIAS (servicios, contacto, blog, privacidad, gracias, 404)
+   Mismo mundo, otras composiciones: cabecera-cartel con título riso, fichas
+   impresas, volantes con precio, lectura cómoda para lo legal.
+   ========================================================================== */
+
+/* Link de la página actual en el margen: igual que la sección activa. */
+.margin-links a[aria-current="page"] {
+  color: var(--accent);
+  text-shadow: 2px -2px 0 var(--blue);
+}
+
+/* --- Cabecera de página --------------------------------------------------- */
+.page-hero {
+  position: relative;
+  padding: clamp(2.5rem, 7vw, 6rem) var(--gutter) clamp(3rem, 7vw, 5.5rem);
+  border-bottom: 2px solid var(--fg);
+  isolation: isolate;
+}
+
+/* Título riso de varias palabras: las capas (::before/::after con el mismo
+   texto, mismo ancho y misma letra) cortan las líneas exactamente igual. */
+.riso-title {
+  position: relative;
+  z-index: 0;
+  isolation: isolate;
+  max-width: 14ch;
+  font-family: var(--display);
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: clamp(3.5rem, 9.5vw, 10rem);
+  line-height: 0.94; /* los acentos (Á, É) no tocan la línea de arriba */
+  letter-spacing: -0.01em;
+  color: var(--fg);
+}
+
+.riso-title::before,
+.riso-title::after {
+  content: attr(data-text);
+  content: attr(data-text) / ""; /* capa decorativa: el lector de pantalla no la lee */
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  mix-blend-mode: var(--layer-blend);
+  pointer-events: none;
+}
+
+.riso-title::before {
+  color: var(--pink);
+  transform: translate(var(--rx), var(--ry));
+}
+
+.riso-title::after {
+  color: var(--blue);
+  transform: translate(calc(var(--rx) * -1), calc(var(--ry) * -0.6));
+}
+
+.page-hero .hero-text {
+  margin-top: 1.75rem;
+  max-width: 46ch;
+}
+
+.page-hero .hero-actions {
+  margin-top: 2rem;
+}
+
+.page-hero .stamp--price,
+.page-hero .stamp--time {
+  top: clamp(1.5rem, 5vw, 4rem);
+  bottom: auto;
+}
+
+/* --- Bloque de texto + acción (CTA de cierre) ------------------------------ */
+.closing {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 1.5rem var(--gutter);
+  padding: clamp(4rem, 10vw, 8rem) var(--gutter);
+  border-top: 2px solid var(--fg);
+}
+
+.closing p {
+  max-width: 48ch;
+  margin-top: 1.25rem;
+  color: var(--muted);
+  font-size: 1.15rem;
+}
+
+.closing a:not(.btn) {
+  font-weight: 700;
+  text-underline-offset: 4px;
+  overflow-wrap: anywhere;
+}
+
+/* --- Servicios detallados: filas tipo índice de imprenta ------------------- */
+.spec {
+  padding: clamp(4rem, 10vw, 8rem) var(--gutter);
+}
+
+.spec .work-list p {
+  font-size: 1.05rem;
+}
+
+/* --- Precios: volantes con el precio gigante -------------------------------- */
+.prices {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 2rem var(--gutter);
+  padding: clamp(4rem, 10vw, 8rem) var(--gutter);
+}
+
+.prices h2 {
+  grid-column: 1 / -1;
+}
+
+.price-flyer {
+  position: relative;
+  padding: 2rem 1.75rem 2.25rem;
+  color: var(--ink);
+  border: 2px solid var(--ink);
+}
+
+.price-flyer h3 {
+  font-size: clamp(2rem, 3vw, 2.8rem);
+}
+
+.price-flyer .price {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: clamp(4rem, 7vw, 6.5rem);
+  line-height: 0.9;
+  margin: 0.5rem 0 0.75rem;
+}
+
+.price-flyer .price small {
+  font-size: 0.35em;
+  margin-right: 0.15em;
+}
+
+.price-flyer ul,
+.includes ul {
+  list-style: none;
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 2px dashed currentColor;
+  display: grid;
+  gap: 0.45rem;
+  font-weight: 600;
+}
+
+.price-flyer li::before,
+.includes li::before {
+  content: "";
+  display: inline-block;
+  width: 0.55em;
+  height: 0.55em;
+  margin-right: 0.6em;
+  background: currentColor;
+  transform: rotate(45deg) translateY(-0.1em);
+}
+
+.price-flyer--a { grid-column: 1 / 5; background: var(--paper); transform: rotate(-2deg); }
+.price-flyer--b { grid-column: 5 / 9; margin-top: 3.5rem; background: var(--pink); transform: rotate(1.5deg); z-index: 1; }
+.price-flyer--c { grid-column: 9 / 13; background: var(--yellow); transform: rotate(-1deg); }
+
+/* --- Qué incluye cada paquete: tabla impresa de tres columnas --------------- */
+.includes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  padding: clamp(4rem, 10vw, 8rem) var(--gutter);
+}
+
+.includes h2 {
+  grid-column: 1 / -1;
+  margin-bottom: 2rem;
+}
+
+.includes article {
+  padding: 1.5rem 1.5rem 1.75rem;
+  border-top: 2px solid var(--fg);
+  border-bottom: 2px solid var(--fg);
+}
+
+.includes article + article {
+  border-left: 2px solid var(--fg);
+}
+
+.includes h3 {
+  font-size: clamp(1.8rem, 2.6vw, 2.4rem);
+}
+
+/* --- Contacto: canales grandes + ficha impresa ------------------------------ */
+.channels {
+  list-style: none;
+  margin-top: 2.5rem;
+  border-top: 2px solid var(--fg);
+}
+
+.channels li {
+  display: grid;
+  grid-template-columns: minmax(0, 14rem) minmax(0, 1fr);
+  align-items: baseline;
+  gap: 0.5rem 2rem;
+  padding: 1.5rem 0;
+  border-bottom: 2px solid var(--fg);
+}
+
+.channels h3 {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 1.2rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.channels a {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: clamp(2rem, 5vw, 4.25rem);
+  line-height: 0.95;
+  text-transform: uppercase;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.channel-note {
+  font-size: clamp(1.15rem, 2vw, 1.5rem);
+  font-weight: 700;
+}
+
+.spec-lead {
+  margin-top: 1.5rem;
+  max-width: 52ch;
+  font-size: 1.2rem;
+  color: var(--muted);
+}
+
+.page-hero--error {
+  min-height: calc(100svh - 2rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.page-hero--error .display {
+  margin-top: 0.35em; /* aire para el acento de la Á */
+  font-size: clamp(3rem, 7vw, 7rem);
+}
+
+.channels a.channel-mail {
+  text-transform: none;
+  font-size: clamp(1.4rem, 3.4vw, 3rem);
+}
+
+@media (hover: hover) {
+  .channels a:hover {
+    color: var(--accent);
+    text-shadow: 4px -3px 0 var(--blue);
+  }
+}
+
+.form-block {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  align-items: start;
+  gap: 2rem var(--gutter);
+  padding: clamp(4rem, 10vw, 8rem) var(--gutter);
+}
+
+/* El título comparte fila con la ficha: más chico para no chocarla. */
+.form-block .display,
+.closing .display {
+  font-size: clamp(3rem, 6.5vw, 7rem);
+  line-height: 0.9;
+}
+
+.form-block > div > p {
+  margin-top: 1.25rem;
+  max-width: 40ch;
+  color: var(--muted);
+  font-size: 1.15rem;
+}
+
+/* La ficha: el formulario impreso en papel, con tinta. En los dos temas es
+   papel con texto tinta, así que los campos usan tinta (no --fg). */
+.form-sheet {
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  background: var(--paper);
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  transform: rotate(-1deg);
+}
+
+.form-sheet .contact-form input,
+.form-sheet .contact-form textarea {
+  color: var(--ink);
+  border-color: var(--ink);
+}
+
+.form-sheet .contact-form input::placeholder,
+.form-sheet .contact-form textarea::placeholder {
+  color: #6b655a; /* 5:1 sobre papel */
+}
+
+.form-sheet .contact-form input:focus,
+.form-sheet .contact-form textarea:focus {
+  outline-color: #c8006a; /* la tinta rosa: sobre papel el fluo no se ve */
+}
+
+.form-sheet .form-consent {
+  color: #4a453d;
+}
+
+.form-sheet .btn-pink {
+  border-color: var(--ink);
+}
+
+/* --- Blog: fanzine ---------------------------------------------------------- */
+.zine {
+  padding: clamp(4rem, 10vw, 8rem) var(--gutter);
+}
+
+.zine-list {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 3rem var(--gutter);
+  margin-top: 2.5rem;
+  list-style: none;
+}
+
+.zine-entry {
+  padding-top: 1.25rem;
+  border-top: 2px solid var(--fg);
+}
+
+.zine-entry h3 {
+  font-size: clamp(2rem, 4vw, 3.6rem);
+  margin-bottom: 1rem;
+}
+
+.zine-entry p {
+  color: var(--muted);
+  max-width: 52ch;
+}
+
+.zine-entry:nth-child(1) { grid-column: 1 / 8; }
+.zine-entry:nth-child(2) { grid-column: 7 / 13; margin-top: 4rem; }
+.zine-entry:nth-child(3) { grid-column: 2 / 9; }
+
+.tips {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 2rem var(--gutter);
+  padding: clamp(4rem, 10vw, 8rem) var(--gutter);
+  border-top: 2px solid var(--fg);
+}
+
+.tips h2 {
+  grid-column: 1 / -1;
+}
+
+/* --- Privacidad: modo lectura ---------------------------------------------- */
+.legal {
+  max-width: 68ch;
+  padding: clamp(3rem, 8vw, 6rem) var(--gutter) clamp(4rem, 10vw, 8rem);
+  font-size: 1.0625rem;
+}
+
+.legal h2 {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  line-height: 0.95;
+  text-transform: uppercase;
+  margin: 3rem 0 1rem;
+  scroll-margin-top: 5rem;
+}
+
+.legal h2:first-child {
+  margin-top: 0;
+}
+
+.legal h3 {
+  font-size: 1.35rem;
+  margin: 1.75rem 0 0.6rem;
+}
+
+.legal p,
+.legal li {
+  color: var(--muted);
+}
+
+.legal strong {
+  color: var(--fg);
+}
+
+.legal p + p {
+  margin-top: 0.85rem;
+}
+
+.legal ul {
+  padding-left: 1.25rem;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.legal a {
+  color: var(--accent);
+  font-weight: 600;
+  text-underline-offset: 3px;
+  overflow-wrap: anywhere;
+}
+
+.legal-notice {
+  margin-top: 1.25rem;
+  padding: 1rem 1.25rem;
+  border: 2px solid var(--fg);
+  font-size: 0.95rem;
+}
+
+/* --- Gracias y 404 ---------------------------------------------------------- */
+.big-number {
+  position: relative;
+  z-index: 0;
+  isolation: isolate;
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: min(clamp(8rem, 26vw, 22rem), 38svh);
+  line-height: 0.78;
+  color: var(--fg);
+}
+
+.big-number::before,
+.big-number::after {
+  content: attr(data-text);
+  content: attr(data-text) / ""; /* capa decorativa: el lector de pantalla no la lee */
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  mix-blend-mode: var(--layer-blend);
+}
+
+.big-number::before { color: var(--pink); transform: translate(var(--rx), var(--ry)); }
+.big-number::after { color: var(--blue); transform: translate(calc(var(--rx) * -1), calc(var(--ry) * -0.6)); }
+
+.runaway-button {
+  position: relative;
+  z-index: 2;
+}
+
+.runaway-message {
+  min-height: 1.6em;
+  margin-top: 1.25rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+/* --- Avisos (toasts) del formulario ---------------------------------------- */
+.toast-region {
+  position: fixed;
+  top: 1rem;
+  left: 50%;
+  z-index: 150;
+  display: grid;
+  gap: 0.5rem;
+  width: min(420px, calc(100% - 2rem));
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.9rem 1.1rem;
+  background: var(--paper);
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  font-weight: 700;
+  pointer-events: auto;
+  opacity: 0;
+  transform: translateY(-14px) rotate(-1deg);
+  transition: opacity 250ms var(--ease-out), transform 500ms var(--spring-fallback);
+  transition: opacity 250ms var(--ease-out), transform 500ms var(--spring);
+}
+
+.toast.is-visible {
+  opacity: 1;
+  transform: translateY(0) rotate(-1deg);
+}
+
+.toast--success { background: var(--yellow); }
+.toast--error { background: var(--pink); }
+
+.toast-icon {
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  background: var(--ink);
+  transform: rotate(45deg);
+}
+
+@media (max-width: 860px) {
+  .riso-title {
+    font-size: clamp(3rem, 15vw, 5.5rem);
+  }
+
+  .page-hero .stamp--price,
+  .page-hero .stamp--time {
+    display: none;
+  }
+
+  .closing,
+  .form-block,
+  .channels li,
+  .includes {
+    grid-template-columns: 1fr;
+  }
+
+  .includes article + article {
+    border-left: 0;
+    border-top: 0;
+  }
+
+  .prices,
+  .zine-list,
+  .tips {
+    grid-template-columns: 1fr;
+  }
+
+  .price-flyer--a,
+  .price-flyer--b,
+  .price-flyer--c,
+  .zine-entry:nth-child(n) {
+    grid-column: 1 / -1;
+    margin-top: 0;
+  }
+
+  .toast-region {
+    top: 76px;
   }
 }
 

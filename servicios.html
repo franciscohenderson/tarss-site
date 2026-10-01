@@ -6,7 +6,7 @@
   <script>
     /* Aplica el tema ANTES de pintar la página (evita un destello del tema
        equivocado): el que la persona eligió con el botón, o si nunca eligió,
-       OSCURO (el diseño principal). La lógica del botón: scripts.js (initThemeToggle). */
+       OSCURO (el diseño principal). La lógica del botón: riso.js (initThemeToggle). */
     (function () {
       var theme;
       try { theme = localStorage.getItem('theme'); } catch (e) {}
@@ -17,7 +17,7 @@
        Las etiquetas (Analytics, píxel de Meta, conversiones de Google Ads) se
        configuran en tagmanager.google.com, no acá. Los eventos que manda el
        sitio (generate_lead, quote_request, whatsapp_click, email_click) salen
-       de trackEvent() en scripts.js. -->
+       de trackEvent() en riso.js. -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
   new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
   j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
@@ -26,7 +26,7 @@
   <!-- End Google Tag Manager -->
   <meta name="description" content="Tars 2.0 ofrece diseño web, soporte digital, redes sociales y asesoría clara para que tu negocio crezca en internet." />
   <meta name="keywords" content="diseño web, mantenimiento web, redes sociales, asesoría digital, pymes" />
-  <meta name="theme-color" content="#07070d" />
+  <meta name="theme-color" content="#141414" />
   <meta property="og:title" content="Tars 2.0 | Servicios detallados" />
   <meta property="og:site_name" content="Tars 2.0" />
   <link rel="canonical" href="https://tarss-site.pages.dev/servicios" />
@@ -42,214 +42,215 @@
   <meta name="twitter:site" content="@tarss" />
   <title>Tars 2.0 | Servicios detallados</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
-  <link rel="preload" href="/fonts/bricolage-grotesque-var.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="preload" href="/fonts/schibsted-grotesk-var.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="preload" href="/fonts/big-shoulders-display-var.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/fonts/libre-franklin-var.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="riso.css" />
 </head>
-<body>
+<body class="riso">
   <!-- Google Tag Manager (noscript) -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WKXQ88DT"
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <!-- End Google Tag Manager (noscript) -->
   <a class="skip-link" href="#main-content">Saltar al contenido</a>
-  <nav class="topbar" role="navigation" aria-label="Menú principal">
-    <div class="container nav-container">
-      <a class="brand" href="index.html">Tars 2.0</a>
-      <div class="nav-actions">
-        <button class="theme-toggle" type="button" aria-label="Cambiar a modo oscuro" title="Modo oscuro"><svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg><svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg></button>
-        <button class="nav-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="primary-navigation"><span></span></button>
-      </div>
-      <div class="nav-links" id="primary-navigation">
-        <a href="index.html#servicios">Servicios</a>
-        <a href="index.html#paquetes">Paquetes</a>
-        <a href="index.html#casos">Casos</a>
-        <a href="#cotizador">Cotizador</a>
-        <a href="blog.html">Blog</a>
-        <a href="contacto.html">Contacto</a>
-        <a class="button button-small" aria-current="page" href="servicios.html">Servicios detallados</a>
-      </div>
+
+  <!-- Margen de impresión (igual en todas las páginas, ver index.html). -->
+  <nav class="margin" aria-label="Menú principal">
+    <a class="margin-brand" href="index.html" aria-label="Tars 2.0, inicio">T<span>2</span></a>
+    <div class="margin-actions">
+      <button class="theme-toggle" type="button" aria-label="Cambiar a modo claro" title="Modo claro">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+      </button>
+      <button class="nav-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="primary-navigation"><span></span></button>
     </div>
+    <div class="margin-links" id="primary-navigation">
+      <a href="servicios.html" aria-current="page">Servicios</a>
+      <a href="servicios.html#cotizador">Cotizador</a>
+      <a href="index.html#paquetes">Paquetes</a>
+      <a href="index.html#casos">Casos</a>
+      <a href="index.html#faq">FAQ</a>
+      <a href="blog.html">Blog</a>
+      <a href="contacto.html">Contacto</a>
+    </div>
+    <svg class="reg-mark" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="6"/><path d="M12 0v24M0 12h24"/></svg>
   </nav>
 
-  <header class="hero hero-small">
-    <div class="container">
-      <h1>Paquetes premium para tu presencia digital</h1>
+  <main id="main-content">
+    <header class="page-hero">
+      <h1 class="riso-title" data-text="Paquetes premium para tu presencia digital">Paquetes premium para tu presencia digital</h1>
       <p class="hero-text">Elegí un plan estratégico para tu web, ventas y comunicación online con un servicio pensado para crecer rápido.</p>
       <div class="hero-actions">
-        <a class="button" href="mailto:Franciscohenderson456@gmail.com">Cotizar ahora</a>
-        <a class="button button-alt" href="https://wa.me/5492617459362" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+        <a class="btn btn-pink" href="mailto:Franciscohenderson456@gmail.com" data-magnetic>Cotizar ahora</a>
+        <a class="btn btn-line" href="https://wa.me/5492617459362" target="_blank" rel="noopener noreferrer" data-magnetic>WhatsApp</a>
       </div>
-    </div>
-  </header>
+      <p class="stamp stamp--price" aria-hidden="true"><span>desde</span>USD 149</p>
+    </header>
 
-  <main id="main-content" role="main">
-    <section class="section container">
-      <h2>Servicios detallados</h2>
-      <div class="grid">
-        <article class="card">
-          <h3>Web profesional</h3>
-          <p>Diseño claro, rápido y adaptado a celulares. Incluye SEO básico, formulario y estructura para convertir más clientes.</p>
-        </article>
-        <article class="card">
-          <h3>Mantenimiento</h3>
-          <p>Actualizaciones, respaldo y mejoras periódicas para que tu sitio siempre esté seguro y funcione sin fallas.</p>
-        </article>
-        <article class="card">
-          <h3>Redes sociales</h3>
-          <p>Plan de publicaciones, creación de piezas simples y apoyo para mantener tu marca activa en Facebook e Instagram.</p>
-        </article>
-        <article class="card">
-          <h3>Asesoría digital</h3>
-          <p>Recomendaciones para optimizar tu presencia online, mejorar mensajes y convertir visitas en clientes.</p>
-        </article>
-      </div>
+    <section class="spec" aria-labelledby="detalle-title">
+      <h2 id="detalle-title" class="display">Servicios detallados</h2>
+      <ul class="work-list">
+        <li><h3>Web profesional</h3><p>Diseño claro, rápido y adaptado a celulares. Incluye SEO básico, formulario y estructura para convertir más clientes.</p></li>
+        <li><h3>Mantenimiento</h3><p>Actualizaciones, respaldo y mejoras periódicas para que tu sitio siempre esté seguro y funcione sin fallas.</p></li>
+        <li><h3>Redes sociales</h3><p>Plan de publicaciones, creación de piezas simples y apoyo para mantener tu marca activa en Facebook e Instagram.</p></li>
+        <li><h3>Asesoría digital</h3><p>Recomendaciones para optimizar tu presencia online, mejorar mensajes y convertir visitas en clientes.</p></li>
+      </ul>
     </section>
 
-    <section class="section dark-section">
-      <div class="container">
-        <h2>Casos de éxito</h2>
-        <div class="grid">
-          <article class="case-card">
-            <h3>Servicio local de limpieza</h3>
-            <p>Landing page que aumentó las solicitudes de presupuesto en un 40% durante el primer mes.</p>
-          </article>
-          <article class="case-card">
-            <h3>Emprendedor de cursos</h3>
-            <p>Web para vender clases online y mejorar la captación de alumnos.</p>
-          </article>
-          <article class="case-card">
-            <h3>Soporte técnico mensual</h3>
-            <p>Plan de mantenimiento que eliminó fallas y mejoró la velocidad del sitio.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section container">
-      <h2>Qué incluye cada paquete</h2>
-      <div class="grid">
-        <article class="card">
-          <h3>Pack inicial</h3>
-          <ul>
-            <li>Landing page de 1-2 secciones</li>
-            <li>Formulario de contacto</li>
-            <li>Entrega rápida</li>
-          </ul>
-        </article>
-        <article class="card">
-          <h3>Pack recomendado</h3>
-          <ul>
-            <li>Sitio web de 3-5 páginas</li>
-            <li>Soporte básico 1 mes</li>
-            <li>Optimización móvil</li>
-          </ul>
-        </article>
-        <article class="card">
-          <h3>Pack full</h3>
-          <ul>
-            <li>Web completa + blog</li>
-            <li>Gestión de redes</li>
-            <li>Asesoría personalizada</li>
-          </ul>
-        </article>
-      </div>
-    </section>
-
-    <section class="section dark-section">
-      <div class="container">
-        <h2>Precios</h2>
-        <div class="grid">
-          <article class="card price-card">
-            <h3>Starter</h3>
-            <p class="price">USD 149</p>
-            <p class="price-note">Ideal para nuevos proyectos y emprendedores.</p>
-            <ul>
+    <section class="prices" aria-labelledby="precios-title">
+      <h2 id="precios-title" class="display">Precios</h2>
+      <article class="price-flyer price-flyer--a">
+        <h3>Starter</h3>
+        <p class="price"><small>USD</small>149</p>
+        <p>Ideal para nuevos proyectos y emprendedores.</p>
+        <ul>
               <li>Landing page de una sección</li>
               <li>Formulario de contacto</li>
               <li>Entrega rápida</li>
             </ul>
-          </article>
-          <article class="card price-card">
-            <h3>Growth</h3>
-            <p class="price">USD 349</p>
-            <p class="price-note">Perfecto para negocios que necesitan presencia completa.</p>
-            <ul>
+      </article>
+      <article class="price-flyer price-flyer--b">
+        <h3>Growth</h3>
+        <p class="price"><small>USD</small>349</p>
+        <p>Perfecto para negocios que necesitan presencia completa.</p>
+        <ul>
               <li>Sitio de 3-5 páginas</li>
               <li>Soporte 1 mes</li>
               <li>Optimización móvil</li>
             </ul>
-          </article>
-          <article class="card price-card">
-            <h3>Full</h3>
-            <p class="price">USD 599</p>
-            <p class="price-note">Todo lo necesario para lanzar una marca digital completa.</p>
-            <ul>
+      </article>
+      <article class="price-flyer price-flyer--c">
+        <h3>Full</h3>
+        <p class="price"><small>USD</small>599</p>
+        <p>Todo lo necesario para lanzar una marca digital completa.</p>
+        <ul>
               <li>Web + blog + menús</li>
               <li>Gestión de redes sociales</li>
               <li>Asesoría personalizada</li>
             </ul>
-          </article>
-        </div>
-      </div>
+      </article>
     </section>
 
-    <!-- Cotizador (initQuoteCalculator en scripts.js). Para cambiar un precio o sumar un
-         servicio alcanza con editar/copiar un <label class="quote-option">: el JS lee
-         value (nombre que va al WhatsApp) y data-price (precio en USD) de cada checkbox. -->
-    <section id="cotizador" class="section container">
-      <h2>Armá tu presupuesto</h2>
-      <p class="hero-text">Marcá lo que necesitás y mirá el total al instante. Después mandame el presupuesto por WhatsApp con un clic.</p>
-      <form id="quote-form" class="quote-form">
-        <fieldset class="quote-options">
+    <section class="includes" aria-labelledby="incluye-title">
+      <h2 id="incluye-title" class="display display--outline">Qué incluye cada paquete</h2>
+      <article>
+        <h3>Pack inicial</h3>
+        <ul>
+              <li>Landing page de 1-2 secciones</li>
+              <li>Formulario de contacto</li>
+              <li>Entrega rápida</li>
+            </ul>
+      </article>
+      <article>
+        <h3>Pack recomendado</h3>
+        <ul>
+              <li>Sitio web de 3-5 páginas</li>
+              <li>Soporte básico 1 mes</li>
+              <li>Optimización móvil</li>
+            </ul>
+      </article>
+      <article>
+        <h3>Pack full</h3>
+        <ul>
+              <li>Web completa + blog</li>
+              <li>Gestión de redes</li>
+              <li>Asesoría personalizada</li>
+            </ul>
+      </article>
+    </section>
+
+    <section class="cases" aria-labelledby="casos-title">
+      <h2 id="casos-title" class="display display--outline">Casos de éxito</h2>
+      <article class="case case--big">
+        <p class="case-figure" aria-hidden="true">+40%</p>
+        <h3>Servicio local de limpieza</h3>
+        <p>Landing page que aumentó las solicitudes de presupuesto en un 40% durante el primer mes.</p>
+      </article>
+      <article class="case case--tilt">
+        <h3>Emprendedor de cursos</h3>
+        <p>Web para vender clases online y mejorar la captación de alumnos.</p>
+      </article>
+      <article class="case case--low">
+        <h3>Soporte técnico mensual</h3>
+        <p>Plan de mantenimiento que eliminó fallas y mejoró la velocidad del sitio.</p>
+      </article>
+    </section>
+
+    <!-- Registradora (riso.js, initRegister): data-price en USD y
+         data-billing="monthly" para lo que se cobra por mes. -->
+    <section class="register" id="cotizador" aria-labelledby="cotizador-title">
+      <div class="register-intro">
+        <h2 id="cotizador-title" class="display">Armá tu<br>presupuesto</h2>
+        <p>Marcá lo que necesitás y mirá el total al instante. Después mandame el presupuesto por WhatsApp con un clic.</p>
+      </div>
+
+      <form class="register-keys" id="ticket-form" aria-describedby="ticket-hint">
+        <fieldset>
           <legend>Servicios</legend>
-          <label class="quote-option">
+          <label class="key">
             <input type="checkbox" name="service" value="Landing Page" data-price="149" />
-            <span class="quote-option-name">Landing Page</span>
-            <span class="quote-option-price">USD 149</span>
+            <span class="key-cap"><span class="key-name">Landing Page</span><span class="key-price">USD 149</span></span>
           </label>
-          <label class="quote-option">
+          <label class="key">
             <input type="checkbox" name="service" value="Mantenimiento" data-price="50" data-billing="monthly" />
-            <span class="quote-option-name">Mantenimiento</span>
-            <span class="quote-option-price">USD 50 /mes</span>
+            <span class="key-cap"><span class="key-name">Mantenimiento</span><span class="key-price">USD 50/mes</span></span>
           </label>
-          <label class="quote-option">
+          <label class="key">
             <input type="checkbox" name="service" value="SEO Local" data-price="80" />
-            <span class="quote-option-name">SEO Local</span>
-            <span class="quote-option-price">USD 80</span>
+            <span class="key-cap"><span class="key-name">SEO Local</span><span class="key-price">USD 80</span></span>
           </label>
         </fieldset>
-
-        <div class="quote-summary">
-          <!-- <output> es el elemento semántico para "resultado de un cálculo";
-               aria-live="polite" hace que el lector de pantalla anuncie el total nuevo. -->
-          <p class="quote-total">Total: <output id="quote-total" aria-live="polite">USD 0</output></p>
-          <a id="quote-request" class="button" aria-disabled="true" target="_blank" rel="noopener noreferrer">Solicitar este presupuesto</a>
-        </div>
-        <p id="quote-hint" class="quote-hint">Elegí al menos un servicio para armar tu presupuesto.</p>
       </form>
+
+      <aside class="ticket-rail" aria-label="Tu ticket">
+        <div class="ticket" id="ticket">
+          <div class="ticket-head">
+            <p class="ticket-brand">TARS 2.0</p>
+            <p>Imprenta digital · Mendoza</p>
+            <p><time id="ticket-date"></time></p>
+          </div>
+          <ul class="ticket-lines" id="ticket-lines">
+            <li class="ticket-empty">Todavía no marcaste nada.</li>
+          </ul>
+          <div class="ticket-totals">
+            <div class="ticket-total">
+              <span>Pago único</span>
+              <span class="odometer" data-odometer="once" aria-hidden="true"></span>
+            </div>
+            <div class="ticket-total">
+              <span>Por mes</span>
+              <span class="odometer" data-odometer="monthly" aria-hidden="true"></span>
+            </div>
+          </div>
+          <p class="sr-only" id="ticket-live" aria-live="polite"></p>
+          <a class="btn btn-ink ticket-cta" id="ticket-request" aria-disabled="true" target="_blank" rel="noopener noreferrer">Pedir por WhatsApp</a>
+          <p class="ticket-hint" id="ticket-hint">Elegí al menos un servicio.</p>
+        </div>
+      </aside>
     </section>
 
-    <section class="section cta-section">
-      <div class="container cta-box">
-        <h2>¿Listo para tu proyecto?</h2>
+    <section class="closing" aria-labelledby="listo-title">
+      <div>
+        <h2 id="listo-title" class="display">¿Listo para tu proyecto?</h2>
         <p>Escribime a <a href="mailto:Franciscohenderson456@gmail.com">Franciscohenderson456@gmail.com</a> y recibí una propuesta en menos de 24 horas.</p>
-        <a class="button" href="mailto:Franciscohenderson456@gmail.com">Cotizar ahora</a>
       </div>
+      <a class="btn btn-pink" href="mailto:Franciscohenderson456@gmail.com" data-magnetic>Cotizar ahora</a>
     </section>
-    <section class="section container">
-      <div class="promo-card">
-        <h2>Oferta especial</h2>
+
+    <section class="packs" aria-labelledby="oferta-title">
+      <div class="offer">
+        <h2 id="oferta-title" class="offer-title">Oferta especial</h2>
         <p>Primera web desde USD 149 para emprendedores que quieren empezar rápido. Incluye diseño, formulario y soporte inicial.</p>
-        <a class="button button-alt" href="contacto.html">Quiero mi oferta</a>
+        <a class="btn btn-pink" href="contacto.html" data-magnetic>Quiero mi oferta</a>
       </div>
     </section>
   </main>
 
-  <footer class="footer">
-    <div class="container footer-grid">
+  <footer class="colophon">
+    <p class="colophon-word" aria-hidden="true">TARS 2.0</p>
+    <div class="colophon-cols">
       <div>
-        <p class="footer-brand">Tars 2.0</p>
-        <p>Soluciones digitales para emprendimientos y pequeños negocios.</p>
+        <p class="colophon-brand">Tars 2.0</p>
+        <p>Soluciones digitales para emprendimientos y pequeños negocios. Impreso en Mendoza.</p>
       </div>
       <div>
         <h2>Contacto</h2>
@@ -258,13 +259,15 @@
       <div>
         <h2>Enlaces</h2>
         <p><a href="index.html">Inicio</a></p>
+        <p><a href="servicios.html">Servicios detallados</a></p>
         <p><a href="contacto.html">Contacto</a></p>
       </div>
     </div>
-    <p class="container footer-copy">© 2026 Tars 2.0. Todos los derechos reservados. · <a href="privacidad.html">Política de privacidad</a></p>
+    <p class="colophon-copy">© 2026 Tars 2.0. Todos los derechos reservados. · <a href="privacidad.html">Política de privacidad</a></p>
   </footer>
 
-  <a class="floating-contact" href="https://wa.me/5492617459362" target="_blank" rel="noopener noreferrer">WhatsApp</a>
-  <script src="scripts.js" defer></script>
+  <a class="wa-stamp" href="https://wa.me/5492617459362" target="_blank" rel="noopener noreferrer" aria-label="Chat por WhatsApp">WhatsApp</a>
+  <a class="ticket-stub" id="ticket-stub" href="#cotizador" hidden>Tu ticket <strong id="ticket-stub-total">USD 0</strong></a>
+  <script src="riso.js" defer></script>
 </body>
 </html>

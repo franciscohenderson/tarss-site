@@ -10,8 +10,11 @@ La web es un **cartel de imprenta risográfica** pegado en una pared de Mendoza:
 | `--pink` | `#FF48B0` | Rosa fluo. Capa de registro, acento principal, afiches. |
 | `--blue` | `#0078BF` | Azul medio. Capa de registro y afiches. **Solo tamaños grandes** (3.9–4.0:1). |
 | `--yellow` | `#FFE800` | Amarillo. Cinta, sellos, ticket. Siempre con tinta encima. |
+| `--accent` | rosa fluo (oscuro) / `#C8006A` (claro) | Rosa como **texto, línea o foco**. Sobre papel el fluo da 2.62:1 y no pasa ni en títulos grandes; la «tinta rosa» `#C8006A` da 4.87:1. Los rellenos siguen en fluo. |
 
 Reglas de contraste: texto de lectura solo tinta↔papel, tinta sobre rosa (6:1) o tinta sobre amarillo (14.7:1). El azul nunca lleva texto chico ni va como texto chico.
+En el tema claro, todo lo que es papel sobre papel (afiche «PLAN», ticket, notas) o amarillo sobre papel (cinta, sellos) lleva un filo de tinta para no desaparecer.
+Las capas decorativas (`::before/::after` con `data-text`) usan `content: attr(data-text) / ""` para que el lector de pantalla no las lea tres veces.
 Mezcla de capas: `multiply` sobre papel, `screen` sobre tinta (así se comporta la tinta riso real sobre papel claro u oscuro).
 
 ## Tipografía

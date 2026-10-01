@@ -6,7 +6,7 @@
   <script>
     /* Aplica el tema ANTES de pintar la página (evita un destello del tema
        equivocado): el que la persona eligió con el botón, o si nunca eligió,
-       OSCURO (el diseño principal). La lógica del botón: scripts.js (initThemeToggle). */
+       OSCURO (el diseño principal). La lógica del botón: riso.js (initThemeToggle). */
     (function () {
       var theme;
       try { theme = localStorage.getItem('theme'); } catch (e) {}
@@ -17,7 +17,7 @@
        Las etiquetas (Analytics, píxel de Meta, conversiones de Google Ads) se
        configuran en tagmanager.google.com, no acá. Los eventos que manda el
        sitio (generate_lead, quote_request, whatsapp_click, email_click) salen
-       de trackEvent() en scripts.js. -->
+       de trackEvent() en riso.js. -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
   new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
   j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
@@ -25,7 +25,7 @@
   })(window,document,'script','dataLayer','GTM-WKXQ88DT');</script>
   <!-- End Google Tag Manager -->
   <meta name="description" content="Política de privacidad de Tars 2.0: qué datos se recolectan en el sitio, para qué se usan y cómo ejercer tus derechos según la Ley 25.326." />
-  <meta name="theme-color" content="#07070d" />
+  <meta name="theme-color" content="#141414" />
   <meta property="og:title" content="Tars 2.0 | Política de privacidad" />
   <meta property="og:site_name" content="Tars 2.0" />
   <link rel="canonical" href="https://tarss-site.pages.dev/privacidad" />
@@ -36,43 +36,46 @@
   <meta property="og:type" content="website" />
   <title>Tars 2.0 | Política de privacidad</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
-  <link rel="preload" href="/fonts/bricolage-grotesque-var.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="preload" href="/fonts/schibsted-grotesk-var.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="preload" href="/fonts/big-shoulders-display-var.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/fonts/libre-franklin-var.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="riso.css" />
 </head>
-<body>
+<body class="riso">
   <!-- Google Tag Manager (noscript) -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WKXQ88DT"
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <!-- End Google Tag Manager (noscript) -->
   <a class="skip-link" href="#main-content">Saltar al contenido</a>
-  <nav class="topbar" role="navigation" aria-label="Menú principal">
-    <div class="container nav-container">
-      <a class="brand" href="index.html">Tars 2.0</a>
-      <div class="nav-actions">
-        <button class="theme-toggle" type="button" aria-label="Cambiar a modo oscuro" title="Modo oscuro"><svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg><svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg></button>
-        <button class="nav-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="primary-navigation"><span></span></button>
-      </div>
-      <div class="nav-links" id="primary-navigation">
-        <a href="index.html">Inicio</a>
-        <a href="servicios.html">Servicios</a>
-        <a href="blog.html">Blog</a>
-        <a href="contacto.html">Contacto</a>
-      </div>
+
+  <!-- Margen de impresión (igual en todas las páginas, ver index.html). -->
+  <nav class="margin" aria-label="Menú principal">
+    <a class="margin-brand" href="index.html" aria-label="Tars 2.0, inicio">T<span>2</span></a>
+    <div class="margin-actions">
+      <button class="theme-toggle" type="button" aria-label="Cambiar a modo claro" title="Modo claro">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+      </button>
+      <button class="nav-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="primary-navigation"><span></span></button>
     </div>
+    <div class="margin-links" id="primary-navigation">
+      <a href="servicios.html">Servicios</a>
+      <a href="servicios.html#cotizador">Cotizador</a>
+      <a href="index.html#paquetes">Paquetes</a>
+      <a href="index.html#casos">Casos</a>
+      <a href="index.html#faq">FAQ</a>
+      <a href="blog.html">Blog</a>
+      <a href="contacto.html">Contacto</a>
+    </div>
+    <svg class="reg-mark" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="6"/><path d="M12 0v24M0 12h24"/></svg>
   </nav>
 
-  <header class="hero hero-small">
-    <div class="container">
-      <h1>Política de privacidad</h1>
+  <main id="main-content">
+    <header class="page-hero">
+      <h1 class="riso-title" data-text="Política de privacidad">Política de privacidad</h1>
       <p class="hero-text">Qué datos se recolectan en este sitio, para qué los uso y cómo podés pedir que los corrija o los borre. Última actualización: 30 de septiembre de 2026.</p>
-    </div>
-  </header>
-
-  <main id="main-content" role="main">
-    <!-- Página de texto largo: .legal limita el ancho de línea para que se lea
-         cómodo (ver styles.css). Cada sección tiene id para poder enlazarla. -->
-    <section class="section container legal">
+    </header>
+    <!-- Página de texto largo (modo lectura): .legal limita el ancho de línea. -->
+    <section class="legal" aria-label="Política de privacidad">
       <h2 id="responsable">1. Quién es responsable de tus datos</h2>
       <p>El responsable del tratamiento de los datos que se recolectan en <strong>tarss-site.pages.dev</strong> es <strong>Tars 2.0</strong>. Para cualquier consulta sobre esta política o sobre tus datos, escribime a <a href="mailto:Franciscohenderson456@gmail.com">Franciscohenderson456@gmail.com</a>.</p>
 
@@ -133,11 +136,12 @@
     </section>
   </main>
 
-  <footer class="footer">
-    <div class="container footer-grid">
+  <footer class="colophon">
+    <p class="colophon-word" aria-hidden="true">TARS 2.0</p>
+    <div class="colophon-cols">
       <div>
-        <p class="footer-brand">Tars 2.0</p>
-        <p>Soluciones digitales para emprendimientos y pequeños negocios.</p>
+        <p class="colophon-brand">Tars 2.0</p>
+        <p>Soluciones digitales para emprendimientos y pequeños negocios. Impreso en Mendoza.</p>
       </div>
       <div>
         <h2>Contacto</h2>
@@ -146,13 +150,14 @@
       <div>
         <h2>Enlaces</h2>
         <p><a href="index.html">Inicio</a></p>
+        <p><a href="servicios.html">Servicios detallados</a></p>
         <p><a href="contacto.html">Contacto</a></p>
       </div>
     </div>
-    <p class="container footer-copy">© 2026 Tars 2.0. Todos los derechos reservados. · <a href="privacidad.html">Política de privacidad</a></p>
+    <p class="colophon-copy">© 2026 Tars 2.0. Todos los derechos reservados. · <a href="privacidad.html">Política de privacidad</a></p>
   </footer>
 
-  <a class="floating-contact" href="https://wa.me/5492617459362" target="_blank" rel="noopener noreferrer">WhatsApp</a>
-  <script src="scripts.js" defer></script>
+  <a class="wa-stamp" href="https://wa.me/5492617459362" target="_blank" rel="noopener noreferrer" aria-label="Chat por WhatsApp">WhatsApp</a>
+  <script src="riso.js" defer></script>
 </body>
 </html>

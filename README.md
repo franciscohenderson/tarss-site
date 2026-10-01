@@ -12,8 +12,8 @@ Landing page para ofrecer:
 - `contacto.html`
 - `blog.html`
 - `404.html`
-- `styles.css`
-- `scripts.js`
+- `riso.css` (estilos «Imprenta Riso», ver DESIGN.md)
+- `riso.js` (menú, tema, cotizador, formulario, efectos)
 
 ## Sitio público
 El sitio ya está desplegado en Cloudflare Pages y listo para promoción:
@@ -58,7 +58,7 @@ El menú superior funciona en mobile con un botón hamburguesa para abrir y cerr
 
 ## Publicar en GitHub + Cloudflare Pages
 1. Crea un repositorio nuevo en GitHub llamado por ejemplo `tarss-site`.
-2. Sube todos los archivos: `index.html`, `servicios.html`, `contacto.html`, `blog.html`, `styles.css`, `scripts.js`, `README.md`, `favicon.svg`.
+2. Sube todos los archivos: `index.html`, `servicios.html`, `contacto.html`, `blog.html`, `riso.css`, `riso.js`, la carpeta `fonts/`, `README.md`, `favicon.svg`.
 3. Ve a https://dash.cloudflare.com/ y accede a Cloudflare Pages.
 4. Crea un nuevo proyecto y conecta tu cuenta de GitHub.
 5. Selecciona el repositorio y usa la rama principal (`main` o `master`).
