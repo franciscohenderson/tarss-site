@@ -153,9 +153,8 @@ function applyTheme(theme) {
   // Actualizamos TODOS los botones de tema (hoy hay uno por página).
   document.querySelectorAll('.theme-toggle').forEach((button) => {
     const isDark = theme === 'dark';
-    // El ícono muestra a qué modo VAS a pasar, y el aria-label lo dice en
-    // palabras para lectores de pantalla (el emoji es solo decorativo).
-    button.querySelector('span').textContent = isDark ? '☀️' : '🌙';
+    // El ícono (sol o luna, SVG) lo alterna el CSS según data-theme; acá solo
+    // se actualiza el texto para lectores de pantalla.
     button.setAttribute('aria-label', isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro');
     button.setAttribute('title', isDark ? 'Modo claro' : 'Modo oscuro');
   });
@@ -584,8 +583,6 @@ function initScrollReveal() {
    - duration: 0 = no se oculta solo (lo usamos para "Enviando..." y después
      lo cerramos a mano con el objeto que devuelve la función).
    -------------------------------------------------------------------------- */
-const TOAST_ICONS = { success: '✅', error: '⚠️', info: '⏳' };
-
 function getToastRegion() {
   let region = document.querySelector('.toast-region');
   if (!region) {
@@ -608,7 +605,7 @@ function showToast(message, { type = 'info', duration = 4000 } = {}) {
   const icon = document.createElement('span');
   icon.className = 'toast-icon';
   icon.setAttribute('aria-hidden', 'true');
-  icon.textContent = TOAST_ICONS[type] || '';
+  // El dibujo del ícono (reloj, check o alerta) sale del CSS según el tipo.
   const text = document.createElement('span');
   text.textContent = message;
   toast.append(icon, text);

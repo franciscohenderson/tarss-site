@@ -9,14 +9,24 @@
    Todo color del sitio sale de estas variables: para retocar un tema, se
    cambia acá y no en cada regla.
    ========================================================================== */
-/* Inter autoalojada (variable, 100-900, subconjunto latino: cubre el español).
-   Antes el CSS pedía "Inter" pero nunca la cargaba y se veía la fuente del sistema. */
+/* Fuentes autoalojadas (variables, subconjunto latino: cubre el español).
+   Bricolage Grotesque para títulos: tiene carácter propio sin perder
+   legibilidad. Schibsted Grotesk para el texto: sobria y muy legible, pensada para leer mucho. */
 @font-face {
-  font-family: 'Inter';
+  font-family: 'Bricolage Grotesque';
   font-style: normal;
-  font-weight: 100 900;
+  font-weight: 200 800;
   font-display: swap;
-  src: url('/fonts/inter-latin-var.woff2') format('woff2');
+  src: url('/fonts/bricolage-grotesque-var.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Schibsted Grotesk';
+  font-style: normal;
+  font-weight: 400 900;
+  font-display: swap;
+  src: url('/fonts/schibsted-grotesk-var.woff2') format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
@@ -25,6 +35,8 @@
    recomienda Emil Kowalski; el "ease" por defecto arranca lento y se siente pesado.
    Radios: escala de 4px con pocos valores en vez de 6/14/18/20/22/28 sueltos. */
 :root {
+  --font-display: 'Bricolage Grotesque', system-ui, sans-serif;
+  --font-body: 'Schibsted Grotesk', system-ui, sans-serif;
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --dur-fast: 150ms;
   --dur: 200ms;
@@ -53,9 +65,6 @@
   --topbar-bg-scrolled: rgba(5, 7, 15, 0.96);
   --menu-bg: rgba(0, 0, 0, 0.98);
   --hero-bg: linear-gradient(180deg, rgba(10, 12, 25, 0.96) 0%, rgba(10, 12, 25, 0.95) 100%);
-  --hero-title-gradient: linear-gradient(90deg, #ffffff, #c6e8ff, #d4b4ff);
-  --hero-title-shadow: 0 18px 30px rgba(0, 0, 0, 0.25);
-  --brand-gradient: linear-gradient(120deg, #72d6ff, #c48bff 60%, #f9faff);
   --text: #f4f7ff;
   --text-muted: #b8c2ff;
   --border: rgba(255, 255, 255, 0.12);
@@ -68,6 +77,8 @@
   --button-alt-border: rgba(255, 255, 255, 0.14);
   --button-alt-hover: rgba(255, 255, 255, 0.12);
   --shadow: 0 35px 120px rgba(0, 0, 0, 0.35);
+  --button-shadow: 0 10px 24px -10px rgba(0, 0, 0, 0.6);
+  --button-shadow-hover: 0 16px 32px -12px rgba(0, 0, 0, 0.7);
   --selection-text: #07070d;
   --scrollbar-thumb: rgba(114, 214, 255, 0.35);
   --scrollbar-thumb-hover: rgba(114, 214, 255, 0.65);
@@ -90,9 +101,6 @@
   --topbar-bg-scrolled: rgba(247, 249, 255, 0.98);
   --menu-bg: rgba(247, 249, 255, 0.99);
   --hero-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.85) 0%, rgba(240, 244, 253, 0.9) 100%);
-  --hero-title-gradient: linear-gradient(90deg, #101428, #1d4f8f, #5b35b0);
-  --hero-title-shadow: none;
-  --brand-gradient: linear-gradient(120deg, #0a8fd1, #7b4de0 60%, #1b1f3b);
   --text: #141a33;
   --text-muted: #4a5578;
   --border: rgba(20, 26, 51, 0.12);
@@ -105,6 +113,8 @@
   --button-alt-border: rgba(20, 26, 51, 0.16);
   --button-alt-hover: rgba(20, 26, 51, 0.09);
   --shadow: 0 30px 80px rgba(30, 40, 90, 0.12);
+  --button-shadow: 0 10px 24px -12px rgba(30, 40, 90, 0.35);
+  --button-shadow-hover: 0 16px 32px -14px rgba(30, 40, 90, 0.45);
   --selection-text: #ffffff;
   --scrollbar-thumb: rgba(10, 127, 181, 0.35);
   --scrollbar-thumb-hover: rgba(10, 127, 181, 0.6);
@@ -136,7 +146,7 @@ html {
 }
 
 body {
-  font-family: Inter, system-ui, sans-serif;
+  font-family: var(--font-body);
   background: var(--page-bg);
   background-color: var(--bg);
   background-attachment: fixed;
@@ -144,17 +154,32 @@ body {
   line-height: 1.7;
   min-height: 100vh;
   padding-top: 72px;
-  overflow-x: hidden;
+  overflow-x: clip;
   transition: background-color var(--dur-slow) var(--ease-out), color var(--dur-slow) var(--ease-out);
 }
 
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background: radial-gradient(circle at 80% 20%, rgba(114, 214, 255, 0.08), transparent 18%),
-    radial-gradient(circle at 90% 80%, rgba(255, 255, 255, 0.05), transparent 20%);
-  pointer-events: none;
+h1,
+h2,
+h3,
+.brand,
+.price,
+.quote-total output {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+/* Tamaño base del h1 fuera del hero (404, gracias): el hero lo agranda. */
+h1 {
+  font-size: clamp(2.25rem, 4vw + 1rem, 3.75rem);
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  margin-bottom: 1rem;
 }
 
 a {
@@ -193,15 +218,13 @@ a {
 }
 
 .brand {
-  font-size: 1.25rem;
+  font-size: 1.4rem;
   font-weight: 800;
   white-space: nowrap;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  background: var(--brand-gradient);
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
+  color: var(--text);
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
 }
 
 /* Botón de tema + hamburguesa van juntos. En escritorio, `order` los manda
@@ -228,6 +251,20 @@ a {
   align-items: center;
   justify-content: center;
   transition: transform var(--dur) var(--ease-out), background var(--dur) var(--ease-out), border-color var(--dur) var(--ease-out);
+}
+
+.theme-toggle svg {
+  width: 20px;
+  height: 20px;
+}
+
+.theme-toggle .icon-moon,
+[data-theme="light"] .theme-toggle .icon-sun {
+  display: none;
+}
+
+[data-theme="light"] .theme-toggle .icon-moon {
+  display: block;
 }
 
 .theme-toggle:hover {
@@ -362,37 +399,21 @@ a {
   pointer-events: none;
 }
 
-.hero::before {
-  content: "";
-  position: absolute;
-  top: -100px;
-  right: -120px;
-  width: 420px;
-  height: 420px;
-  background: radial-gradient(circle, rgba(114, 214, 255, 0.18), transparent 60%);
-  filter: blur(60px);
-  pointer-events: none;
-  animation: floatGlow 12s ease-in-out infinite;
-}
-
 .hero h1 {
   position: relative;
   z-index: 1;
-  background: var(--hero-title-gradient);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  text-shadow: var(--hero-title-shadow);
+  color: var(--text);
 }
 
 /* --- Efecto máquina de escribir (index.html) ------------------------------
    La palabra que rota va en su propia línea (display: block + min-height):
    así el título no cambia de alto mientras se escribe/borra y el resto de la
-   página no "salta". El cursor es un ::after con color propio, porque el h1
-   tiene color: transparent (el texto se pinta con el gradiente). */
+   página no "salta". La palabra va en el color de acento: el énfasis sale
+   del color, no de un degradado. */
 .typewriter {
   display: block;
   min-height: 1.2em;
+  color: var(--accent);
 }
 
 .typewriter::after {
@@ -414,41 +435,29 @@ a {
   padding: 4rem 0 3rem;
 }
 
-.hero .button {
-  animation: glowPulse 6s ease-in-out infinite alternate;
-}
-
-@keyframes glowPulse {
-  from { box-shadow: 0 24px 45px rgba(114, 214, 255, 0.15); }
-  to { box-shadow: 0 32px 65px rgba(114, 214, 255, 0.25); transform: translateY(-1px); }
-}
-
-@keyframes floatGlow {
-  0%, 100% { transform: translate(0, 0); }
-  50% { transform: translate(-12px, 10px); }
-}
-
-.eyebrow {
-  text-transform: uppercase;
-  letter-spacing: 0.25em;
-  color: var(--text-muted);
-  margin-bottom: 1rem;
-  font-size: 0.9rem;
+.footer-brand {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.5rem;
 }
 
 /* Tipografía fluida: clamp(mínimo, preferido, máximo). El valor preferido
    mezcla vw (crece con el ancho de pantalla) con rem (base fija), así escala
    parejo del celular al monitor grande sin saltos por media queries. */
 .hero h1 {
-  font-size: clamp(2.5rem, 5vw + 1rem, 4.5rem);
-  line-height: 1.15;
+  font-size: clamp(2.5rem, 5vw + 1rem, 4.75rem);
+  line-height: 1.05;
+  letter-spacing: -0.035em;
   max-width: 800px;
   margin-bottom: 1.2rem;
 }
 
 .hero-text {
   color: var(--text-muted);
-  max-width: 760px;
+  font-size: clamp(1rem, 0.4vw + 0.95rem, 1.2rem);
+  max-width: 62ch;
   margin-bottom: 2rem;
 }
 
@@ -481,12 +490,6 @@ a {
   text-decoration: none;
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
   transition: transform var(--dur) var(--ease-out), box-shadow var(--dur) var(--ease-out), opacity var(--dur) var(--ease-out);
-  animation: pulseFloat 3.8s ease-in-out infinite alternate;
-}
-
-@keyframes pulseFloat {
-  0% { transform: translateY(0); box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25); }
-  100% { transform: translateY(-4px); box-shadow: 0 34px 80px rgba(0, 0, 0, 0.28); }
 }
 
 .floating-contact:hover {
@@ -509,7 +512,7 @@ a {
   transition: transform var(--dur) var(--ease-out), opacity var(--dur) var(--ease-out), box-shadow var(--dur) var(--ease-out);
   border: none;
   cursor: pointer;
-  box-shadow: 0 24px 45px rgba(114, 214, 255, 0.15);
+  box-shadow: var(--button-shadow);
 }
 
 .button-small {
@@ -523,23 +526,11 @@ a {
   opacity: 0.95;
 }
 
-/* Hover premium del botón principal: además de elevarse, "se enciende" con
-   un halo de los dos colores del gradiente de la marca (celeste arriba,
-   violeta abajo) y un filo de luz de 1px. El botón alternativo y el
-   deshabilitado quedan afuera. */
+/* Hover del botón principal: se eleva un poco y la sombra crece en la
+   misma dirección (luz de arriba). Sin halos de color. */
 .button:not(.button-alt):not([aria-disabled="true"]):hover,
 .button-small:not(.button-alt):hover {
-  box-shadow:
-    0 0 0 1px rgba(114, 214, 255, 0.45),
-    0 10px 30px -6px rgba(114, 214, 255, 0.55),
-    0 18px 50px -10px rgba(166, 124, 255, 0.55);
-}
-
-/* Los botones del inicio tienen una animación de sombra infinita
-   (glowPulse); una animación le gana a :hover, así que se pausa mientras el
-   mouse está encima para que se vea el halo. */
-.hero .button:hover {
-  animation: none;
+  box-shadow: var(--button-shadow-hover);
 }
 
 .skip-link {
@@ -583,6 +574,7 @@ textarea:focus-visible {
   background: var(--button-alt);
   color: var(--text);
   border: 1px solid var(--button-alt-border);
+  box-shadow: none;
 }
 
 .button-alt:hover {
@@ -625,46 +617,18 @@ textarea:focus-visible {
   overflow: hidden;
 }
 
-.section::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 20% 20%, rgba(114, 214, 255, 0.08), transparent 22%),
-    radial-gradient(circle at 85% 80%, rgba(166, 124, 255, 0.06), transparent 20%);
-  pointer-events: none;
-  opacity: 0.8;
-  transform: translate3d(0, 0, 0);
-  animation: driftSection 20s ease-in-out infinite;
-}
-
 .dark-section {
   background: var(--bg-alt);
   border-top: 1px solid var(--border-soft);
   border-bottom: 1px solid var(--border-soft);
 }
 
-@keyframes driftSection {
-  0%, 100% { transform: translate(0, 0); }
-  50% { transform: translate(18px, -18px); }
-}
-
 .section h2 {
-  font-size: clamp(1.9rem, 2.5vw + 1rem, 2.9rem);
-  line-height: 1.2;
+  font-size: clamp(1.9rem, 2.5vw + 1rem, 3rem);
+  line-height: 1.1;
   margin-bottom: 1.5rem;
-  letter-spacing: 0.03em;
+  letter-spacing: -0.03em;
   position: relative;
-}
-
-.section h2::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -0.5rem;
-  width: 4rem;
-  height: 3px;
-  background: linear-gradient(90deg, #72d6ff, #a67cff, #ff8bce);
-  border-radius: var(--radius-pill);
 }
 
 .grid {
@@ -690,9 +654,9 @@ textarea:focus-visible {
 .card:hover,
 .case-card:hover,
 .cta-box:hover {
-  transform: translateY(-8px) scale(1.01);
-  border-color: rgba(114, 214, 255, 0.24);
-  box-shadow: 0 46px 140px rgba(114, 214, 255, 0.12);
+  transform: translateY(-4px);
+  border-color: var(--button-alt-border);
+  box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.55);
 }
 
 .card h3,
@@ -711,14 +675,6 @@ textarea:focus-visible {
 .price-card {
   position: relative;
   overflow: hidden;
-}
-
-.price-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at top right, rgba(114, 214, 255, 0.1), transparent 28%);
-  pointer-events: none;
 }
 
 .price-card h3 {
@@ -749,11 +705,11 @@ textarea:focus-visible {
 
 .promo-card {
   background: var(--surface-strong);
-  border: 1px solid rgba(114, 214, 255, 0.18);
+  border: 1px solid var(--border);
   border-radius: var(--radius-xl);
   padding: 2rem;
   text-align: center;
-  box-shadow: 0 34px 120px rgba(114, 214, 255, 0.14);
+  box-shadow: var(--shadow);
   max-width: 840px;
   margin: 0 auto;
 }
@@ -786,13 +742,20 @@ textarea:focus-visible {
 
 .card a:hover {
   color: var(--accent-alt);
-  transform: translateX(3px);
 }
 
-.card a::before {
-  content: "📲";
-  display: inline-block;
-  font-size: 1rem;
+.card a::after {
+  content: "";
+  width: 1em;
+  height: 1em;
+  background: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14'/%3E%3Cpath d='m12 5 7 7-7 7'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14'/%3E%3Cpath d='m12 5 7 7-7 7'/%3E%3C/svg%3E") center / contain no-repeat;
+  transition: transform var(--dur) var(--ease-out);
+}
+
+.card a:hover::after {
+  transform: translateX(3px);
 }
 
 .how-section {
@@ -869,9 +832,9 @@ textarea:hover {
 
 input:focus,
 textarea:focus {
-  outline: none;
-  border-color: rgba(114, 214, 255, 0.7);
-  box-shadow: 0 0 0 4px rgba(114, 214, 255, 0.1);
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-color: var(--accent);
   background: var(--input-bg-focus);
 }
 
@@ -899,6 +862,11 @@ textarea {
   display: grid;
   gap: 1.5rem;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.footer h2 {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
 }
 
 .footer a {
@@ -929,6 +897,14 @@ textarea {
 
 .error-section {
   padding: 6rem 0 5rem;
+}
+
+.cta-box .hero-actions {
+  justify-content: center;
+}
+
+.cta-box .hero-text {
+  margin-inline: auto;
 }
 
 .error-section .cta-box {
@@ -1107,9 +1083,7 @@ textarea {
      todo lo que hay detrás en CADA cuadro de scroll. Es lo más caro del sitio.
    - background-attachment: fixed -> fuerza a repintar el fondo entero al
      scrollear (en celulares suele ser el principal causante de tirones).
-   - Animaciones infinitas de fondo (glows que flotan, secciones que "derivan",
-     brillo del logo) y sombras enormes animadas (box-shadow no se acelera
-     por GPU: animarlo = repintar).
+   - Sombras enormes (box-shadow no se acelera por GPU: repintarlas cuesta).
    - will-change en ~30 elementos -> cada uno reserva una capa de memoria de
      video; en un celular con poca memoria eso termina siendo más lento.
    Los colores y el diseño no cambian: solo se quitan capas de efectos.
@@ -1117,12 +1091,6 @@ textarea {
 @media (max-width: 768px) {
   body {
     background-attachment: scroll;
-  }
-
-  body::before,
-  .hero::before,
-  .section::before {
-    display: none;
   }
 
   .topbar,
@@ -1157,11 +1125,6 @@ textarea {
   .cta-box:hover {
     transform: none;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
-  }
-
-  .hero .button,
-  .floating-contact {
-    animation: none;
   }
 
   .reveal {
@@ -1231,7 +1194,6 @@ textarea {
   background: var(--surface-strong);
   color: var(--text);
   border: 1px solid var(--border);
-  border-left: 4px solid var(--accent);
   box-shadow: 0 18px 50px rgba(0, 0, 0, 0.3);
   font-weight: 600;
   opacity: 0;
@@ -1246,31 +1208,40 @@ textarea {
 }
 
 .toast-icon {
-  font-size: 1.1rem;
-  line-height: 1;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  background: var(--accent);
+  -webkit-mask: var(--toast-icon) center / contain no-repeat;
+  mask: var(--toast-icon) center / contain no-repeat;
 }
 
-.toast--success { border-left-color: #25d366; }
-.toast--error { border-left-color: #ff5c7a; }
+.toast--info {
+  --toast-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M12 6v6l4 2'/%3E%3C/svg%3E");
+}
+
+.toast--success {
+  --toast-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='m9 12 2 2 4-4'/%3E%3C/svg%3E");
+}
+
+.toast--success .toast-icon { background: #25d366; }
+
+.toast--error {
+  --toast-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M12 8v4'/%3E%3Cpath d='M12 16h.01'/%3E%3C/svg%3E");
+}
+
+.toast--error .toast-icon { background: #ff5c7a; }
 
 /* ==========================================================================
    Selección de texto
    --------------------------------------------------------------------------
    Al resaltar texto, el fondo es el acento de la marca. --selection-text
    cambia por tema para que el contraste sea suficiente en los dos (texto
-   oscuro sobre celeste en oscuro, blanco sobre azul en claro). El h1 y el
-   logo pintan su texto con un gradiente (color: transparent): hay que darles
-   un color de relleno propio al seleccionarlos, si no el texto desaparece.
+   oscuro sobre celeste en oscuro, blanco sobre azul en claro).
    ========================================================================== */
 ::selection {
   background: var(--accent);
   color: var(--selection-text);
-}
-
-.hero h1::selection,
-.hero h1 *::selection,
-.brand::selection {
-  -webkit-text-fill-color: var(--selection-text);
 }
 
 /* ==========================================================================
@@ -1406,10 +1377,20 @@ textarea {
 }
 
 .marquee-group li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   white-space: nowrap;
   font-weight: 600;
   color: var(--text-muted);
   letter-spacing: 0.02em;
+}
+
+.marquee-group svg {
+  width: 1.1em;
+  height: 1.1em;
+  color: var(--accent);
+  flex-shrink: 0;
 }
 
 /* Pasar el mouse frena la cinta para poder leerla. */
@@ -1503,8 +1484,8 @@ textarea {
 .legal-notice {
   margin-top: 1.25rem;
   padding: 1rem 1.25rem;
-  border-left: 3px solid var(--accent);
-  border-radius: 0 var(--radius) var(--radius) 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
   background: var(--surface);
   font-size: 0.95rem;
 }
