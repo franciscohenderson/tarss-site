@@ -1,0 +1,1690 @@
+/* ==========================================================================
+   Tars 2.0 — «Imprenta Riso»
+   --------------------------------------------------------------------------
+   La web es un cartel de imprenta risográfica: tintas planas que se pisan,
+   registro imperfecto y tipografía gigante como estructura. La constitución
+   completa (paleta, reglas de contraste, movimiento) está en DESIGN.md.
+
+   Tema: [data-theme="dark"] (por defecto) = tinta negra de fondo con las
+   tintas fluo encima; [data-theme="light"] = papel. El atributo lo pone el
+   script del <head> antes de pintar y lo cambia el botón (riso.js).
+   ========================================================================== */
+
+@font-face {
+  font-family: 'Big Shoulders Display';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/fonts/big-shoulders-display-var.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Libre Franklin';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/fonts/libre-franklin-var.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* --- Tintas y tokens ------------------------------------------------------ */
+:root {
+  --paper: #f1ece2;
+  --ink: #141414;
+  --pink: #ff48b0;
+  --blue: #0078bf;
+  --yellow: #ffe800;
+
+  --display: 'Big Shoulders Display', 'Arial Narrow', sans-serif;
+  --text: 'Libre Franklin', system-ui, sans-serif;
+
+  --margin-w: 88px;   /* ancho del margen de impresión (menú vertical) */
+  --gutter: clamp(1rem, 3vw, 2.5rem);
+
+  /* Desregistro riso: riso.js mueve --rx/--ry con física de resorte. */
+  --rx: 3px;
+  --ry: 2px;
+
+  /* Curvas. --spring es un resorte real (rebota y se asienta); el
+     cubic-bezier de respaldo es para navegadores sin linear(). */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --spring-fallback: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --spring: linear(0, 0.009, 0.035 2.1%, 0.141, 0.281 6.7%, 0.723 12.9%, 0.938 16.7%, 1.017, 1.077, 1.121, 1.149 24.3%, 1.159, 1.163, 1.161, 1.154 29.9%, 1.129 32.8%, 1.051 39.6%, 1.017 43.1%, 0.991, 0.977 51%, 0.974 53.8%, 0.975 57.1%, 0.997 69.8%, 1.003 76.9%, 1.004 83.8%, 1);
+}
+
+:root,
+[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: var(--ink);
+  --fg: var(--paper);
+  --muted: #c9c2b4;           /* 11:1 sobre tinta */
+  --layer-blend: screen;      /* tinta fluo sobre fondo oscuro */
+  --key-depth: var(--pink);
+  --grain-opacity: 0.09;
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+  --bg: var(--paper);
+  --fg: var(--ink);
+  --muted: #4a453d;           /* 8.4:1 sobre papel */
+  --layer-blend: multiply;    /* tinta riso real sobre papel */
+  --key-depth: var(--ink);
+  --grain-opacity: 0.14;
+}
+
+/* --- Base ----------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--text);
+  font-size: 1.0625rem;
+  line-height: 1.55;
+  padding-left: var(--margin-w);
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 300ms var(--ease-out), color 300ms var(--ease-out);
+}
+
+/* Grano de papel: ruido SVG estático encima de todo (no se anima, no cuesta). */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+  opacity: var(--grain-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 1.2 -0.2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+}
+
+/* La cinta rotada y las palabras a sangre se salen del ancho a propósito:
+   se recortan acá (en body, el overflow se propaga a la ventana y no corta). */
+main,
+.colophon {
+  overflow-x: clip;
+}
+
+a {
+  color: inherit;
+}
+
+img,
+svg {
+  display: block;
+}
+
+::selection {
+  background: var(--pink);
+  color: var(--ink);
+}
+
+:focus-visible {
+  outline: 3px solid var(--pink);
+  outline-offset: 3px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: fixed;
+  top: -100px;
+  left: calc(var(--margin-w) + 1rem);
+  z-index: 200;
+  background: var(--yellow);
+  color: var(--ink);
+  font-weight: 700;
+  padding: 0.75rem 1rem;
+  text-decoration: none;
+}
+
+.skip-link:focus-visible {
+  top: 1rem;
+}
+
+/* Títulos-cartel: Big Shoulders en mayúsculas, apretados, enormes. */
+.display {
+  font-family: var(--display);
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: clamp(3.75rem, 11vw, 11rem);
+  line-height: 0.82;
+  letter-spacing: -0.01em;
+}
+
+.display--outline {
+  color: transparent;
+  -webkit-text-stroke: 2px var(--fg);
+}
+
+h3 {
+  font-family: var(--display);
+  font-weight: 800;
+  text-transform: uppercase;
+  line-height: 0.95;
+  letter-spacing: 0.01em;
+}
+
+/* --- Botones ---------------------------------------------------------------
+   Rectángulos de imprenta. --mx/--my los mueve el efecto magnético (riso.js)
+   con un resorte; :active los «estampa» (se achican un poco). */
+.btn {
+  --mx: 0px;
+  --my: 0px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  padding: 0.95rem 1.6rem;
+  border: 2px solid var(--fg);
+  border-radius: 2px;
+  font-family: var(--text);
+  font-weight: 800;
+  font-size: 1rem;
+  text-decoration: none;
+  cursor: pointer;
+  transform: translate(var(--mx), var(--my));
+  transition: transform 120ms var(--ease-out), background-color 200ms var(--ease-out), color 200ms var(--ease-out);
+}
+
+.btn:active {
+  transform: translate(var(--mx), var(--my)) scale(0.96);
+}
+
+.btn-pink {
+  background: var(--pink);
+  border-color: var(--pink);
+  color: var(--ink);
+}
+
+.btn-line {
+  background: transparent;
+  color: var(--fg);
+}
+
+.btn-ink {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+}
+
+@media (hover: hover) {
+  .btn-pink:hover { background: var(--yellow); border-color: var(--yellow); }
+  .btn-line:hover { background: var(--fg); color: var(--bg); }
+  .btn-ink:hover { background: var(--pink); border-color: var(--pink); color: var(--ink); }
+}
+
+.btn[aria-disabled="true"] {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* --- Margen de impresión (menú) ------------------------------------------- */
+.margin {
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 100;
+  width: var(--margin-w);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.25rem 0;
+  background: var(--bg);
+  border-right: 2px solid var(--fg);
+  transition: background-color 300ms var(--ease-out);
+}
+
+.margin-brand {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: 2.25rem;
+  line-height: 1;
+  text-decoration: none;
+  display: grid;
+  place-items: center;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.margin-brand span {
+  color: var(--pink);
+}
+
+.margin-actions {
+  order: 3;
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.margin-links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.1rem;
+}
+
+.margin-links a {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 1.05rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 0.35rem 0.6rem;
+  min-width: 44px;
+  transition: color 200ms var(--ease-out), text-shadow 200ms var(--ease-out);
+}
+
+.margin-links a:hover,
+.margin-links a.is-active {
+  color: var(--pink);
+  text-shadow: 2px -2px 0 var(--blue);
+}
+
+.reg-mark {
+  order: 4;
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: var(--fg);
+  stroke-width: 1.5;
+}
+
+.theme-toggle {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border: 2px solid var(--fg);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--fg);
+  cursor: pointer;
+  transition: transform 500ms var(--spring-fallback);
+  transition: transform 500ms var(--spring);
+}
+
+.theme-toggle:active {
+  transform: rotate(-30deg) scale(0.9);
+}
+
+.theme-toggle svg {
+  width: 20px;
+  height: 20px;
+}
+
+.theme-toggle .icon-moon,
+[data-theme="light"] .theme-toggle .icon-sun {
+  display: none;
+}
+
+[data-theme="light"] .theme-toggle .icon-moon {
+  display: block;
+}
+
+.nav-toggle {
+  display: none;
+}
+
+/* --- HERO: «VENDER MÁS» --------------------------------------------------- */
+.hero {
+  position: relative;
+  min-height: 100svh;
+  padding: clamp(1.5rem, 4vw, 3rem) var(--gutter) clamp(2rem, 5vw, 3.5rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 2rem;
+  isolation: isolate;
+}
+
+.hero-title {
+  display: flex;
+  flex-direction: column;
+  font-weight: 400;
+}
+
+.hero-lead {
+  font-family: var(--text);
+  font-weight: 700;
+  font-size: clamp(1.25rem, 2.2vw, 2rem);
+  letter-spacing: -0.01em;
+  margin-bottom: 0.4em;
+}
+
+/* Cada palabra: la tinta real arriba y dos capas (rosa y azul) debajo,
+   corridas en direcciones opuestas. Entre ellas se mezclan como tinta. */
+.riso-word {
+  position: relative;
+  z-index: 0;
+  isolation: isolate;
+  display: block;
+  font-family: var(--display);
+  font-weight: 900;
+  text-transform: uppercase;
+  /* Llena el ancho, pero sin empujar los botones fuera de la pantalla. */
+  font-size: min(calc((100vw - var(--margin-w)) * 0.3), calc((100svh - 17rem) / 1.75));
+  line-height: 0.8;
+  letter-spacing: -0.015em;
+  color: var(--fg);
+}
+
+.riso-word::before,
+.riso-word::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  mix-blend-mode: var(--layer-blend);
+  pointer-events: none;
+}
+
+.riso-word::before {
+  color: var(--pink);
+  transform: translate(var(--rx), var(--ry));
+}
+
+.riso-word::after {
+  color: var(--blue);
+  transform: translate(calc(var(--rx) * -1), calc(var(--ry) * -0.6));
+}
+
+.riso-word--indent {
+  align-self: flex-end;
+  margin-top: 0.17em; /* aire para el acento de la Á */
+  margin-right: 4vw;
+}
+
+.hero-foot {
+  display: grid;
+  grid-template-columns: minmax(0, 34rem) auto;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1.5rem 3rem;
+}
+
+.hero-text {
+  font-size: clamp(1.05rem, 1.2vw, 1.3rem);
+  color: var(--muted);
+  max-width: 38ch;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+/* Sellos: decorativos, rotados en los márgenes, como de goma. */
+.stamp {
+  position: absolute;
+  z-index: 2;
+  font-family: var(--display);
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 0.9;
+  text-align: center;
+  pointer-events: none;
+}
+
+.stamp--price {
+  top: clamp(1.5rem, 6vw, 5rem);
+  right: clamp(1rem, 6vw, 6rem);
+  display: grid;
+  place-items: center;
+  width: clamp(7rem, 13vw, 11rem);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--pink);
+  color: var(--ink);
+  font-size: clamp(1.6rem, 3vw, 2.6rem);
+  transform: rotate(12deg);
+}
+
+.stamp--price span {
+  display: block;
+  font-family: var(--text);
+  font-size: 0.4em;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+.stamp--city {
+  top: 62%;
+  left: calc(var(--gutter) + 4vw);
+  padding: 0.35rem 0.8rem;
+  border: 3px solid var(--fg);
+  font-size: clamp(1rem, 1.6vw, 1.4rem);
+  letter-spacing: 0.12em;
+  transform: rotate(-9deg);
+}
+
+.stamp--time {
+  bottom: clamp(9rem, 22vh, 14rem);
+  right: clamp(1rem, 4vw, 4rem);
+  padding: 0.6rem 0.9rem;
+  background: var(--yellow);
+  color: var(--ink);
+  font-size: clamp(1.1rem, 1.8vw, 1.6rem);
+  transform: rotate(-4deg);
+}
+
+/* --- Cinta ---------------------------------------------------------------- */
+.tape {
+  position: relative;
+  z-index: 3;
+  margin: 0 calc(var(--gutter) * -1);
+  padding: 0.9rem 0;
+  background: var(--yellow);
+  color: var(--ink);
+  overflow: hidden;
+  transform: rotate(-2deg);
+}
+
+.tape-track {
+  --tape-x: 0px;
+  display: flex;
+  gap: 2.5rem;
+  width: max-content;
+  list-style: none;
+  transform: translateX(var(--tape-x));
+}
+
+.tape-track li {
+  display: inline-flex;
+  align-items: center;
+  gap: 2.5rem;
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: clamp(1.4rem, 2.6vw, 2.2rem);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.tape-track li::after {
+  content: "";
+  width: 0.45em;
+  height: 0.45em;
+  background: var(--pink);
+  transform: rotate(45deg);
+}
+
+/* --- Afiches (servicios) -------------------------------------------------- */
+.posters {
+  position: relative;
+  padding-top: clamp(4rem, 10vw, 8rem);
+}
+
+.posters-head {
+  padding: 0 var(--gutter) clamp(2rem, 5vw, 4rem);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem 3rem;
+}
+
+.posters-head p {
+  max-width: 26ch;
+  font-size: 1.2rem;
+  color: var(--muted);
+}
+
+.poster {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  padding: clamp(0.75rem, 2vw, 1.5rem);
+}
+
+/* --enter: 0 → 1 mientras la hoja sube; --cover: 0 → 1 mientras la siguiente
+   la tapa. Las dos las publica riso.js en cada cuadro de scroll. */
+.poster-sheet {
+  --enter: 1;
+  --cover: 0;
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  isolation: isolate;
+  color: var(--ink);
+  transform-origin: 50% 110%;
+  transform:
+    rotate(calc((1 - var(--enter)) * 5deg))
+    scale(calc(1 - var(--cover) * 0.07));
+}
+
+/* Sombra de la hoja de arriba: oscurece la de abajo a medida que la tapa. */
+.poster-sheet::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  background: var(--ink);
+  opacity: calc(var(--cover) * 0.55);
+  pointer-events: none;
+}
+
+.poster--pink .poster-sheet { background: var(--pink); --word: var(--blue); }
+.poster--blue .poster-sheet { background: var(--blue); --word: var(--pink); }
+.poster--yellow .poster-sheet { background: var(--yellow); --word: var(--pink); }
+.poster--paper .poster-sheet { background: var(--paper); --word: var(--blue); }
+
+/* La palabra gigante se imprime con la otra tinta encima (multiply): donde se
+   pisan aparece un tercer color, como en una risografía real. */
+.poster-word {
+  position: absolute;
+  left: -0.04em;
+  bottom: -0.12em;
+  z-index: 1;
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: clamp(9rem, 33vw, 34rem);
+  line-height: 0.78;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--word);
+  mix-blend-mode: multiply;
+  transform: translateX(calc((1 - var(--enter)) * -8%));
+}
+
+.poster-label {
+  position: absolute;
+  z-index: 3;
+  top: clamp(1rem, 5vw, 3.5rem);
+  right: clamp(1rem, 5vw, 3.5rem);
+  width: min(26rem, calc(100% - 2rem));
+  padding: 1.5rem 1.5rem 1.6rem;
+  background: var(--paper);
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  transform: rotate(-1.5deg);
+}
+
+.poster-label h3 {
+  font-size: clamp(2rem, 3.4vw, 3rem);
+  margin-bottom: 0.6rem;
+}
+
+.poster-price {
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 2px dashed var(--ink);
+  font-weight: 600;
+}
+
+.poster-price strong {
+  font-family: var(--display);
+  font-size: 1.8rem;
+  font-weight: 900;
+}
+
+.stamp--poster {
+  top: auto;
+  bottom: clamp(1.5rem, 6vw, 4rem);
+  right: clamp(1.5rem, 6vw, 5rem);
+  z-index: 4;
+  display: grid;
+  place-items: center;
+  width: 8rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 3px solid var(--ink);
+  background: var(--yellow);
+  color: var(--ink);
+  font-size: 2rem;
+  transform: rotate(-14deg);
+}
+
+/* --- Registradora --------------------------------------------------------- */
+.register {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  grid-template-areas:
+    "intro ticket"
+    "keys  ticket";
+  align-items: start;
+  gap: clamp(2rem, 4vw, 3.5rem) clamp(2rem, 5vw, 5rem);
+  padding: clamp(5rem, 12vw, 10rem) var(--gutter);
+}
+
+.register-intro {
+  grid-area: intro;
+}
+
+.register-intro p {
+  margin-top: 1.5rem;
+  max-width: 40ch;
+  font-size: 1.15rem;
+  color: var(--muted);
+}
+
+.register-keys {
+  grid-area: keys;
+}
+
+.register-keys fieldset {
+  border: 0;
+  display: grid;
+  gap: 1.25rem;
+}
+
+.register-keys legend {
+  margin-bottom: 1rem;
+  font-weight: 800;
+  font-size: 0.9rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* Tecla: el checkbox real queda invisible encima de toda la tecla (sigue
+   siendo clickeable y enfocable con teclado). La profundidad es una sombra
+   dura: al presionar, la tecla baja y la sombra se achica. */
+.key {
+  position: relative;
+  display: block;
+  cursor: pointer;
+}
+
+.key input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  margin: 0;
+}
+
+.key-cap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.4rem 1.5rem;
+  background: var(--paper);
+  color: var(--ink);
+  border: 3px solid var(--ink);
+  border-radius: 6px;
+  box-shadow: 0 9px 0 var(--key-depth);
+  transform: translateY(0);
+  transition: transform 450ms var(--spring-fallback), box-shadow 450ms var(--spring-fallback), background-color 150ms var(--ease-out);
+  transition: transform 450ms var(--spring), box-shadow 450ms var(--spring), background-color 150ms var(--ease-out);
+}
+
+.key-name {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.key-price {
+  font-weight: 800;
+  font-size: 1.1rem;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+@media (hover: hover) {
+  .key:hover .key-cap {
+    transform: translateY(-2px);
+    box-shadow: 0 11px 0 var(--key-depth);
+  }
+}
+
+.key:active .key-cap {
+  transform: translateY(7px);
+  box-shadow: 0 2px 0 var(--key-depth);
+  transition-duration: 80ms;
+}
+
+.key input:checked + .key-cap {
+  background: var(--yellow);
+  transform: translateY(5px);
+  box-shadow: 0 4px 0 var(--key-depth);
+}
+
+.key input:focus-visible + .key-cap {
+  outline: 3px solid var(--pink);
+  outline-offset: 5px;
+}
+
+/* --- Ticket --------------------------------------------------------------- */
+.ticket-rail {
+  grid-area: ticket;
+  position: sticky;
+  top: 1.5rem;
+}
+
+.ticket {
+  position: relative;
+  width: min(100%, 25rem);
+  margin-left: auto;
+  padding: 1.5rem 1.5rem 2.75rem;
+  background: var(--paper);
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  transform: rotate(1.5deg);
+  /* Borde inferior cortado en zigzag, como papel arrancado de la máquina. */
+  -webkit-mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / 18px 100%;
+  mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / 18px 100%;
+}
+
+/* «Avance de papel»: cada vez que cambia el ticket, da un tirón corto. */
+.ticket.is-feeding {
+  animation: ticket-feed 520ms var(--spring-fallback);
+  animation: ticket-feed 520ms var(--spring);
+}
+
+@keyframes ticket-feed {
+  from { transform: rotate(1.5deg) translateY(-10px); }
+  to { transform: rotate(1.5deg) translateY(0); }
+}
+
+.ticket-head {
+  text-align: center;
+  padding-bottom: 1rem;
+  border-bottom: 2px dashed var(--ink);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.ticket-brand {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: 2.2rem;
+  line-height: 1;
+}
+
+.ticket-lines {
+  list-style: none;
+  padding: 1rem 0;
+  min-height: 5.5rem;
+  border-bottom: 2px dashed var(--ink);
+}
+
+.ticket-lines li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.25rem 0;
+  font-weight: 600;
+}
+
+.ticket-line {
+  animation: ticket-print 480ms var(--spring-fallback) both;
+  animation: ticket-print 480ms var(--spring) both;
+}
+
+@keyframes ticket-print {
+  from { opacity: 0; transform: translateY(-12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.ticket-empty {
+  color: #5a554c;
+  font-style: italic;
+}
+
+.ticket-totals {
+  display: grid;
+  gap: 0.6rem;
+  padding: 1rem 0 1.25rem;
+}
+
+.ticket-total {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+}
+
+/* Contador mecánico: cada dígito es una tira 0-9 que se corre con
+   translateY. riso.js arma las tiras y pone --d (el dígito) y --i (la
+   posición, para escalonar de derecha a izquierda). */
+.odometer {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.05em;
+  font-size: 2.4rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: none;
+  line-height: 1;
+}
+
+.odo-prefix {
+  font-size: 0.45em;
+  font-weight: 800;
+  margin-right: 0.3em;
+}
+
+.odo-digit {
+  display: inline-block;
+  height: 1em;
+  overflow: hidden;
+}
+
+.odo-digit.is-lead {
+  opacity: 0.2;
+}
+
+.odo-strip {
+  display: flex;
+  flex-direction: column;
+  transform: translateY(calc(var(--d, 0) * -1em));
+  transition: transform 900ms var(--spring-fallback);
+  transition: transform 900ms var(--spring);
+  transition-delay: calc(var(--i, 0) * 70ms);
+}
+
+.odo-strip span {
+  display: block;
+  height: 1em;
+  line-height: 1;
+}
+
+.ticket-cta {
+  width: 100%;
+}
+
+.ticket-hint {
+  margin-top: 0.75rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Talón flotante: recuerda el total cuando te alejás del cotizador. */
+.ticket-stub {
+  position: fixed;
+  left: calc(var(--margin-w) + 1rem);
+  bottom: 1rem;
+  z-index: 80;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  padding: 0.75rem 1.1rem;
+  background: var(--yellow);
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  font-weight: 700;
+  text-decoration: none;
+  transform: translateY(160%) rotate(-3deg);
+  visibility: hidden;
+  transition: transform 600ms var(--spring-fallback), visibility 0s linear 600ms;
+  transition: transform 600ms var(--spring), visibility 0s linear 600ms;
+}
+
+.ticket-stub.is-shown {
+  transform: translateY(0) rotate(-3deg);
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+.ticket-stub strong {
+  font-family: var(--display);
+  font-size: 1.5rem;
+  font-weight: 900;
+}
+
+/* --- Casos ---------------------------------------------------------------- */
+.cases {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 2rem var(--gutter);
+  padding: clamp(4rem, 10vw, 8rem) var(--gutter);
+}
+
+.cases h2 {
+  grid-column: 1 / -1;
+}
+
+.case {
+  padding: 1.75rem;
+  border: 2px solid var(--fg);
+}
+
+.case h3 {
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  margin-bottom: 0.75rem;
+}
+
+.case p {
+  color: var(--muted);
+  max-width: 44ch;
+}
+
+.case--big {
+  grid-column: 1 / 8;
+  grid-row: span 2;
+  border: 0;
+  padding: 0;
+}
+
+.case-figure {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: clamp(8rem, 22vw, 20rem);
+  line-height: 0.8;
+  color: var(--pink);
+  text-shadow: 6px 6px 0 var(--blue);
+  margin-bottom: 1.5rem;
+}
+
+.case--tilt {
+  grid-column: 8 / 13;
+  align-self: start;
+  margin-top: 6rem;
+  background: var(--paper);
+  color: var(--ink);
+  border-color: var(--ink);
+  transform: rotate(2.5deg);
+}
+
+.case--tilt p { color: #4a453d; }
+
+.case--low {
+  grid-column: 8 / 13;
+  align-self: start;
+}
+
+/* --- Cómo trabajo --------------------------------------------------------- */
+.method {
+  padding: clamp(4rem, 10vw, 8rem) var(--gutter);
+  border-top: 2px solid var(--fg);
+  border-bottom: 2px solid var(--fg);
+}
+
+.method-line {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: clamp(3.2rem, 9vw, 9rem);
+  line-height: 0.88;
+  text-transform: uppercase;
+}
+
+.method-line--pink {
+  color: var(--pink);
+  padding-left: 8vw;
+}
+
+.method-line--right {
+  text-align: right;
+}
+
+.method-note {
+  margin-top: 2rem;
+  max-width: 34ch;
+  color: var(--muted);
+  font-size: 1.15rem;
+}
+
+/* --- Paquetes: volantes pegados que se pisan ------------------------------ */
+.packs {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 1.5rem var(--gutter);
+  padding: clamp(4rem, 10vw, 8rem) var(--gutter);
+}
+
+.packs h2 {
+  grid-column: 1 / -1;
+  margin-bottom: 1rem;
+}
+
+.flyer {
+  position: relative;
+  padding: 2rem 1.75rem 2.25rem;
+  color: var(--ink);
+  border: 2px solid var(--ink);
+}
+
+.flyer h3 {
+  font-size: clamp(2.2rem, 3.6vw, 3.4rem);
+  margin-bottom: 0.9rem;
+}
+
+.flyer--a {
+  grid-column: 1 / 6;
+  background: var(--pink);
+  transform: rotate(-3deg);
+}
+
+.flyer--b {
+  grid-column: 5 / 10;
+  z-index: 1;
+  margin-top: 5rem;
+  background: var(--paper);
+  transform: rotate(2deg);
+}
+
+.flyer--c {
+  grid-column: 8 / 13;
+  margin-top: -3rem;
+  background: var(--yellow);
+  transform: rotate(-1deg);
+}
+
+.offer {
+  grid-column: 2 / 12;
+  margin-top: 3rem;
+  padding: 2rem;
+  border: 3px dashed var(--pink);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 1rem 2rem;
+}
+
+.offer-title {
+  grid-column: 1 / -1;
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  line-height: 0.9;
+  text-transform: uppercase;
+  color: var(--pink);
+}
+
+.offer p:not(.offer-title) {
+  max-width: 52ch;
+  color: var(--muted);
+}
+
+/* --- Portafolio ----------------------------------------------------------- */
+.work {
+  padding: clamp(4rem, 10vw, 8rem) var(--gutter);
+}
+
+.work-list {
+  list-style: none;
+  margin-top: 2rem;
+}
+
+.work-list li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 22rem);
+  align-items: baseline;
+  gap: 1rem 2rem;
+  padding: 1.5rem 0;
+  border-top: 2px solid var(--fg);
+}
+
+.work-list li:last-child {
+  border-bottom: 2px solid var(--fg);
+}
+
+.work-list h3 {
+  font-size: clamp(2.2rem, 6vw, 5.5rem);
+  transition: transform 500ms var(--spring-fallback), text-shadow 250ms var(--ease-out), color 250ms var(--ease-out);
+  transition: transform 500ms var(--spring), text-shadow 250ms var(--ease-out), color 250ms var(--ease-out);
+}
+
+.work-list p {
+  color: var(--muted);
+}
+
+@media (hover: hover) {
+  .work-list li:hover h3 {
+    transform: translateX(1.5rem);
+    color: var(--pink);
+    text-shadow: -4px 3px 0 var(--blue);
+  }
+}
+
+/* --- Testimonios: notas pegadas ------------------------------------------- */
+.notes {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 2rem var(--gutter);
+  padding: clamp(4rem, 10vw, 8rem) var(--gutter);
+}
+
+.notes h2 {
+  grid-column: 1 / -1;
+}
+
+.note {
+  padding: 1.75rem;
+  color: var(--ink);
+}
+
+.note blockquote {
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.note figcaption {
+  margin-top: 1rem;
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 1.3rem;
+  text-transform: uppercase;
+}
+
+.note--pink { grid-column: 1 / 5; background: var(--pink); transform: rotate(-2deg); }
+.note--paper { grid-column: 5 / 9; background: var(--paper); margin-top: 4rem; transform: rotate(1.5deg); }
+.note--yellow { grid-column: 9 / 13; background: var(--yellow); transform: rotate(-1deg); }
+
+/* --- FAQ ------------------------------------------------------------------ */
+.faq {
+  padding: clamp(4rem, 10vw, 8rem) var(--gutter);
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: 2rem var(--gutter);
+  align-items: start;
+}
+
+.faq-list details {
+  border-top: 2px solid var(--fg);
+}
+
+.faq-list details:last-child {
+  border-bottom: 2px solid var(--fg);
+}
+
+.faq-list summary {
+  position: relative;
+  list-style: none;
+  cursor: pointer;
+  padding: 1.25rem 3.5rem 1.25rem 0;
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: clamp(1.4rem, 2.4vw, 2rem);
+  text-transform: uppercase;
+  line-height: 1.05;
+}
+
+.faq-list summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Cruz dibujada con dos barras: gira a «x» al abrir. */
+.faq-list summary::before,
+.faq-list summary::after {
+  content: "";
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  width: 1.4rem;
+  height: 3px;
+  background: var(--pink);
+  transition: transform 450ms var(--spring-fallback);
+  transition: transform 450ms var(--spring);
+}
+
+.faq-list summary::after {
+  transform: rotate(90deg);
+}
+
+.faq-list details[open] summary::before {
+  transform: rotate(45deg);
+}
+
+.faq-list details[open] summary::after {
+  transform: rotate(135deg);
+}
+
+.faq-list details p {
+  padding: 0 0 1.5rem;
+  max-width: 60ch;
+  color: var(--muted);
+}
+
+/* --- Contacto ------------------------------------------------------------- */
+.contact {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 2rem var(--gutter);
+  padding: clamp(4rem, 10vw, 8rem) var(--gutter);
+  border-top: 2px solid var(--fg);
+}
+
+.contact h2 {
+  grid-column: 1 / -1;
+}
+
+.contact-direct {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.contact-direct p {
+  color: var(--muted);
+  font-size: 1.15rem;
+}
+
+.contact-big {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: clamp(3.5rem, 8vw, 7rem);
+  line-height: 0.9;
+  text-transform: uppercase;
+  color: var(--pink);
+  text-decoration: none;
+}
+
+@media (hover: hover) {
+  .contact-big:hover { text-shadow: 5px -4px 0 var(--blue); }
+}
+
+.contact-mail {
+  font-weight: 700;
+  text-underline-offset: 4px;
+  overflow-wrap: anywhere;
+}
+
+.contact-form {
+  display: grid;
+  gap: 1rem;
+}
+
+.contact-form label {
+  display: grid;
+  gap: 0.4rem;
+  font-weight: 700;
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 0.95rem 1rem;
+  background: transparent;
+  color: var(--fg);
+  border: 2px solid var(--fg);
+  border-radius: 0;
+  font: inherit;
+  font-size: 1rem;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  outline: 3px solid var(--pink);
+  outline-offset: 2px;
+}
+
+.contact-form textarea {
+  resize: vertical;
+  min-height: 8rem;
+}
+
+.contact-form .btn {
+  justify-self: start;
+}
+
+.form-consent {
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.form-consent a,
+.colophon a {
+  text-underline-offset: 3px;
+}
+
+/* --- Colofón (pie) -------------------------------------------------------- */
+.colophon {
+  padding: 2rem var(--gutter) 6rem;
+  border-top: 2px solid var(--fg);
+  overflow: hidden;
+}
+
+.colophon-word {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: calc((100vw - var(--margin-w)) * 0.24);
+  line-height: 0.78;
+  color: var(--pink);
+  white-space: nowrap;
+  margin-left: -0.03em;
+}
+
+.colophon-cols {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+}
+
+.colophon-brand,
+.colophon h2 {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: 1.4rem;
+  text-transform: uppercase;
+  margin-bottom: 0.4rem;
+}
+
+.colophon p {
+  color: var(--muted);
+}
+
+.colophon-copy {
+  margin-top: 2.5rem;
+  font-size: 0.9rem;
+}
+
+/* --- Sello de WhatsApp ---------------------------------------------------- */
+.wa-stamp {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: var(--pink);
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: 1.05rem;
+  text-transform: uppercase;
+  text-decoration: none;
+  transform: rotate(-12deg);
+  transition: transform 500ms var(--spring-fallback);
+  transition: transform 500ms var(--spring);
+}
+
+@media (hover: hover) {
+  .wa-stamp:hover { transform: rotate(0deg) scale(1.06); }
+}
+
+.hero-in-view .wa-stamp {
+  transform: translateY(180%) rotate(-12deg);
+  visibility: hidden;
+  transition: transform 500ms var(--ease-out), visibility 0s linear 500ms;
+}
+
+/* ==========================================================================
+   Celular y tablet (≤ 860px): el margen pasa a ser una tira arriba y el menú
+   se abre a pantalla completa. Las grillas rotas se apilan.
+   ========================================================================== */
+@media (max-width: 860px) {
+  :root {
+    --margin-w: 0px;
+  }
+
+  body {
+    padding-top: 64px;
+  }
+
+  .margin {
+    inset: 0 0 auto 0;
+    width: auto;
+    height: 64px;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0 0.75rem 0 1rem;
+    border-right: 0;
+    border-bottom: 2px solid var(--fg);
+  }
+
+  .margin-actions {
+    order: 2;
+    margin: 0;
+    flex-direction: row;
+  }
+
+  .reg-mark {
+    display: none;
+  }
+
+  .nav-toggle {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .nav-toggle span,
+  .nav-toggle span::before,
+  .nav-toggle span::after {
+    content: "";
+    position: absolute;
+    left: 9px;
+    width: 26px;
+    height: 3px;
+    background: var(--fg);
+    transition: transform 400ms var(--spring-fallback), background-color 150ms;
+    transition: transform 400ms var(--spring), background-color 150ms;
+  }
+
+  .nav-toggle span { top: 50%; margin-top: -1.5px; }
+  .nav-toggle span::before { left: 0; top: -8px; }
+  .nav-toggle span::after { left: 0; top: 8px; }
+
+  .nav-open .nav-toggle span { background: transparent; }
+  .nav-open .nav-toggle span::before { transform: translateY(8px) rotate(45deg); }
+  .nav-open .nav-toggle span::after { transform: translateY(-8px) rotate(-45deg); }
+
+  .margin-links {
+    display: none;
+    position: fixed;
+    inset: 64px 0 0 0;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0.25rem;
+    padding: 1.5rem;
+    background: var(--pink);
+    color: var(--ink);
+  }
+
+  .nav-open .margin-links {
+    display: flex;
+  }
+
+  .margin-links a {
+    writing-mode: horizontal-tb;
+    transform: none;
+    font-size: clamp(2.5rem, 12vw, 4rem);
+    font-weight: 900;
+    letter-spacing: 0;
+    padding: 0.1rem 0;
+  }
+
+  .margin-links a:hover,
+  .margin-links a.is-active {
+    color: var(--paper);
+    text-shadow: 3px -3px 0 var(--blue);
+  }
+
+  .margin-brand {
+    font-size: 2rem;
+  }
+
+  .skip-link {
+    left: 1rem;
+  }
+
+  .hero {
+    min-height: calc(100svh - 64px);
+  }
+
+  .riso-word {
+    font-size: min(32vw, calc((100svh - 22rem) / 1.75));
+  }
+
+  .hero-foot {
+    grid-template-columns: 1fr;
+  }
+
+  .stamp--price {
+    top: auto;
+    bottom: 42%;
+    right: 1rem;
+    width: 6.5rem;
+    font-size: 1.5rem;
+  }
+
+  .stamp--city {
+    display: none;
+  }
+
+  .stamp--time {
+    bottom: auto;
+    top: 1.25rem;
+    right: 1rem;
+    font-size: 1rem;
+  }
+
+  .poster {
+    top: 64px;
+    height: calc(100svh - 64px);
+  }
+
+  .poster-label {
+    top: auto;
+    bottom: 1rem;
+    left: 1rem;
+    right: 1rem;
+    width: auto;
+  }
+
+  .poster-word {
+    top: 0.75rem;
+    bottom: auto;
+    font-size: 46vw;
+    white-space: normal;
+    line-height: 0.92;
+  }
+
+  .stamp--poster {
+    display: none;
+  }
+
+  .register {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "intro"
+      "keys"
+      "ticket";
+  }
+
+  .ticket-rail {
+    position: static;
+  }
+
+  .ticket {
+    margin: 0 auto;
+  }
+
+  .ticket-stub {
+    left: 1rem;
+  }
+
+  .cases,
+  .packs,
+  .notes {
+    grid-template-columns: 1fr;
+  }
+
+  .case--big,
+  .case--tilt,
+  .case--low,
+  .flyer--a,
+  .flyer--b,
+  .flyer--c,
+  .offer,
+  .note--pink,
+  .note--paper,
+  .note--yellow {
+    grid-column: 1 / -1;
+    grid-row: auto;
+    margin-top: 0;
+  }
+
+  .offer {
+    grid-template-columns: 1fr;
+  }
+
+  .work-list li,
+  .faq,
+  .contact,
+  .colophon-cols {
+    grid-template-columns: 1fr;
+  }
+
+  .colophon-word {
+    font-size: 24vw;
+  }
+
+  .wa-stamp {
+    width: 64px;
+    height: 64px;
+    font-size: 0.8rem;
+  }
+}
+
+/* ==========================================================================
+   Reducir movimiento: capas quietas con un desregistro fijo, sin giros de
+   afiches, sin rebotes. Todo sigue visible y funcionando.
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+  }
+
+  .poster-sheet {
+    transform: none;
+  }
+
+  .poster-word {
+    transform: none;
+  }
+}

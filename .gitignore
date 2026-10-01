@@ -18,3 +18,7 @@ design-systems/
 # Resultados de Playwright
 test-results/
 playwright-report/
+
+# Capturas y snapshots del Playwright MCP
+.playwright-mcp/
+riso-*.png
