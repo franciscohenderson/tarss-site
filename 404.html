@@ -6,7 +6,7 @@
   <script>
     /* Aplica el tema ANTES de pintar la página (evita un destello del tema
        equivocado): el que la persona eligió con el botón, o si nunca eligió,
-       OSCURO (el diseño principal). La lógica del botón: riso.js (initThemeToggle). */
+       OSCURO (el diseño principal). La lógica del botón: js/core.js (initThemeToggle). */
     (function () {
       var theme;
       try { theme = localStorage.getItem('theme'); } catch (e) {}
@@ -17,7 +17,7 @@
        Las etiquetas (Analytics, píxel de Meta, conversiones de Google Ads) se
        configuran en tagmanager.google.com, no acá. Los eventos que manda el
        sitio (generate_lead, quote_request, whatsapp_click, email_click) salen
-       de trackEvent() en riso.js. -->
+       de trackEvent() en js/lib/track.js. -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
   new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
   j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
@@ -45,6 +45,8 @@
   <link rel="preload" href="/fonts/big-shoulders-display-var.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="/fonts/libre-franklin-var.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="/riso.css" />
+  <link rel="modulepreload" href="/js/core.js" />
+  <link rel="modulepreload" href="/js/lib/env.js" />
 </head>
 <body class="riso">
   <!-- Google Tag Manager (noscript) -->
@@ -79,7 +81,7 @@
     <!-- Las rutas de esta página son absolutas (/riso.css, /index.html...)
          porque Cloudflare la muestra en CUALQUIER ruta inexistente, también
          en /algo/mas/profundo. Easter egg: con mouse, «Volver al inicio» se
-         escapa 4 veces (riso.js, initRunawayButton). -->
+         escapa 4 veces (js/features/runaway.js). -->
     <header class="page-hero page-hero--error">
       <p class="big-number" aria-hidden="true" data-text="404">404</p>
       <h1 class="display">Página no encontrada</h1>
@@ -114,6 +116,6 @@
   </footer>
 
   <a class="wa-stamp" href="https://wa.me/5492617459362" target="_blank" rel="noopener noreferrer" aria-label="Chat por WhatsApp">WhatsApp</a>
-  <script src="/riso.js" defer></script>
+  <script type="module" src="/js/main.js"></script>
 </body>
 </html>

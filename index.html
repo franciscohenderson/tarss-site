@@ -8,7 +8,7 @@
   <script>
     /* Aplica el tema ANTES de pintar la página (evita un destello del tema
        equivocado): el que la persona eligió con el botón, o si nunca eligió,
-       OSCURO (el diseño principal). La lógica del botón: riso.js (initThemeToggle). */
+       OSCURO (el diseño principal). La lógica del botón: js/core.js (initThemeToggle). */
     (function () {
       var theme;
       try { theme = localStorage.getItem('theme'); } catch (e) {}
@@ -19,7 +19,7 @@
        Las etiquetas (Analytics, píxel de Meta, conversiones de Google Ads) se
        configuran en tagmanager.google.com, no acá. Los eventos que manda el
        sitio (generate_lead, quote_request, whatsapp_click, email_click) salen
-       de trackEvent() en riso.js. -->
+       de trackEvent() en js/lib/track.js. -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
   new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
   j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
@@ -108,6 +108,8 @@
   <link rel="preload" href="/fonts/big-shoulders-display-var.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="/fonts/libre-franklin-var.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="riso.css" />
+  <link rel="modulepreload" href="js/core.js" />
+  <link rel="modulepreload" href="js/lib/env.js" />
 </head>
 <body class="riso">
   <!-- Google Tag Manager (noscript) -->
@@ -143,7 +145,7 @@
   <main id="main-content">
     <!-- HERO: «VENDER MÁS» a pantalla completa. Cada palabra gigante lleva dos
          capas decorativas (rosa y azul, con ::before/::after y data-text) que
-         riso.js corre siguiendo el cursor: el «desregistro» de la imprenta. -->
+         js/core.js corre siguiendo el cursor: el «desregistro» de la imprenta. -->
     <header class="hero" id="inicio">
       <h1 class="hero-title">
         <span class="hero-lead">Ayudo a tu negocio a</span>
@@ -162,7 +164,7 @@
       <p class="stamp stamp--time" aria-hidden="true">propuesta<br>en 24 h</p>
     </header>
 
-    <!-- Cinta de papel: se desplaza con el scroll (no sola), ver riso.js. -->
+    <!-- Cinta de papel: se desplaza con el scroll (no sola), ver js/core.js. -->
     <div class="tape" role="region" aria-label="Por qué Tars 2.0">
       <ul class="tape-track">
         <li>Sitios ultra rápidos</li><li>100% adaptables</li><li>Optimización SEO</li><li>Seguros</li><li>Enfocados en ventas</li>
@@ -171,7 +173,7 @@
     </div>
 
     <!-- AFICHES: cada servicio es una hoja a pantalla completa que se queda fija
-         (sticky) mientras la siguiente sube y la tapa. riso.js publica dos
+         (sticky) mientras la siguiente sube y la tapa. js/core.js publica dos
          variables por afiche: --enter (cuánto entró) y --cover (cuánto lo tapó
          el siguiente) y el CSS las convierte en giro y escala. -->
     <section class="posters" id="servicios" aria-labelledby="servicios-title">
@@ -226,7 +228,7 @@
 
     <!-- REGISTRADORA: teclas a la izquierda, ticket fijo a la derecha. Los
          precios salen de data-price (USD) y data-billing="monthly" marca lo que
-         se cobra por mes. riso.js arma el ticket y el link a WhatsApp. -->
+         se cobra por mes. js/features/register.js arma el ticket y el link a WhatsApp. -->
     <section class="register" id="cotizador" aria-labelledby="cotizador-title">
       <div class="register-intro">
         <h2 id="cotizador-title" class="display">Armá tu<br>presupuesto</h2>
@@ -402,6 +404,6 @@
 
   <a class="wa-stamp" href="https://wa.me/5492617459362" target="_blank" rel="noopener noreferrer" aria-label="Chat por WhatsApp">WhatsApp</a>
   <a class="ticket-stub" id="ticket-stub" href="#cotizador" hidden>Tu ticket <strong id="ticket-stub-total">USD 0</strong></a>
-  <script src="riso.js" defer></script>
+  <script type="module" src="js/main.js"></script>
 </body>
 </html>

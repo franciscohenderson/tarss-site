@@ -7,7 +7,7 @@
 
    Tema: [data-theme="dark"] (por defecto) = tinta negra de fondo con las
    tintas fluo encima; [data-theme="light"] = papel. El atributo lo pone el
-   script del <head> antes de pintar y lo cambia el botón (riso.js).
+   script del <head> antes de pintar y lo cambia el botón (js/core.js).
    ========================================================================== */
 
 @font-face {
@@ -42,7 +42,7 @@
   --margin-w: 88px;   /* ancho del margen de impresión (menú vertical) */
   --gutter: clamp(1rem, 3vw, 2.5rem);
 
-  /* Desregistro riso: riso.js mueve --rx/--ry con física de resorte. */
+  /* Desregistro riso: js/core.js mueve --rx/--ry con física de resorte. */
   --rx: 3px;
   --ry: 2px;
 
@@ -215,7 +215,7 @@ h3 {
 }
 
 /* --- Botones ---------------------------------------------------------------
-   Rectángulos de imprenta. --mx/--my los mueve el efecto magnético (riso.js)
+   Rectángulos de imprenta. --mx/--my los mueve el efecto magnético (js/core.js)
    con un resorte; :active los «estampa» (se achican un poco). */
 .btn {
   --mx: 0px;
@@ -595,7 +595,7 @@ h3 {
 }
 
 /* --enter: 0 → 1 mientras la hoja sube; --cover: 0 → 1 mientras la siguiente
-   la tapa. Las dos las publica riso.js en cada cuadro de scroll. */
+   la tapa. Las dos las publica js/core.js en cada cuadro de scroll. */
 .poster-sheet {
   --enter: 1;
   --cover: 0;
@@ -903,7 +903,7 @@ h3 {
 }
 
 /* Contador mecánico: cada dígito es una tira 0-9 que se corre con
-   translateY. riso.js arma las tiras y pone --d (el dígito) y --i (la
+   translateY. js/features/register.js arma las tiras y pone --d (el dígito) y --i (la
    posición, para escalonar de derecha a izquierda). */
 .odometer {
   display: inline-flex;
@@ -2356,5 +2356,43 @@ h3 {
 
   .poster-word {
     transform: none;
+  }
+}
+
+/* ==========================================================================
+   Rendimiento del render inicial
+   --------------------------------------------------------------------------
+   content-visibility: auto -> el navegador no maqueta ni pinta estas
+   secciones hasta que se acercan a la pantalla (el primer pantallazo sale
+   antes). contain-intrinsic-size reserva un alto estimado para que la barra
+   de scroll no salte; «auto» recuerda el alto real una vez medido.
+   NO se aplica a .posters ni a .register: usan position: sticky, y la
+   contención rompe el «pegado» de sus hijos.
+   ========================================================================== */
+.cases,
+.method,
+.packs,
+.work,
+.notes,
+.faq,
+.contact,
+.spec,
+.prices,
+.includes,
+.zine,
+.tips,
+.closing,
+.form-block,
+.colophon {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 900px;
+}
+
+/* En celulares, el grano deja de mezclarse (mix-blend-mode) con todo lo que
+   tiene debajo en cada cuadro de scroll: una trama apenas visible alcanza. */
+@media (max-width: 860px) {
+  body::after {
+    mix-blend-mode: normal;
+    opacity: calc(var(--grain-opacity) * 0.5);
   }
 }
