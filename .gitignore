@@ -14,3 +14,7 @@ design-systems/
 # Herramientas locales de Claude Code (no son parte del sitio publicado)
 .mcp.json
 .claude/
+
+# Resultados de Playwright
+test-results/
+playwright-report/
