@@ -7,3 +7,10 @@ node_modules/
 
 # Ignore editor files
 .vscode/
+
+# Referencias de diseño extraídas con SkillUI (no se publican)
+design-systems/
+
+# Herramientas locales de Claude Code (no son parte del sitio publicado)
+.mcp.json
+.claude/
