@@ -24,7 +24,7 @@ test.describe('Proyectos de muestra', () => {
   test('cada maqueta se pide por WhatsApp con su nombre y se mide', async ({ page }) => {
     await page.goto('/index.html');
     const link = page.getByRole('link', { name: 'Quiero una landing así' });
-    await expect(link).toHaveAttribute('href', /wa\.me\/5492617459362\?text=.*landing/);
+    await expect(link).toHaveAttribute('href', /wa\.me\/5492612408064\?text=.*landing/);
     // Al enfocar con teclado, las planchas entran en registro.
     await link.focus();
     await expect(link).toBeFocused();

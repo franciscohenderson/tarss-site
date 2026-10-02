@@ -56,8 +56,8 @@ test.describe('quote.js (sin navegador)', () => {
       '',
       'Total estimado: USD 149 + USD 50/mes',
     ].join('\n'));
-    const url = new URL(buildWhatsAppUrl(quote, '5492617459362'));
-    expect(url.origin + url.pathname).toBe('https://wa.me/5492617459362');
+    const url = new URL(buildWhatsAppUrl(quote, '5492612408064'));
+    expect(url.origin + url.pathname).toBe('https://wa.me/5492612408064');
     expect(url.searchParams.get('text')).toBe(buildWhatsAppMessage(quote));
   });
 
