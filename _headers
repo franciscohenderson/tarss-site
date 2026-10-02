@@ -20,3 +20,7 @@
   Cache-Control: public, max-age=3600, stale-while-revalidate=604800
 /js/*
   Cache-Control: public, max-age=3600, stale-while-revalidate=604800
+
+# Imágenes del sitio (pantallas de muestra): cambian poco.
+/img/*
+  Cache-Control: public, max-age=2592000
