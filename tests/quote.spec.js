@@ -5,7 +5,9 @@ const { test, expect } = require('@playwright/test');
 const path = require('path');
 const { pathToFileURL } = require('url');
 
-const load = () => import(pathToFileURL(path.join(__dirname, '..', 'js', 'lib', 'quote.js')).href);
+// import() nativo (ver tests/integrations.spec.js).
+const nativeImport = new Function('specifier', 'return import(specifier)');
+const load = () => nativeImport(pathToFileURL(path.join(__dirname, '..', 'js', 'lib', 'quote.js')).href);
 
 test.describe('quote.js (sin navegador)', () => {
   test.skip(({ isMobile }) => isMobile, 'lógica pura: alcanza con correrla una vez');

@@ -6,6 +6,7 @@
      botones magnéticos, vigía del hero.
    - Funciones por página (import dinámico, solo si su HTML existe):
        #ticket-form     -> features/register.js      (index, servicios)
+                           + features/ticket-actions.js (PDF y pago)
        #contact-form    -> features/contact-form.js  (contacto)
        .runaway-button  -> features/runaway.js       (404)
    Así la 404 o el blog no descargan el cotizador ni el formulario.
@@ -42,7 +43,11 @@ function loadContactForm() {
 }
 
 const features = [
-  ['#ticket-form', () => import('./features/register.js').then((m) => m.initRegister())],
+  ['#ticket-form', async () => {
+    const register = (await import('./features/register.js')).initRegister();
+    // PDF y pago online: después de la registradora, usando su API.
+    (await import('./features/ticket-actions.js')).initTicketActions(register);
+  }],
   ['#contact-form', loadContactForm],
   ['.runaway-button', () => import('./features/runaway.js').then((m) => m.initRunawayButton())],
 ];

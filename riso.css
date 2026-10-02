@@ -2396,3 +2396,44 @@ h3 {
     opacity: calc(var(--grain-opacity) * 0.5);
   }
 }
+
+/* --- Acciones del ticket: PDF y pago online -------------------------------
+   Viven sobre el papel del ticket, así que usan tinta (no --fg). */
+.ticket-actions {
+  display: grid;
+  gap: 0.6rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 2px dashed var(--ink);
+}
+
+.ticket .btn-line {
+  color: var(--ink);
+  border-color: var(--ink);
+  background: transparent;
+}
+
+@media (hover: hover) {
+  .ticket .btn-line:not(:disabled):hover {
+    background: var(--ink);
+    color: var(--paper);
+  }
+}
+
+.ticket .btn-pink {
+  border-color: var(--ink);
+}
+
+.ticket-actions .btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.ticket-actions .btn.is-busy:disabled {
+  opacity: 1;
+  cursor: progress;
+}
+
+.ticket-actions [hidden] {
+  display: none;
+}

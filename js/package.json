@@ -1,0 +1,4 @@
+{
+  "//": "Le indica a Node (tests) que los .js de esta carpeta son módulos ES. El navegador no lo usa.",
+  "type": "module"
+}

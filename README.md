@@ -117,3 +117,35 @@ El menú superior funciona en mobile con un botón hamburguesa para abrir y cerr
   "¿Querés una web que convierta? Tarss hace sitios modernos para emprendedores, entrega rápido y responde en menos de 24 horas."
 - Mensaje corto:
   "Diseño web desde USD 149 para emprendedores que quieren vender más online. Contacto rápido por WhatsApp."
+
+## Arquitectura (JavaScript)
+Sin build: módulos ES nativos.
+- `js/main.js`: entrada. Carga el núcleo y, solo si la página lo necesita, cada función con `import()` dinámico.
+- `js/core.js`: tema, menú, motor de scroll/desregistro, botones magnéticos.
+- `js/lib/quote.js`: **catálogo de precios** y cálculo del presupuesto (única fuente de verdad; lo usa también el servidor).
+- `js/lib/toast.js`, `track.js`, `pdf.js`, `payments.js`, `env.js`.
+- `js/features/`: registradora, acciones del ticket (PDF y pago), formulario de contacto, easter egg de la 404.
+- `vendor/jspdf/`: jsPDF autoalojado (se descarga solo al pedir un PDF). Para actualizarlo: `npm install` y `npm run vendor:jspdf`.
+
+## PDF de presupuesto y remito
+El ticket del cotizador tiene «Descargar PDF» (presupuesto). El generador (`js/lib/pdf.js`) también arma **remitos**: `downloadDocument('remito', quote)`.
+
+## Cobros online con Nave (Galicia)
+`functions/api/payment-link.js` es una Cloudflare Pages Function: las claves quedan en el servidor y el importe se recalcula ahí con el catálogo.
+Endpoints y cuerpo tomados del plugin oficial `nave-for-woocommerce`; confirmalos con la documentación que te da Nave al habilitar la integración.
+
+Variables en Cloudflare Pages → Settings → Environment variables (las claves como *Secret*):
+
+| Variable | Para qué |
+|---|---|
+| `NAVE_ENABLED` | `true` para mostrar el botón «Pagar ahora» |
+| `NAVE_ENV` | `sandbox` (por defecto) o `production` |
+| `NAVE_CLIENT_ID`, `NAVE_CLIENT_SECRET`, `NAVE_AUDIENCE`, `NAVE_POS_ID` | credenciales que entrega Nave |
+| `NAVE_CURRENCY` | moneda del cobro (`ARS` por defecto) |
+| `NAVE_USD_ARS_RATE` | cotización USD→ARS a usar (los precios del sitio están en USD) |
+| `NAVE_NOTIFICATION_URL` | opcional: webhook de avisos de pago |
+
+Sin credenciales funciona en **modo simulado** (devuelve un link de prueba a `gracias.html?pago=simulado`, no cobra). Solo se cobra online lo de pago único; los servicios mensuales se coordinan por WhatsApp.
+
+## Tests
+`npm test` (Playwright, escritorio y celular). Incluye tests en Node sin navegador para `quote.js`, `pdf.js` y la función de cobros.
