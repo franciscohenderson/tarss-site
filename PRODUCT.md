@@ -14,7 +14,7 @@ Dueños de negocios chicos y emprendedores de Argentina, mayormente desde el cel
 ## Verdades del producto (no inventar otras)
 - Precios: Landing Page USD 149 (pago único) · Mantenimiento USD 50/mes · SEO Local USD 80.
 - Entregas: landing 3–5 días; sitio de 4–5 páginas 7–10 días. Propuesta en menos de 24 h.
-- Contacto: WhatsApp +54 9 261 745-9362 · Franciscohenderson456@gmail.com.
+- Contacto: WhatsApp +54 9 261 745-9362 · contacto@tars.com.ar.
 - Medición: GTM-WKXQ88DT; eventos generate_lead, quote_request, whatsapp_click, email_click.
 
 ## Superficies
