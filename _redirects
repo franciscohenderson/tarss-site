@@ -20,3 +20,4 @@
 /test-results/*         /  301
 /playwright-report/*    /  301
 /node_modules/*         /  301
+/workers/*              /  301
