@@ -81,4 +81,18 @@ test.describe('Core Web Vitals', () => {
     await expect.poll(() => order.includes('vitals'), { timeout: 10000 }).toBe(true);
     expect(order.indexOf('load')).toBeLessThan(order.indexOf('vitals'));
   });
+test("el hero no salta aunque la fuente llegue tarde (CLS 0)", async ({ page, browserName }) => {
+    test.skip(browserName !== "chromium", "layout-shift es una API de Chromium");
+    // Fuente demorada 1,5 s: con font-display swap esto daba CLS 0,25.
+    await page.route("**/*.woff2", async (route) => { await new Promise((ok) => setTimeout(ok, 1500)); await route.continue(); });
+    await page.goto("/index.html", { waitUntil: "load" });
+    await page.waitForTimeout(500);
+    const cls = await page.evaluate(() => new Promise((resolve) => {
+      let total = 0;
+      new PerformanceObserver((list) => list.getEntries().forEach((e) => { if (!e.hadRecentInput) total += e.value; }))
+        .observe({ type: "layout-shift", buffered: true });
+      setTimeout(() => resolve(total), 100);
+    }));
+    expect(cls).toBeLessThan(0.01);
+  });
 });
