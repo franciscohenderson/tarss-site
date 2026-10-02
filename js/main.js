@@ -7,6 +7,7 @@
    - Funciones por página (import dinámico, solo si su HTML existe):
        #ticket-form     -> features/register.js      (index, servicios)
                            + features/ticket-actions.js (PDF y pago)
+       .hero-ink        -> features/ink.js           (index)
        #proof-form      -> features/proof.js         (index)
        #contact-form    -> features/contact-form.js  (contacto)
        .runaway-button  -> features/runaway.js       (404)
@@ -50,6 +51,7 @@ const features = [
     // PDF y pago online: después de la registradora, usando su API.
     (await import('./features/ticket-actions.js')).initTicketActions(register);
   }],
+  ['.hero-ink', () => import('./features/ink.js').then((m) => m.initInk())],
   ['#proof-form', () => import('./features/proof.js').then((m) => m.initProof())],
   ['#contact-form', loadContactForm],
   ['.runaway-button', () => import('./features/runaway.js').then((m) => m.initRunawayButton())],
