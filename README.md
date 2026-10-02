@@ -2,7 +2,7 @@
 
 Sitio comercial de un estudio web unipersonal de Mendoza (Argentina): presenta los servicios, arma presupuestos en el navegador, genera PDF y prepara cobros online con **Nave (Banco Galicia)** con conversión USD → ARS.
 
-**Producción:** https://tarss-site.pages.dev · **Hosting:** Cloudflare Pages (estático + Pages Functions) · **Build:** ninguno (HTML, CSS y módulos ES nativos)
+**Producción:** https://tars.com.ar · **Hosting:** Cloudflare Pages (estático + Pages Functions) · **Build:** ninguno (HTML, CSS y módulos ES nativos)
 
 ---
 
@@ -183,7 +183,7 @@ Sin las cuatro credenciales, el endpoint queda en **modo simulado**.
 - **Actualizar jsPDF:** `npm install` y `npm run vendor:jspdf`.
 - **Volver atrás un deploy:** desde Cloudflare Pages → Deployments → «Rollback», o con `git revert` del commit en `main`.
 - **Formulario:** Formspree con redirección a `gracias.html`, que es la página que cuenta la conversión.
-- **Dominio propio:** agregarlo en Cloudflare Pages y apuntar un CNAME a `tarss-site.pages.dev`.
+- **Dominio propio:** agregarlo en Cloudflare Pages y apuntar un CNAME a `tars.com.ar`.
 
 ---
 
