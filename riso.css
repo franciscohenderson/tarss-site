@@ -10,11 +10,17 @@
    script del <head> antes de pintar y lo cambia el botón (js/core.js).
    ========================================================================== */
 
+/* Fuentes: font-display «optional» + preload en cada <head>. La fuente casi
+   siempre llega antes de pintar (pesa ~30 KB y se pide primero) y se usa; si
+   la conexión es tan lenta que no llega a tiempo, esa visita queda con la
+   letra de reserva y NO salta cuando llega. Con «swap» el título gigante del
+   hero saltaba al cambiar de letra: CLS 0,25 («malo») medido con web-vitals.
+   La siguiente visita ya la tiene en caché (un año, ver _headers). */
 @font-face {
   font-family: 'Big Shoulders Display';
   font-style: normal;
   font-weight: 100 900;
-  font-display: swap;
+  font-display: optional;
   src: url('/fonts/big-shoulders-display-var.woff2') format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
@@ -23,7 +29,7 @@
   font-family: 'Libre Franklin';
   font-style: normal;
   font-weight: 100 900;
-  font-display: swap;
+  font-display: optional;
   src: url('/fonts/libre-franklin-var.woff2') format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
