@@ -1,4 +1,4 @@
-/* Tars 2.0 · medición para Google Tag Manager
+/* Tars · medición para Google Tag Manager
    Mismos eventos de siempre: whatsapp_click, email_click, quote_request, generate_lead. */
 
 export function trackEvent(event, params = {}) {

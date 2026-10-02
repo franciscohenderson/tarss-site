@@ -1,4 +1,4 @@
-# Tars 2.0 — Soluciones Digitales
+# Tars — Soluciones Digitales
 
 Sitio comercial de un estudio web unipersonal de Mendoza (Argentina): presenta los servicios, arma presupuestos en el navegador, genera PDF y prepara cobros online con **Nave (Banco Galicia)** con conversión USD → ARS.
 
@@ -192,6 +192,6 @@ Sin las cuatro credenciales, el endpoint queda en **modo simulado**.
 
 ## Apéndice: material comercial
 - **WhatsApp (cliente que pide propuesta):** «Hola, soy [Nombre] y quiero un sitio web para mi negocio de [tipo de negocio]. Busco una web que venda más y tenga contacto directo por WhatsApp. ¿Podés enviarme una propuesta?»
-- **Publicación para redes:** «Lanzá tu web profesional con Tars 2.0. Diseño rápido, pensado para vender y desde USD 149. Contacto directo por WhatsApp.»
-- **Instagram/Facebook:** «¿Querés una web que convierta? Tars 2.0 hace sitios modernos para emprendedores, entrega rápido y responde en menos de 24 horas.»
+- **Publicación para redes:** «Lanzá tu web profesional con Tars. Diseño rápido, pensado para vender y desde USD 149. Contacto directo por WhatsApp.»
+- **Instagram/Facebook:** «¿Querés una web que convierta? Tars hace sitios modernos para emprendedores, entrega rápido y responde en menos de 24 horas.»
 - **Mensaje corto:** «Diseño web desde USD 149 para emprendedores que quieren vender más online. Contacto rápido por WhatsApp.»

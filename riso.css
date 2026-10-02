@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Tars 2.0 — «Imprenta Riso»
+   Tars — «Imprenta Riso»
    --------------------------------------------------------------------------
    La web es un cartel de imprenta risográfica: tintas planas que se pisan,
    registro imperfecto y tipografía gigante como estructura. La constitución
@@ -302,6 +302,7 @@ h3 {
   min-height: 44px;
 }
 
+/* TA / RS: «TA» y el <span> son dos celdas de la grilla, quedan en dos líneas. */
 .margin-brand span {
   color: var(--accent);
 }
@@ -1791,6 +1792,10 @@ h3 {
 
   .margin-brand {
     font-size: 2rem;
+  }
+
+  .margin-brand {
+    grid-auto-flow: column; /* en la barra del celular: TARS en una línea */
   }
 
   .skip-link {

@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Tars 2.0 · cliente de la API de Nave (Galicia) para links de cobro
+   Tars · cliente de la API de Nave (Galicia) para links de cobro
    --------------------------------------------------------------------------
    Corre SOLO del lado del servidor (Cloudflare Pages Functions): las claves
    viven en variables de entorno y nunca llegan al navegador.
@@ -179,7 +179,7 @@ export function buildPaymentRequest(config, quote, { reference, buyer, siteUrl, 
       amount: { currency: config.currency, value: money(total) },
       products: items.map((item) => ({
         name: item.name,
-        description: `Servicio Tars 2.0: ${item.name}`,
+        description: `Servicio Tars: ${item.name}`,
         quantity: 1,
         unit_price: { currency: config.currency, value: money(convert(item.price)) },
       })),

@@ -1,4 +1,4 @@
-# Tars 2.0 — Producto
+# Tars — Producto
 
 ## Qué es
 Estudio unipersonal de Francisco Henderson (Mendoza, Argentina) que hace sitios web, mantenimiento técnico, redes sociales y asesoría digital para emprendedores y pequeños negocios.

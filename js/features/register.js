@@ -1,4 +1,4 @@
-/* Tars 2.0 · registradora (index y servicios)
+/* Tars · registradora (index y servicios)
    Se carga solo en páginas con #ticket-form (import dinámico desde main.js). */
 
 import { WHATSAPP_NUMBER, prefersReducedMotion } from '../lib/env.js';

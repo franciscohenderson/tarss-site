@@ -1,7 +1,7 @@
 {
   "name": "tarss-site",
   "private": true,
-  "description": "Tars 2.0 — sitio estático + funciones de Cloudflare Pages. Node se usa para tests y para copiar librerías a vendor/.",
+  "description": "Tars — sitio estático + funciones de Cloudflare Pages. Node se usa para tests y para copiar librerías a vendor/.",
   "scripts": {
     "serve": "http-server . -p 4173 -c-1 --silent",
     "test": "playwright test",

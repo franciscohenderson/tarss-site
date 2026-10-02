@@ -49,7 +49,7 @@ test.describe('quote.js (sin navegador)', () => {
     const { createQuote, buildWhatsAppMessage, buildWhatsAppUrl } = await load();
     const quote = createQuote(['landing', 'mantenimiento']);
     expect(buildWhatsAppMessage(quote)).toBe([
-      '¡Hola! Quiero solicitar este presupuesto de Tars 2.0:',
+      '¡Hola! Quiero solicitar este presupuesto de Tars:',
       '',
       '• Landing Page: USD 149',
       '• Mantenimiento: USD 50/mes',

@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Tars 2.0 · documentos PDF (presupuesto y remito)
+   Tars · documentos PDF (presupuesto y remito)
    --------------------------------------------------------------------------
    Dos partes:
    - documentModel(): PURA. Arma qué dice el documento (título, renglones,
@@ -15,7 +15,7 @@
 import { priceLabel, formatUSD } from './quote.js';
 
 const BUSINESS = {
-  name: 'TARS 2.0',
+  name: 'TARS',
   tagline: 'Imprenta digital · Mendoza',
   whatsapp: '+54 9 261 745-9362',
   email: 'contacto@tars.com.ar',
@@ -99,7 +99,7 @@ export function renderDocument(JsPDF, model) {
   const doc = new JsPDF({ unit: 'mm', format: 'a4' });
   const W = doc.internal.pageSize.getWidth();
   const M = 18; // margen
-  doc.setProperties({ title: `${model.title} ${model.reference}`, author: 'Tars 2.0', subject: model.title });
+  doc.setProperties({ title: `${model.title} ${model.reference}`, author: 'Tars', subject: model.title });
 
   // Banda superior: azul corrido 3mm debajo del rosa (desregistro riso).
   doc.setFillColor(...BLUE);

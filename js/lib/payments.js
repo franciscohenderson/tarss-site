@@ -1,4 +1,4 @@
-/* Tars 2.0 · cliente de /api/payment-link (Cloudflare Pages Function)
+/* Tars · cliente de /api/payment-link (Cloudflare Pages Function)
    El navegador solo manda los ids de los servicios: el importe lo calcula el
    servidor con el catálogo. Sin la función (ej. http-server local) o con
    NAVE_ENABLED distinto de "true", el botón de pago no aparece. */
