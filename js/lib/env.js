@@ -7,10 +7,6 @@ export const hasFinePointer = window.matchMedia('(hover: hover) and (pointer: fi
 
 export const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 
-export function formatUSD(amount) {
-  return `USD ${amount.toLocaleString('es-AR')}`;
-}
-
 /* Resorte amortiguado «a mano»: cada cuadro acerca `value` a `target` con una
    fuerza proporcional a la distancia (stiffness) y frena con la velocidad
    (damping). Con damping < 2·√stiffness rebota un poco antes de asentarse. */
@@ -24,3 +20,4 @@ export function stepSpring(spring, dt) {
   spring.value += spring.velocity * dt;
   return Math.abs(spring.velocity) > 0.01 || Math.abs(spring.target - spring.value) > 0.01;
 }
+

@@ -106,19 +106,46 @@ export function initRisoEngine() {
     }).observe(postersSection);
   }
 
-  function updatePosters() {
-    if (posters.length === 0) return; // páginas sin afiches
+  /* Medidas que solo cambian al redimensionar (memo): se calculan una vez y
+     en resize, no en cada cuadro. Antes se pedían en cada tick y obligaban
+     al navegador a recalcular estilos y layout. */
+  const measures = { stick: 0, range: 1, tapeHalf: 0 };
+  function measure() {
     // Los afiches se fijan en «top» (0 en escritorio, 64px bajo la barra en
     // celular): el recorrido útil es desde el borde de abajo hasta ahí.
-    const stick = parseFloat(getComputedStyle(posters[0]).top) || 0;
-    const range = window.innerHeight - stick;
-    posters.forEach((poster, index) => {
-      const top = poster.getBoundingClientRect().top - stick;
-      const enter = clamp(1 - top / range, 0, 1);
-      const next = posters[index + 1];
-      const cover = next ? clamp(1 - (next.getBoundingClientRect().top - stick) / range, 0, 1) : 0;
-      sheets[index].style.setProperty('--enter', enter.toFixed(3));
-      sheets[index].style.setProperty('--cover', cover.toFixed(3));
+    measures.stick = posters.length ? parseFloat(getComputedStyle(posters[0]).top) || 0 : 0;
+    measures.range = Math.max(1, window.innerHeight - measures.stick);
+    measures.tapeHalf = tapeTrack ? tapeTrack.scrollWidth / 2 : 0;
+  }
+  measure();
+
+  // Último valor escrito de cada variable: si no cambió, no se reescribe
+  // (escribir un estilo igual igual invalida y cuesta).
+  const written = new Map();
+  function write(element, name, value) {
+    const key = element === root ? name : element;
+    const previous = written.get(key);
+    if (previous && previous[name] === value) return;
+    element.style.setProperty(name, value);
+    written.set(key, { ...previous, [name]: value });
+  }
+
+  /* LECTURA: todas las posiciones juntas, antes de escribir nada. Intercalar
+     leer/escribir (como antes) forzaba un layout por afiche en cada cuadro. */
+  function readPosters() {
+    if (!postersVisible || posters.length === 0) return null;
+    return posters.map((poster) => poster.getBoundingClientRect().top - measures.stick);
+  }
+
+  /* ESCRITURA: con las posiciones ya leídas. */
+  function writePosters(tops) {
+    if (!tops) return;
+    tops.forEach((top, index) => {
+      const enter = clamp(1 - top / measures.range, 0, 1);
+      const next = tops[index + 1];
+      const cover = next === undefined ? 0 : clamp(1 - next / measures.range, 0, 1);
+      write(sheets[index], '--enter', enter.toFixed(3));
+      write(sheets[index], '--cover', cover.toFixed(3));
     });
   }
 
@@ -137,18 +164,17 @@ export function initRisoEngine() {
     }
     lastScrollY = scrollY;
 
+    // 1) Lecturas (layout) -> 2) cálculo -> 3) escrituras (estilo).
+    const tops = readPosters();
     const movingX = stepSpring(springX, dt);
     const movingY = stepSpring(springY, dt);
-    root.style.setProperty('--rx', `${(BASE_X + springX.value).toFixed(2)}px`);
-    root.style.setProperty('--ry', `${(BASE_Y + springY.value).toFixed(2)}px`);
 
-    if (tapeTrack) {
-      const half = tapeTrack.scrollWidth / 2;
-      const x = half > 0 ? -((scrollY * 0.35) % half) : 0;
-      tapeTrack.style.setProperty('--tape-x', `${x.toFixed(1)}px`);
+    write(root, '--rx', `${(BASE_X + springX.value).toFixed(2)}px`);
+    write(root, '--ry', `${(BASE_Y + springY.value).toFixed(2)}px`);
+    if (tapeTrack && measures.tapeHalf > 0) {
+      write(tapeTrack, '--tape-x', `${(-((scrollY * 0.35) % measures.tapeHalf)).toFixed(1)}px`);
     }
-
-    if (postersVisible) updatePosters();
+    writePosters(tops);
 
     if (movingX || movingY) schedule();
   }
@@ -173,7 +199,9 @@ export function initRisoEngine() {
     schedule();
   }, { passive: true });
 
-  window.addEventListener('resize', schedule, { passive: true });
+  window.addEventListener('resize', () => { measure(); schedule(); }, { passive: true });
+  // Las fuentes web cambian el ancho de la cinta al terminar de cargar.
+  document.fonts?.ready.then(() => { measure(); schedule(); });
 
   if (hasFinePointer) {
     window.addEventListener('pointermove', (event) => {
@@ -188,7 +216,6 @@ export function initRisoEngine() {
     });
   }
 
-  updatePosters();
   schedule();
 }
 
@@ -218,14 +245,22 @@ export function initMagnetic() {
       }
     };
 
-    element.addEventListener('pointermove', (event) => {
+    // Centro del botón medido una vez al entrar el mouse (restando el
+    // corrimiento magnético actual), no en cada pointermove.
+    let center = null;
+    element.addEventListener('pointerenter', (event) => {
       if (event.pointerType !== 'mouse') return;
       const rect = element.getBoundingClientRect();
-      sx.target = clamp((event.clientX - (rect.left + rect.width / 2)) * 0.3, -10, 10);
-      sy.target = clamp((event.clientY - (rect.top + rect.height / 2)) * 0.4, -8, 8);
+      center = { x: rect.left + rect.width / 2 - sx.value, y: rect.top + rect.height / 2 - sy.value };
+    });
+    element.addEventListener('pointermove', (event) => {
+      if (event.pointerType !== 'mouse' || !center) return;
+      sx.target = clamp((event.clientX - center.x) * 0.3, -10, 10);
+      sy.target = clamp((event.clientY - center.y) * 0.4, -8, 8);
       start();
     });
     element.addEventListener('pointerleave', () => {
+      center = null;
       sx.target = 0;
       sy.target = 0;
       start();

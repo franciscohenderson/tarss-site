@@ -177,8 +177,8 @@
       </article>
     </section>
 
-    <!-- Registradora (js/features/register.js): data-price en USD y
-         data-billing="monthly" para lo que se cobra por mes. -->
+    <!-- Registradora (js/features/register.js): precios en el catálogo
+         de js/lib/quote.js (data-service = id). -->
     <section class="register" id="cotizador" aria-labelledby="cotizador-title">
       <div class="register-intro">
         <h2 id="cotizador-title" class="display">Armá tu<br>presupuesto</h2>
@@ -189,15 +189,15 @@
         <fieldset>
           <legend>Servicios</legend>
           <label class="key">
-            <input type="checkbox" name="service" value="Landing Page" data-price="149" />
+            <input type="checkbox" name="service" value="Landing Page" data-service="landing" />
             <span class="key-cap"><span class="key-name">Landing Page</span><span class="key-price">USD 149</span></span>
           </label>
           <label class="key">
-            <input type="checkbox" name="service" value="Mantenimiento" data-price="50" data-billing="monthly" />
+            <input type="checkbox" name="service" value="Mantenimiento" data-service="mantenimiento" />
             <span class="key-cap"><span class="key-name">Mantenimiento</span><span class="key-price">USD 50/mes</span></span>
           </label>
           <label class="key">
-            <input type="checkbox" name="service" value="SEO Local" data-price="80" />
+            <input type="checkbox" name="service" value="SEO Local" data-service="seo-local" />
             <span class="key-cap"><span class="key-name">SEO Local</span><span class="key-price">USD 80</span></span>
           </label>
         </fieldset>

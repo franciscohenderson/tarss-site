@@ -1,7 +1,8 @@
 /* Tars 2.0 · registradora (index y servicios)
    Se carga solo en páginas con #ticket-form (import dinámico desde main.js). */
 
-import { WHATSAPP_NUMBER, prefersReducedMotion, formatUSD } from '../lib/env.js';
+import { WHATSAPP_NUMBER, prefersReducedMotion } from '../lib/env.js';
+import { createQuote, priceLabel, buildWhatsAppUrl, quoteAnalytics } from '../lib/quote.js';
 import { trackEvent } from '../lib/track.js';
 
 /* --- 6. Registradora ------------------------------------------------------
@@ -50,7 +51,7 @@ function setOdometer(wheels, amount) {
 
 export function initRegister() {
   const form = document.querySelector('#ticket-form');
-  if (!form) return;
+  if (!form) return null;
 
   const ticket = document.querySelector('#ticket');
   const lines = document.querySelector('#ticket-lines');
@@ -69,79 +70,72 @@ export function initRegister() {
     dateEl.textContent = today.toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric' });
   }
 
-  const selected = () => Array.from(form.querySelectorAll('input[name="service"]:checked')).map((input) => ({
-    name: input.value,
-    price: Number(input.dataset.price) || 0,
-    monthly: input.dataset.billing === 'monthly',
-  }));
-
-  // Un pago único y una cuota mensual no se suman en un solo número.
-  const describe = (oneTime, monthly) => {
-    if (oneTime && monthly) return `${formatUSD(oneTime)} + ${formatUSD(monthly)}/mes`;
-    if (monthly) return `${formatUSD(monthly)}/mes`;
-    return formatUSD(oneTime);
-  };
-
-  let printed = new Set();
-  let total = { oneTime: 0, monthly: 0 };
+  // Estado: el presupuesto actual (inmutable, viene de quote.js). Las demás
+  // funciones lo leen en vez de volver a recorrer el formulario.
+  let quote = createQuote();
   let registerVisible = false;
+  const listeners = new Set();
+
+  const selectedIds = () => Array.from(form.querySelectorAll('input[name="service"]:checked'), (input) => input.dataset.service);
 
   function updateStub() {
     if (!stub) return;
-    const hasItems = total.oneTime > 0 || total.monthly > 0;
-    stub.classList.toggle('is-shown', hasItems && !registerVisible);
+    stub.classList.toggle('is-shown', !quote.isEmpty && !registerVisible);
   }
 
-  function render(animate) {
-    const services = selected();
-    const oneTime = services.filter((s) => !s.monthly).reduce((sum, s) => sum + s.price, 0);
-    const monthly = services.filter((s) => s.monthly).reduce((sum, s) => sum + s.price, 0);
-    total = { oneTime, monthly };
-    const totalText = describe(oneTime, monthly);
+  // Renglones: se diffea contra lo ya impreso. Solo se crean los nuevos (y
+  // solo esos «se imprimen» con animación); los que se desmarcan se quitan.
+  function renderLines(previous, animate) {
+    const before = new Set(previous.items.map((item) => item.id));
+    const now = new Set(quote.items.map((item) => item.id));
 
-    // Renglones: solo los que se agregan ahora «se imprimen» (animación).
-    lines.textContent = '';
-    if (services.length === 0) {
+    lines.querySelector('.ticket-empty')?.remove();
+    lines.querySelectorAll('li[data-id]').forEach((li) => { if (!now.has(li.dataset.id)) li.remove(); });
+
+    quote.items.forEach((item, index) => {
+      let li = lines.querySelector(`li[data-id="${item.id}"]`);
+      if (!li) {
+        li = document.createElement('li');
+        li.dataset.id = item.id;
+        if (animate && !before.has(item.id)) li.className = 'ticket-line';
+        const name = document.createElement('span');
+        name.textContent = item.name;
+        const price = document.createElement('span');
+        price.textContent = priceLabel(item);
+        li.append(name, price);
+      }
+      // Mantiene el orden del catálogo aunque se marquen en otro orden.
+      if (lines.children[index] !== li) lines.insertBefore(li, lines.children[index] || null);
+    });
+
+    if (quote.isEmpty) {
       const empty = document.createElement('li');
       empty.className = 'ticket-empty';
       empty.textContent = 'Todavía no marcaste nada.';
       lines.appendChild(empty);
     }
-    const nowPrinted = new Set();
-    services.forEach((service) => {
-      const li = document.createElement('li');
-      if (animate && !printed.has(service.name)) li.className = 'ticket-line';
-      const name = document.createElement('span');
-      name.textContent = service.name;
-      const price = document.createElement('span');
-      price.textContent = `${formatUSD(service.price)}${service.monthly ? '/mes' : ''}`;
-      li.append(name, price);
-      lines.appendChild(li);
-      nowPrinted.add(service.name);
-    });
-    printed = nowPrinted;
+  }
 
-    setOdometer(odoOnce, oneTime);
-    setOdometer(odoMonthly, monthly);
-    live.textContent = `Total: ${totalText}`;
-    if (stubTotal) stubTotal.textContent = totalText;
+  function render(animate) {
+    const previous = quote;
+    quote = createQuote(selectedIds());
 
-    if (services.length === 0) {
+    renderLines(previous, animate);
+    // El contador solo se toca si cambió el importe (evita reiniciar el giro).
+    if (quote.oneTime !== previous.oneTime || !animate) setOdometer(odoOnce, quote.oneTime);
+    if (quote.monthly !== previous.monthly || !animate) setOdometer(odoMonthly, quote.monthly);
+    live.textContent = `Total: ${quote.totalText}`;
+    if (stubTotal) stubTotal.textContent = quote.totalText;
+
+    if (quote.isEmpty) {
       request.setAttribute('aria-disabled', 'true');
       request.removeAttribute('href');
       hint.textContent = 'Elegí al menos un servicio.';
     } else {
-      const plural = services.length > 1 ? 's' : '';
-      const message = [
-        '¡Hola! Quiero solicitar este presupuesto de Tars 2.0:',
-        '',
-        ...services.map((s) => `• ${s.name}: ${formatUSD(s.price)}${s.monthly ? '/mes' : ''}`),
-        '',
-        `Total estimado: ${totalText}`,
-      ].join('\n');
+      const plural = quote.count > 1 ? 's' : '';
       request.removeAttribute('aria-disabled');
-      request.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-      hint.textContent = `${services.length} servicio${plural} en el ticket.`;
+      request.href = buildWhatsAppUrl(quote, WHATSAPP_NUMBER);
+      hint.textContent = `${quote.count} servicio${plural} en el ticket.`;
     }
 
     if (animate && !prefersReducedMotion) {
@@ -151,6 +145,7 @@ export function initRegister() {
       ticket.classList.add('is-feeding');
     }
     updateStub();
+    listeners.forEach((listener) => listener(quote));
   }
 
   // Talón: aparece cuando hay algo en el ticket y el cotizador no está a la vista.
@@ -172,14 +167,18 @@ export function initRegister() {
       event.preventDefault();
       return;
     }
-    trackEvent('quote_request', {
-      currency: 'USD',
-      value: total.oneTime,
-      monthly_value: total.monthly,
-      services: selected().map((s) => s.name).join(', '),
-    });
+    trackEvent('quote_request', quoteAnalytics(quote));
   });
 
   render(false); // estado inicial (el navegador puede recordar teclas marcadas)
-}
 
+  // API para otras funciones de la registradora (PDF, cobros): leen el
+  // presupuesto actual y se enteran de los cambios sin tocar el formulario.
+  return {
+    getQuote: () => quote,
+    onChange(listener) {
+      listeners.add(listener);
+      return () => listeners.delete(listener);
+    },
+  };
+}
