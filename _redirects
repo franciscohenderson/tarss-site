@@ -1,0 +1,21 @@
+# Cloudflare Pages publica la carpeta entera (output directory «.»).
+# Estas reglas esconden lo que NO es parte del sitio público: documentación,
+# tests y configuración. Cloudflare aplica las redirecciones antes de servir
+# archivos, así que estas rutas mandan al inicio en vez de mostrarse.
+# (Pages no permite responder 404 desde _redirects: solo 301/302/303/307/308.)
+
+/README.md              /  301
+/DESIGN.md              /  301
+/PRODUCT.md             /  301
+/CLOUDFLARE-PAGES.md    /  301
+/CNAME.template         /  301
+/package.json           /  301
+/package-lock.json      /  301
+/playwright.config.js   /  301
+/wrangler.toml          /  301
+/js/package.json        /  301
+/tests/*                /  301
+/functions/*            /  301
+/test-results/*         /  301
+/playwright-report/*    /  301
+/node_modules/*         /  301
