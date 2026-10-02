@@ -10,6 +10,7 @@
        #contact-form    -> features/contact-form.js  (contacto)
        .runaway-button  -> features/runaway.js       (404)
    Así la 404 o el blog no descargan el cotizador ni el formulario.
+   - Core Web Vitals (lib/vitals.js): después de load, en un momento ocioso.
    ========================================================================== */
 import { initLinkTracking } from './lib/track.js';
 import { initThemeToggle, initNavigation, initRisoEngine, initMagnetic, initHeroWatch } from './core.js';
@@ -57,3 +58,17 @@ for (const [selector, load] of features) {
     load().catch((error) => console.error(`No se pudo cargar ${selector}:`, error));
   }
 }
+
+/* Core Web Vitals (todas las páginas): después del evento load y en un
+   momento ocioso, así la medición nunca compite con lo que ve la persona.
+   web-vitals recupera lo que pasó antes (buffered), no se pierde nada. */
+function loadWebVitals() {
+  const start = () => import('./lib/vitals.js')
+    .then((m) => m.initWebVitals())
+    .catch((error) => console.error('No se pudo cargar web-vitals:', error));
+  if ('requestIdleCallback' in window) requestIdleCallback(start, { timeout: 4000 });
+  else setTimeout(start, 1500);
+}
+
+if (document.readyState === 'complete') loadWebVitals();
+else addEventListener('load', loadWebVitals, { once: true });

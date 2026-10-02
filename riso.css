@@ -999,65 +999,266 @@ h3 {
   font-weight: 900;
 }
 
-/* --- Casos ---------------------------------------------------------------- */
-.cases {
+/* --- Proyectos de muestra: pruebas de imprenta ------------------------------
+   Tres maquetas en una grilla rota (no son tarjetas iguales en fila): una
+   pantalla ancha, un celular que baja y otro corrido al centro. Cada maqueta
+   es una «prueba» con dos planchas: azul (estructura) y rosa (acentos),
+   desfasadas como en la riso. Al pasar el mouse o enfocar el botón del
+   artículo, las planchas entran en registro con un resorte. */
+.demos {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: 2rem var(--gutter);
+  gap: 3rem var(--gutter);
   padding: clamp(4rem, 10vw, 8rem) var(--gutter);
+  border-top: 2px solid var(--fg);
 }
 
-.cases h2 {
-  grid-column: 1 / -1;
+.demos-head {
+  grid-column: 1 / 10;
 }
 
-.case {
-  padding: 1.75rem;
+.demos-head p,
+.demos-foot p {
+  max-width: 56ch;
+  margin-top: 1.25rem;
+  color: var(--muted);
+  font-size: 1.15rem;
+}
+
+.demo {
+  position: relative;
+  display: grid;
+  gap: 1.5rem;
+  align-content: start;
+  align-self: start; /* cada prueba mide lo suyo: sin huecos estirados */
+  padding: 1.5rem;
   border: 2px solid var(--fg);
+  /* Marcas de corte en dos esquinas, como en un pliego de imprenta. */
+  background:
+    linear-gradient(var(--accent), var(--accent)) left 10px top 10px / 14px 2px,
+    linear-gradient(var(--accent), var(--accent)) left 10px top 10px / 2px 14px,
+    linear-gradient(var(--accent), var(--accent)) right 10px bottom 10px / 14px 2px,
+    linear-gradient(var(--accent), var(--accent)) right 10px bottom 10px / 2px 14px;
+  background-repeat: no-repeat;
 }
 
-.case h3 {
-  font-size: clamp(1.8rem, 3vw, 2.6rem);
+.demo--shop {
+  grid-column: 1 / 8;
+}
+
+.demo--landing {
+  grid-column: 8 / 13;
+  margin-top: 7rem;
+}
+
+.demo--menu {
+  grid-column: 3 / 11;
+  grid-template-columns: minmax(0, 12rem) minmax(0, 1fr);
+}
+
+.demo h3 {
+  font-size: clamp(2.2rem, 4vw, 3.6rem);
   margin-bottom: 0.75rem;
 }
 
-.case p:not(.case-figure) {
+.demo-body {
+  min-width: 0;
+}
+
+.demo-body > p {
+  max-width: 48ch;
   color: var(--muted);
-  max-width: 44ch;
 }
 
-.case--big {
-  grid-column: 1 / 8;
-  grid-row: span 2;
-  border: 0;
-  padding: 0;
+.demo-meta {
+  display: grid;
+  gap: 0.35rem;
+  margin: 1.25rem 0 1.5rem;
+  padding-top: 1rem;
+  border-top: 2px dashed var(--fg);
+  font-size: 0.95rem;
 }
 
-.case-figure {
+.demo-meta div {
+  display: grid;
+  grid-template-columns: 6.5rem minmax(0, 1fr);
+  gap: 1rem;
+}
+
+.demo-meta dt {
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.8rem;
+  padding-top: 0.15rem;
+}
+
+.demo-meta dd {
+  margin: 0;
+}
+
+/* Sello «MUESTRA»: amarillo con tinta, girado sobre el borde. */
+.demo-stamp {
+  position: absolute;
+  top: -1.1rem;
+  right: 1.25rem;
+  padding: 0.3rem 0.8rem;
+  background: var(--yellow);
+  color: var(--ink);
   font-family: var(--display);
   font-weight: 900;
-  font-size: clamp(8rem, 22vw, 20rem);
-  line-height: 0.8;
-  color: var(--accent);
-  text-shadow: 6px 6px 0 var(--blue);
-  margin-bottom: 1.5rem;
+  font-size: 1.35rem;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  transform: rotate(4deg);
 }
 
-.case--tilt {
-  grid-column: 8 / 13;
-  align-self: start;
-  margin-top: 6rem;
+[data-theme="light"] .demo-stamp {
+  border: 2px solid var(--ink);
+}
+
+/* La prueba: papel con dos planchas encima. Siempre papel (también en el
+   tema oscuro), porque es lo impreso. */
+.mock {
+  position: relative;
+  isolation: isolate;
   background: var(--paper);
-  color: var(--ink);
-  border-color: var(--ink);
-  transform: rotate(2.5deg);
+  border: 2px solid var(--fg);
+  overflow: hidden;
 }
 
-.case--tilt p:not(.case-figure) { color: #4a453d; } /* 8.4:1 sobre papel */
+.mock--screen { aspect-ratio: 16 / 10; }
+.mock--phone { aspect-ratio: 9 / 16; width: 100%; max-width: 12rem; }
 
-.case--low {
-  grid-column: 8 / 13;
-  align-self: start;
+.plate {
+  position: absolute;
+  inset: 8% 7%;
+  display: grid;
+  mix-blend-mode: multiply;
+  transition: transform 700ms var(--spring-fallback);
+  transition: transform 700ms var(--spring);
+}
+
+.plate--blue { color: var(--blue); transform: translate(-8px, -6px); }
+.plate--pink { color: var(--pink); transform: translate(8px, 6px); }
+
+.plate i {
+  display: block;
+  min-height: 0;
+  background: currentColor;
+}
+
+@media (hover: hover) {
+  .demo:hover .plate { transform: none; }
+}
+
+.demo:focus-within .plate { transform: none; }
+
+/* Tienda: barra, 4 productos con su nombre (azul); carrito y precios (rosa).
+   Las dos planchas comparten la misma grilla para que «registren». */
+.mock--screen .plate {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-rows: 9% minmax(0, 1fr) 6% 6%;
+  gap: 6% 5%;
+}
+.mock--screen .m-bar { grid-column: 1 / 4; grid-row: 1; width: 45%; }
+.mock--screen .m-img { grid-row: 2; background: none; border: 3px solid currentColor; }
+.mock--screen .m-line { grid-row: 3; width: 85%; }
+.mock--screen .m-cart { grid-column: 4; grid-row: 1; width: 55%; justify-self: end; border-radius: 99px; }
+.mock--screen .m-price { grid-row: 4; width: 45%; }
+
+/* Celulares (landing y menú): filas fijas en las dos planchas. */
+.mock--phone .plate {
+  grid-template-columns: minmax(0, 1fr) 24%;
+  grid-template-rows: repeat(12, minmax(0, 1fr));
+  gap: 3% 6%;
+}
+
+/* Landing: titular grande y texto (azul); subrayado y botón (rosa). */
+.demo--landing .m-bar { grid-row: 1; width: 40%; }
+.demo--landing .m-head { grid-column: 1 / -1; }
+.demo--landing .m-head:nth-child(2) { grid-row: 3; }
+.demo--landing .m-head:nth-child(3) { grid-row: 4; width: 90%; }
+.demo--landing .m-head--short { grid-row: 5; width: 60%; }
+.demo--landing .m-line { grid-column: 1 / -1; height: 45%; }
+.demo--landing .m-line:nth-child(5) { grid-row: 7; }
+.demo--landing .m-line:nth-child(6) { grid-row: 8; }
+.demo--landing .m-line--short { grid-row: 9; width: 70%; }
+.demo--landing .m-mark { grid-row: 6; height: 40%; width: 60%; }
+.demo--landing .m-button { grid-column: 1 / -1; grid-row: 11; width: 75%; }
+
+/* Menú: título y platos con línea de puntos (azul); pestaña y precios (rosa). */
+.demo--menu .m-bar { grid-row: 1; width: 70%; }
+.demo--menu .m-tab { grid-column: 1 / -1; grid-row: 2; width: 35%; height: 50%; }
+.demo--menu .m-dish {
+  grid-column: 1;
+  background: none;
+  border-top: 4px solid currentColor;
+  border-bottom: 2px dotted currentColor;
+}
+.demo--menu .m-dish:nth-child(2) { grid-row: 4; }
+.demo--menu .m-dish:nth-child(3) { grid-row: 6; }
+.demo--menu .m-dish:nth-child(4) { grid-row: 8; }
+.demo--menu .m-dish:nth-child(5) { grid-row: 10; }
+.demo--menu .m-dish:nth-child(6) { grid-row: 12; }
+.demo--menu .m-cost { grid-column: 2; height: 50%; }
+.demo--menu .m-cost:nth-child(2) { grid-row: 4; }
+.demo--menu .m-cost:nth-child(3) { grid-row: 6; }
+.demo--menu .m-cost:nth-child(4) { grid-row: 8; }
+.demo--menu .m-cost:nth-child(5) { grid-row: 10; }
+.demo--menu .m-cost:nth-child(6) { grid-row: 12; }
+
+.demos-foot {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1.5rem var(--gutter);
+  margin-top: 1rem;
+}
+
+.demos-foot p {
+  margin-top: 0;
+}
+
+@media (max-width: 860px) {
+  .demos-head,
+  .demo--shop,
+  .demo--landing,
+  .demo--menu {
+    grid-column: 1 / -1;
+    margin-top: 0;
+  }
+
+  .demo--landing,
+  .demo--menu {
+    grid-template-columns: minmax(0, 9rem) minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+@media (max-width: 520px) {
+  .demo--landing,
+  .demo--menu {
+    grid-template-columns: 1fr;
+  }
+
+  .mock--phone {
+    max-width: 9rem;
+  }
+}
+
+/* Reducir movimiento: desregistro fijo de 3px, sin resorte ni registro. */
+@media (prefers-reduced-motion: reduce) {
+  .plate { transition: none; }
+  .plate--blue,
+  .demo:hover .plate--blue,
+  .demo:focus-within .plate--blue { transform: translate(-3px, -3px); }
+  .plate--pink,
+  .demo:hover .plate--pink,
+  .demo:focus-within .plate--pink { transform: translate(3px, 3px); }
 }
 
 /* --- Cómo trabajo --------------------------------------------------------- */
@@ -1666,15 +1867,11 @@ h3 {
     left: 1rem;
   }
 
-  .cases,
   .packs,
   .notes {
     grid-template-columns: 1fr;
   }
 
-  .case--big,
-  .case--tilt,
-  .case--low,
   .flyer--a,
   .flyer--b,
   .flyer--c,
@@ -2377,7 +2574,7 @@ h3 {
    NO se aplica a .posters ni a .register: usan position: sticky, y la
    contención rompe el «pegado» de sus hijos.
    ========================================================================== */
-.cases,
+.demos,
 .method,
 .packs,
 .work,

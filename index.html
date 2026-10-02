@@ -289,12 +289,73 @@
       </aside>
     </section>
 
-    <section class="closing" id="casos" aria-labelledby="casos-title">
-      <div>
-        <h2 id="casos-title" class="display">Primeros proyectos</h2>
-        <p>Tars 2.0 está sumando sus primeros casos. Si tu negocio quiere ser uno de ellos, la oferta de lanzamiento es para vos: tu web desde USD 149 y una propuesta en menos de 24 horas.</p>
+    <!-- PROYECTOS DE MUESTRA: maquetas de demostración, no clientes. Cada
+         «prueba de imprenta» tiene dos planchas (azul = estructura, rosa =
+         acentos) desfasadas como en la riso; al pasar el mouse o enfocar el
+         botón entran en registro. El dibujo es decorativo (aria-hidden): lo
+         que importa para leer está en el texto de cada artículo. -->
+    <section class="demos" id="casos" aria-labelledby="casos-title">
+      <div class="demos-head">
+        <h2 id="casos-title" class="display">Proyectos de muestra</h2>
+        <p>Tars 2.0 todavía no publica trabajos de clientes. Estas son maquetas de demostración para que veas cómo puede quedar tu web; si te sirve una, la armo con tu marca, tus fotos y tus precios.</p>
       </div>
-      <a class="btn btn-pink" href="#cotizador" data-magnetic>Armá tu presupuesto</a>
+
+      <article class="demo demo--shop" aria-labelledby="demo-shop-title">
+        <div class="mock mock--screen" aria-hidden="true">
+          <div class="plate plate--blue"><i class="m-bar"></i><i class="m-img"></i><i class="m-img"></i><i class="m-img"></i><i class="m-img"></i><i class="m-line"></i><i class="m-line"></i><i class="m-line"></i><i class="m-line"></i></div>
+          <div class="plate plate--pink"><i class="m-cart"></i><i class="m-price"></i><i class="m-price"></i><i class="m-price"></i><i class="m-price"></i></div>
+        </div>
+        <div class="demo-body">
+          <h3 id="demo-shop-title">Tienda online base</h3>
+          <p>Catálogo con fotos y precios, carrito y pedido directo por WhatsApp. Para vender lo tuyo sin pagar comisión por cada venta a un marketplace.</p>
+          <dl class="demo-meta">
+            <div><dt>Qué es</dt><dd>Maqueta de demostración</dd></div>
+            <div><dt>Precio</dt><dd>A cotizar según el catálogo</dd></div>
+          </dl>
+          <a class="btn btn-line" href="https://wa.me/5492617459362?text=Hola%2C%20vi%20la%20maqueta%20de%20tienda%20online%20en%20tars.com.ar%20y%20quiero%20una%20as%C3%AD." target="_blank" rel="noopener noreferrer" data-magnetic>Quiero una tienda así</a>
+        </div>
+        <p class="demo-stamp" aria-hidden="true">Muestra</p>
+      </article>
+
+      <article class="demo demo--landing" aria-labelledby="demo-landing-title">
+        <div class="mock mock--phone" aria-hidden="true">
+          <div class="plate plate--blue"><i class="m-bar"></i><i class="m-head"></i><i class="m-head"></i><i class="m-head m-head--short"></i><i class="m-line"></i><i class="m-line"></i><i class="m-line m-line--short"></i></div>
+          <div class="plate plate--pink"><i class="m-mark"></i><i class="m-button"></i></div>
+        </div>
+        <div class="demo-body">
+          <h3 id="demo-landing-title">Landing de servicios</h3>
+          <p>Una sola página para un profesional u oficio: qué hacés, cuánto sale y un botón para escribirte. Carga rápido en el celular, que es donde te van a buscar.</p>
+          <dl class="demo-meta">
+            <div><dt>Qué es</dt><dd>Maqueta de demostración</dd></div>
+            <div><dt>Precio</dt><dd>Desde USD 149</dd></div>
+            <div><dt>Entrega</dt><dd>3 a 5 días</dd></div>
+          </dl>
+          <a class="btn btn-line" href="https://wa.me/5492617459362?text=Hola%2C%20vi%20la%20maqueta%20de%20landing%20de%20servicios%20en%20tars.com.ar%20y%20quiero%20una%20as%C3%AD." target="_blank" rel="noopener noreferrer" data-magnetic>Quiero una landing así</a>
+        </div>
+        <p class="demo-stamp" aria-hidden="true">Muestra</p>
+      </article>
+
+      <article class="demo demo--menu" aria-labelledby="demo-menu-title">
+        <div class="mock mock--phone" aria-hidden="true">
+          <div class="plate plate--blue"><i class="m-bar"></i><i class="m-dish"></i><i class="m-dish"></i><i class="m-dish"></i><i class="m-dish"></i><i class="m-dish"></i></div>
+          <div class="plate plate--pink"><i class="m-tab"></i><i class="m-cost"></i><i class="m-cost"></i><i class="m-cost"></i><i class="m-cost"></i><i class="m-cost"></i></div>
+        </div>
+        <div class="demo-body">
+          <h3 id="demo-menu-title">Menú para restaurante</h3>
+          <p>Carta digital que se abre con un código QR en la mesa: platos, precios y horarios que cambiás sin reimprimir nada. Pedidos y reservas por WhatsApp.</p>
+          <dl class="demo-meta">
+            <div><dt>Qué es</dt><dd>Maqueta de demostración</dd></div>
+            <div><dt>Precio</dt><dd>A cotizar según la carta</dd></div>
+          </dl>
+          <a class="btn btn-line" href="https://wa.me/5492617459362?text=Hola%2C%20vi%20la%20maqueta%20de%20men%C3%BA%20para%20restaurante%20en%20tars.com.ar%20y%20quiero%20uno%20as%C3%AD." target="_blank" rel="noopener noreferrer" data-magnetic>Quiero un menú así</a>
+        </div>
+        <p class="demo-stamp" aria-hidden="true">Muestra</p>
+      </article>
+
+      <div class="demos-foot">
+        <p>¿Lo tuyo no se parece a ninguna? Contame qué vendés y te armo una propuesta en menos de 24 horas.</p>
+        <a class="btn btn-pink" href="#cotizador" data-magnetic>Armá tu presupuesto</a>
+      </div>
     </section>
 
     <section class="method" aria-labelledby="metodo-title">
@@ -326,14 +387,6 @@
       </div>
     </section>
 
-    <section class="work" id="portfolio" aria-labelledby="portfolio-title">
-      <h2 id="portfolio-title" class="display">Tipos de proyecto</h2>
-      <ul class="work-list">
-        <li><h3>Landing para emprendedor</h3><p>Diseño rápido, claro y optimizado para captar clientes.</p></li>
-        <li><h3>Web para servicio local</h3><p>Sitio responsive con formulario de contacto y estructura profesional.</p></li>
-        <li><h3>Mantenimiento técnico</h3><p>Soporte mensual para actualizar, corregir y optimizar el sitio.</p></li>
-      </ul>
-    </section>
 
     <section class="faq" id="faq" aria-labelledby="faq-title">
       <h2 id="faq-title" class="display">Preguntas</h2>
