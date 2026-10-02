@@ -7,7 +7,8 @@
     "test": "playwright test",
     "test:ui": "playwright test --ui",
     "test:report": "playwright show-report",
-    "vendor:jspdf": "node -e \"const fs=require('fs');fs.mkdirSync('vendor/jspdf',{recursive:true});fs.copyFileSync('node_modules/jspdf/dist/jspdf.umd.min.js','vendor/jspdf/jspdf.umd.min.js');fs.copyFileSync('node_modules/jspdf/LICENSE','vendor/jspdf/LICENSE')\""
+    "vendor:jspdf": "node -e \"const fs=require('fs');fs.mkdirSync('vendor/jspdf',{recursive:true});fs.copyFileSync('node_modules/jspdf/dist/jspdf.umd.min.js','vendor/jspdf/jspdf.umd.min.js');fs.copyFileSync('node_modules/jspdf/LICENSE','vendor/jspdf/LICENSE')\"",
+    "set-domain": "node scripts/set-domain.js"
   },
   "devDependencies": {
     "@playwright/test": "^1.55.0",
