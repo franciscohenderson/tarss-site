@@ -17,7 +17,7 @@ import { priceLabel, formatUSD } from './quote.js';
 const BUSINESS = {
   name: 'TARS',
   tagline: 'Imprenta digital · Mendoza',
-  whatsapp: '+54 9 261 745-9362',
+  whatsapp: '+54 9 261 240-8064',
   email: 'contacto@tars.com.ar',
   web: 'tars.com.ar',
 };

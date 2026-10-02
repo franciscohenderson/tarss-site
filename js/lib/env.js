@@ -1,7 +1,7 @@
 /* Tars · entorno y utilidades compartidas
    Constantes, preferencias del sistema y el resorte que usan varios módulos. */
 
-export const WHATSAPP_NUMBER = '5492617459362';
+export const WHATSAPP_NUMBER = '5492612408064';
 export const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 export const hasFinePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
