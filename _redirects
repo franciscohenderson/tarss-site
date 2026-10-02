@@ -16,6 +16,7 @@
 /js/package.json        /  301
 /tests/*                /  301
 /functions/*            /  301
+/scripts/*              /  301
 /test-results/*         /  301
 /playwright-report/*    /  301
 /node_modules/*         /  301
