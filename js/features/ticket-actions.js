@@ -16,6 +16,10 @@ export function initTicketActions(register) {
   const payButton = document.querySelector('#ticket-pay');
   if (!register || (!pdfButton && !payButton)) return;
 
+  // El bloque arranca oculto en el HTML: recién ahora (con JS listo) se muestra.
+  const container = document.querySelector('#ticket-actions');
+  if (container) container.hidden = false;
+
   let paymentsChecked = false;
 
   function sync(quote) {

@@ -2434,6 +2434,8 @@ h3 {
   cursor: progress;
 }
 
+/* [hidden] tiene que ganarle al display: grid / inline-flex de los estilos. */
+.ticket-actions[hidden],
 .ticket-actions [hidden] {
   display: none;
 }
