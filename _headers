@@ -1,0 +1,22 @@
+# Cloudflare Pages: cabeceras de caché. Sin este archivo todo vence a las 4 h
+# y cada visita que vuelve revalida fuentes, CSS y JS (ida y vuelta al
+# servidor antes de pintar).
+
+# Fuentes: no cambian nunca. Si algún día cambian, se renombra el archivo.
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Librerías de terceros (jsPDF, web-vitals): cambian solo al actualizar versión.
+/vendor/*
+  Cache-Control: public, max-age=2592000
+
+# Imágenes para compartir: las regenera `npm run og`; un día alcanza.
+/og/*
+  Cache-Control: public, max-age=86400
+
+# CSS y JS del sitio: no llevan hash en el nombre, así que vencen rápido, pero
+# mientras se revalida en segundo plano se usa la copia guardada (no frena).
+/riso.css
+  Cache-Control: public, max-age=3600, stale-while-revalidate=604800
+/js/*
+  Cache-Control: public, max-age=3600, stale-while-revalidate=604800

@@ -26,7 +26,7 @@ Sitio comercial de un estudio web unipersonal de Mendoza (Argentina): presenta l
 - **Cotizar al instante:** una «registradora» con teclas y ticket que suma servicios, separa pago único de abono mensual y arma el mensaje de WhatsApp.
 - **Formalizar:** descarga del presupuesto en PDF; el mismo generador produce remitos.
 - **Cobrar:** link de pago de Nave generado del lado del servidor, con el importe convertido a pesos con cotización en vivo y respaldo.
-- **Medir:** eventos para Google Tag Manager (`quote_request`, `whatsapp_click`, `email_click`, `generate_lead`, `quote_pdf_download`, `begin_checkout`).
+- **Medir:** eventos para Google Tag Manager (`quote_request`, `whatsapp_click`, `email_click`, `generate_lead`, `quote_pdf_download`, `begin_checkout`) y Core Web Vitals reales (`web_vitals`: LCP, CLS e INP con el elemento responsable en `debug_target`).
 
 ## Stack y decisiones
 | Pieza | Elección | Por qué |
@@ -35,6 +35,7 @@ Sitio comercial de un estudio web unipersonal de Mendoza (Argentina): presenta l
 | Code splitting | `import()` dinámico desde `js/main.js` | Cada página baja solo lo que usa. |
 | Servidor | Cloudflare Pages Functions (`functions/`) | Las credenciales de pago nunca llegan al navegador. |
 | PDF | jsPDF 3 autoalojado en `vendor/` | Se descarga solo al pedir un PDF (no pesa en la carga inicial). |
+| Core Web Vitals | web-vitals 6 (build attribution) autoalojado en `vendor/` | Se carga después de `load`, en un momento ocioso: no toca el render ni el bloqueo del hilo. |
 | Formulario | Formspree (con envío por `fetch` y respaldo clásico) | Sin servidor propio de correo. |
 | Tests | Playwright (navegador) + tests en Node sin navegador | Cubre interfaz, lógica pura y servidor. |
 
@@ -55,6 +56,8 @@ functions/
   api/payment-link.js                       endpoint de cobros (Pages Function)
   _lib/nave.js                              cliente de Nave + cotización USD -> ARS
 vendor/jspdf/                               jsPDF (MIT) autoalojado
+vendor/web-vitals/                          web-vitals 6.2.2 (Apache 2.0) autoalojado
+_headers                                    Caché del navegador por tipo de archivo (Cloudflare Pages)
 fonts/                                      Big Shoulders Display + Libre Franklin (autoalojadas)
 tests/                                      suite de Playwright
 DESIGN.md, PRODUCT.md                       dirección de arte y verdades del producto
