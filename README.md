@@ -22,7 +22,7 @@ Sitio comercial de un estudio web unipersonal de Mendoza (Argentina): presenta l
 ---
 
 ## Qué resuelve
-- **Vender:** landing con dirección de arte propia («Imprenta Riso», ver [`DESIGN.md`](DESIGN.md)), servicios, casos, paquetes, FAQ y contacto.
+- **Vender:** landing con dirección de arte propia («Imprenta Riso», ver [`DESIGN.md`](DESIGN.md)), servicios, primeros proyectos, paquetes, FAQ, blog y contacto.
 - **Cotizar al instante:** una «registradora» con teclas y ticket que suma servicios, separa pago único de abono mensual y arma el mensaje de WhatsApp.
 - **Formalizar:** descarga del presupuesto en PDF; el mismo generador produce remitos.
 - **Cobrar:** link de pago de Nave generado del lado del servidor, con el importe convertido a pesos con cotización en vivo y respaldo.

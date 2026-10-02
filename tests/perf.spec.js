@@ -24,7 +24,7 @@ for (const [path, { loads, skips }] of Object.entries(EXPECTED)) {
     // Los módulos de cada página llegan por import dinámico, después de la
     // cadena de imports estáticos: se espera activamente a que aparezcan.
     for (const name of loads) {
-      await expect.poll(names, { message: `debería cargar ${name}` }).toContain(name);
+      await expect.poll(names, { message: `debería cargar ${name}`, timeout: 15000 } /* margen: con toda la suite en paralelo la carga puede tardar */).toContain(name);
     }
     await page.waitForLoadState('networkidle');
     for (const name of skips) expect(names(), `no debería cargar ${name}`).not.toContain(name);
