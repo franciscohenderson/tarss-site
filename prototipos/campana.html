@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tars · Prototipo A · Campaña</title>
+<link rel="stylesheet" href="telefono.css">
+<style>
+  @font-face { font-family: 'BSD'; src: url('../fonts/big-shoulders-display-var.woff2') format('woff2'); font-weight: 100 900; font-display: swap; }
+  @font-face { font-family: 'LF'; src: url('../fonts/libre-franklin-var.woff2') format('woff2'); font-weight: 100 900; font-display: swap; }
+
+  /* Prototipo A — «Campaña»: la web hecha como las piezas aprobadas. Una
+     persona real a pantalla completa, titular de cartel con el rosa desfasado
+     y un celular fijo. Al bajar cambia la escena: foto, titular y app. */
+  :root {
+    --ink: #141414;
+    --paper: #f1ece2;
+    --pink: #ff48b0;
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    --ease-io: cubic-bezier(0.77, 0, 0.175, 1);
+    --spring: linear(0, 0.009, 0.035 2.1%, 0.141, 0.281 6.7%, 0.723 12.9%, 0.938 16.7%, 1.017, 1.077, 1.121, 1.149 24.3%, 1.159, 1.163, 1.161, 1.154 29.9%, 1.129 32.8%, 1.051 39.6%, 1.017 43.1%, 0.991, 0.977 51%, 0.974 53.8%, 0.975 57.1%, 0.997 69.8%, 1.003 76.9%, 1.004 83.8%, 1);
+    --fg: var(--ink);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { background: var(--ink); scrollbar-color: var(--pink) var(--ink); }
+  body { font-family: 'LF', system-ui, sans-serif; color: var(--fg); -webkit-font-smoothing: antialiased; }
+  body[data-theme="dark"] { --fg: var(--paper); }
+  ::selection { background: var(--pink); color: var(--ink); }
+  :focus-visible { outline: 3px solid var(--pink); outline-offset: 4px; }
+
+  /* Barra: marca y un solo llamado. Cambia de tinta con la escena. */
+  .top { position: fixed; inset: 0 0 auto; z-index: 30; display: flex; align-items: center; justify-content: space-between; padding: 22px clamp(20px, 5vw, 72px); color: var(--fg); transition: color 500ms var(--ease-out); }
+  .brand { font: 900 34px/1 'BSD'; letter-spacing: 0.01em; color: inherit; text-decoration: none; text-shadow: 3px 3px 0 var(--pink); }
+  .btn { display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 22px; border: 2px solid currentColor; color: inherit; font: 800 15px 'LF'; text-decoration: none; transition: background-color 200ms var(--ease-out), color 200ms var(--ease-out), transform 120ms var(--ease-out); }
+  .btn:active { transform: scale(0.97); }
+  .btn--pink { background: var(--pink); border-color: var(--pink); color: var(--ink); }
+  @media (hover: hover) {
+    .btn:hover { background: var(--fg); color: var(--ink); }
+    body[data-theme="light"] .btn:not(.btn--pink):hover { color: var(--paper); }
+    .btn--pink:hover { background: var(--fg); border-color: var(--fg); color: var(--pink); }
+  }
+
+  /* El recorrido: 4 escenas dentro de una pista alta; la escena se fija. */
+  .reel { position: relative; height: 460vh; }
+  .stage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
+
+  .bg { position: absolute; inset: 0; clip-path: inset(0 0 0 100%); transition: clip-path 950ms var(--ease-io); }
+  .bg.is-on { clip-path: inset(0 0 0 0); }
+  .bg img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.1); transition: transform 1800ms var(--ease-out); }
+  .bg.is-on img { transform: scale(1); }
+  .bg.flip img { scale: -1 1; }
+  /* Velo del lado del titular: claro en escenas claras, tinta en las oscuras. */
+  .bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgb(241 236 226 / 0.86), rgb(241 236 226 / 0.45) 34%, transparent 56%); }
+  .bg.dark::after { background: linear-gradient(90deg, rgb(10 8 6 / 0.86), rgb(10 8 6 / 0.5) 30%, transparent 52%), linear-gradient(0deg, rgb(10 8 6 / 0.5), transparent 30%); }
+
+  .copy { position: absolute; z-index: 5; left: clamp(20px, 6vw, 96px); top: 50%; translate: 0 -46%; width: min(46vw, 660px); }
+  .scene { position: absolute; inset: 0 auto auto 0; width: 100%; visibility: hidden; }
+  .scene.is-on { position: relative; visibility: visible; }
+  .hl { position: relative; z-index: 0; isolation: isolate; font: 900 clamp(58px, 8.6vw, 156px)/0.86 'BSD'; text-transform: uppercase; letter-spacing: -0.005em; }
+  .hl .line { display: block; overflow: hidden; padding-bottom: 0.04em; }
+  .hl .line > span { display: block; transform: translateY(105%); }
+  .scene.is-on .hl .line > span { transform: none; transition: transform 800ms var(--ease-out); }
+  .scene.is-on .hl .line:nth-child(2) > span { transition-delay: 70ms; }
+  .scene.is-on .hl .line:nth-child(3) > span { transition-delay: 140ms; }
+  /* Capa rosa: llega corrida y entra en registro (el desfasado de las piezas). */
+  .hl::before { content: attr(data-text); content: attr(data-text) / ""; position: absolute; inset: 0; z-index: -1; white-space: pre-line; color: var(--pink); mix-blend-mode: multiply; translate: 9px 7px; opacity: 0; }
+  body[data-theme="dark"] .hl::before { mix-blend-mode: normal; }
+  .scene.is-on .hl::before { opacity: 1; animation: register 900ms var(--spring) 380ms backwards; }
+  @keyframes register { from { opacity: 0; translate: 46px 30px; } }
+  .sub { max-width: 30ch; margin-top: 28px; font: 600 clamp(18px, 1.5vw, 23px)/1.45 'LF'; opacity: 0; transform: translateY(14px); }
+  .scene.is-on .sub { opacity: 1; transform: none; transition: opacity 600ms var(--ease-out) 300ms, transform 600ms var(--ease-out) 300ms; }
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; }
+
+  /* Índice de rubros: es navegación (lleva a cada escena), no decoración. */
+  .rubros { position: absolute; z-index: 6; left: clamp(20px, 6vw, 96px); bottom: clamp(22px, 5vh, 48px); display: flex; gap: 22px; list-style: none; }
+  .rubros button { all: unset; cursor: pointer; padding: 6px 0; font: 800 13px 'LF'; letter-spacing: 0.16em; text-transform: uppercase; color: var(--fg); opacity: 0.5; box-shadow: inset 0 -2px 0 transparent; transition: opacity 200ms var(--ease-out), box-shadow 300ms var(--ease-out); }
+  .rubros button[aria-current="true"] { opacity: 1; box-shadow: inset 0 -2px 0 var(--pink); }
+  @media (hover: hover) { .rubros button:hover { opacity: 1; } }
+  .rubros button:focus-visible { outline: 3px solid var(--pink); outline-offset: 4px; }
+
+  /* El celular: fijo a la derecha, con un leve giro que sigue al mouse. */
+  .device { position: absolute; z-index: 4; right: clamp(20px, 8vw, 140px); top: 50%; width: clamp(230px, 21vw, 330px); translate: 0 -50%; perspective: 1400px; }
+  .device .proof-phone { width: 100%; margin: 0; transform: rotateY(var(--ry, -8deg)) rotateX(var(--rx, 3deg)); box-shadow: 0 50px 90px rgb(0 0 0 / 0.42), 0 12px 24px rgb(0 0 0 / 0.25); }
+  .device .proof-screen + .proof-screen { z-index: 1; }
+
+  .muestra { position: absolute; z-index: 6; right: clamp(20px, 8vw, 140px); bottom: clamp(22px, 5vh, 48px); font: 700 11px 'LF'; letter-spacing: 0.2em; text-transform: uppercase; color: var(--fg); opacity: 0.75; }
+  .bar { position: absolute; z-index: 6; left: 0; bottom: 0; height: 3px; width: 100%; background: var(--pink); transform-origin: 0 50%; transform: scaleX(var(--progress, 0)); }
+
+  /* Cierre */
+  .end { position: relative; min-height: 100svh; display: grid; align-content: center; gap: 28px; padding: 14vh clamp(20px, 6vw, 96px); background: var(--ink); color: var(--paper); }
+  .end h2 { font: 900 clamp(72px, 15vw, 260px)/0.84 'BSD'; text-transform: uppercase; text-shadow: 0.05em 0.04em 0 var(--pink); }
+  .end p { max-width: 44ch; font: 600 clamp(18px, 1.6vw, 24px)/1.45 'LF'; color: #d6cfc2; }
+  .end p b { color: var(--paper); }
+
+  @media (max-width: 820px) {
+    .copy { top: 96px; translate: none; width: auto; right: 20px; }
+    .hl { font-size: clamp(46px, 14vw, 92px); }
+    .sub { font-size: 17px; margin-top: 16px; }
+    .actions { display: none; }
+    .device { top: auto; bottom: 64px; translate: none; width: 46vw; right: 20px; }
+    .rubros { display: none; }
+    .bg::after { background: linear-gradient(180deg, rgb(241 236 226 / 0.9), rgb(241 236 226 / 0.55) 42%, transparent 66%); }
+    .bg.dark::after { background: linear-gradient(180deg, rgb(10 8 6 / 0.9), rgb(10 8 6 / 0.55) 42%, transparent 66%); }
+    .muestra { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before { transition-duration: 0ms !important; animation: none !important; }
+  }
+</style>
+</head>
+<body data-theme="light">
+  <header class="top">
+    <a class="brand" href="#">TARS</a>
+    <a class="btn" href="https://wa.me/5492612408064" target="_blank" rel="noopener">Hablemos</a>
+  </header>
+
+  <main>
+    <section class="reel" aria-label="Webs para cada rubro">
+      <div class="stage">
+        <div class="bgs"></div>
+        <div class="copy"></div>
+        <div class="device" aria-hidden="true"><div class="proof-phone"></div></div>
+        <ul class="rubros"></ul>
+        <p class="muestra">Muestra de diseño · negocio de ejemplo</p>
+        <div class="bar"></div>
+      </div>
+    </section>
+
+    <section class="end">
+      <h2>¿Y el tuyo?</h2>
+      <p>Landing page desde <b>USD 149</b>, pago único. Te mando la propuesta en menos de 24 horas y la web queda lista en 3 a 5 días.</p>
+      <div class="actions"><a class="btn btn--pink" href="https://wa.me/5492612408064" target="_blank" rel="noopener">Escribime por WhatsApp</a><a class="btn" href="mailto:contacto@tars.com.ar">contacto@tars.com.ar</a></div>
+    </section>
+  </main>
+
+<script type="module">
+  import { KINDS } from '../js/features/proof.js';
+
+  const SCENES = [
+    { kind: 'gimnasio', label: 'Gimnasios', img: 'gimnasio', pos: '60% 30%', theme: 'light', sample: 'Pulso', lines: ['Tu gym', 'en el', 'bolsillo'], sub: 'Carnet digital con QR, reserva de clases y beneficios para cada socio.' },
+    { kind: 'barberia', label: 'Barberías', img: 'barberia', pos: '30% 35%', theme: 'dark', flip: true, sample: 'Filo Norte', lines: ['Turnos', 'sin hacer', 'fila'], sub: 'Reserva online, elección de barbero y recordatorio por WhatsApp.' },
+    { kind: 'restaurante', label: 'Restaurantes', img: 'restaurante', pos: '55% 30%', theme: 'light', sample: 'Brasa &amp; Vid', lines: ['Tu carta', 'siempre', 'al día'], sub: 'Carta digital, reservas online y pedidos por WhatsApp.' },
+    { kind: 'ropa', label: 'Tiendas', img: 'ropa', pos: '50% 18%', theme: 'light', sample: 'Lana Cruda', lines: ['Tu tienda', 'abierta', '24 horas'], sub: 'Catálogo con talles, cuotas y envíos a todo el país.' },
+  ];
+
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const reel = document.querySelector('.reel');
+  const stage = reel.querySelector('.stage');
+  const bgs = stage.querySelector('.bgs');
+  const copy = stage.querySelector('.copy');
+  const phone = stage.querySelector('.proof-phone');
+  const rubros = stage.querySelector('.rubros');
+
+  SCENES.forEach((scene, index) => {
+    const tag = index ? 'h2' : 'h1'; // solo el primer titular es h1
+    bgs.insertAdjacentHTML('beforeend', `<div class="bg ${scene.theme === 'dark' ? 'dark' : ''} ${scene.flip ? 'flip' : ''}"><img src="img/${scene.img}.webp" alt="" style="object-position:${scene.pos}" ${index ? 'loading="lazy"' : 'fetchpriority="high"'}></div>`);
+    copy.insertAdjacentHTML('beforeend', `<div class="scene"><${tag} class="hl" data-text="${scene.lines.join('\n')}">${scene.lines.map((line) => `<span class="line"><span>${line}</span></span>`).join('')}</${tag}><p class="sub">${scene.sub}</p><div class="actions"><a class="btn btn--pink" href="https://wa.me/5492612408064" target="_blank" rel="noopener">Quiero mi web</a><a class="btn" href="#">Ver precios</a></div></div>`);
+    rubros.insertAdjacentHTML('beforeend', `<li><button type="button">${scene.label}</button></li>`);
+  });
+
+  const layers = [...bgs.children];
+  const scenes = [...copy.children];
+  const buttons = [...rubros.querySelectorAll('button')];
+  let current = -1;
+  let z = 1;
+
+  function screen(scene) {
+    const el = document.createElement('div');
+    el.className = 'proof-screen';
+    el.dataset.kind = scene.kind;
+    el.innerHTML = KINDS[scene.kind].screen(scene.sample);
+    return el;
+  }
+
+  function show(index) {
+    if (index === current) return;
+    const scene = SCENES[index];
+    const previous = current;
+    document.body.dataset.theme = scene.theme;
+    // La foto nueva entra barriendo por encima de la anterior, que se apaga después.
+    layers[index].style.zIndex = ++z;
+    layers[index].classList.add('is-on');
+    layers.forEach((layer, i) => { if (i !== index && i !== previous) layer.classList.remove('is-on'); });
+    if (previous >= 0) setTimeout(() => { if (current !== previous) layers[previous].classList.remove('is-on'); }, reduce ? 0 : 1000);
+    scenes.forEach((el, i) => el.classList.toggle('is-on', i === index));
+    buttons.forEach((b, i) => b.setAttribute('aria-current', String(i === index)));
+
+    // La app nueva sube desde abajo sobre la anterior, como un cambio de pantalla.
+    const next = screen(scene);
+    const old = phone.querySelector('.proof-screen');
+    phone.append(next);
+    if (old && !reduce) {
+      next.animate([{ clipPath: 'inset(100% 0 0 0)' }, { clipPath: 'inset(0 0 0 0)' }], { duration: 700, easing: 'cubic-bezier(0.77, 0, 0.175, 1)' }).finished.then(() => old.remove());
+    } else old?.remove();
+    current = index;
+  }
+
+  const fit = () => phone.style.setProperty('--s', (phone.clientWidth / 312).toFixed(4));
+  new ResizeObserver(fit).observe(phone);
+  fit();
+
+  let frame = 0;
+  function onScroll() {
+    frame = 0;
+    const rect = reel.getBoundingClientRect();
+    const total = reel.offsetHeight - innerHeight;
+    const p = Math.min(1, Math.max(0, -rect.top / total));
+    stage.style.setProperty('--progress', p.toFixed(4));
+    show(Math.min(SCENES.length - 1, Math.floor(p * SCENES.length * 0.999)));
+    // Pasada la pista, el cierre es oscuro: la barra superior cambia a tinta clara.
+    if (rect.bottom < innerHeight * 0.5) document.body.dataset.theme = 'dark';
+    else document.body.dataset.theme = SCENES[current].theme;
+  }
+  addEventListener('scroll', () => { if (!frame) frame = requestAnimationFrame(onScroll); }, { passive: true });
+  onScroll();
+
+  buttons.forEach((button, i) => button.addEventListener('click', () => {
+    const total = reel.offsetHeight - innerHeight;
+    scrollTo({ top: reel.offsetTop + total * ((i + 0.5) / SCENES.length), behavior: reduce ? 'auto' : 'smooth' });
+  }));
+
+  // Giro del celular con el mouse, suavizado (no en táctiles ni con «reducir movimiento»).
+  if (!reduce && matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    let tx = -8, ty = 3, x = -8, y = 3, raf = 0;
+    const loop = () => {
+      x += (tx - x) * 0.08; y += (ty - y) * 0.08;
+      phone.style.setProperty('--ry', `${x.toFixed(2)}deg`);
+      phone.style.setProperty('--rx', `${y.toFixed(2)}deg`);
+      raf = Math.abs(tx - x) + Math.abs(ty - y) > 0.02 ? requestAnimationFrame(loop) : 0;
+    };
+    addEventListener('pointermove', (e) => {
+      tx = -8 + (e.clientX / innerWidth - 0.5) * 16;
+      ty = 3 - (e.clientY / innerHeight - 0.5) * 10;
+      if (!raf) raf = requestAnimationFrame(loop);
+    }, { passive: true });
+  }
+</script>
+</body>
+</html>

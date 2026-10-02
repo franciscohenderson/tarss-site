@@ -29,7 +29,7 @@ const top = (right) => `<div class="pf-top"><span class="pf-rb">${ICON.back}</sp
 
 /* Cada rubro: nombre de ejemplo, frase de la hoja y la pantalla del celular
    (formato de las apps que la gente ya usa en ese rubro). */
-const KINDS = {
+export const KINDS = {
   restaurante: {
     sample: 'Brasa & Vid',
     line: 'Tu carta siempre al día',
