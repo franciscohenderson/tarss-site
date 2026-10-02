@@ -1,4 +1,4 @@
-/* Tars 2.0 · formulario de contacto (contacto.html)
+/* Tars · formulario de contacto (contacto.html)
    Se carga solo si existe #contact-form. */
 
 import { trackEvent } from '../lib/track.js';

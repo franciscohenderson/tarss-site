@@ -26,7 +26,7 @@ const PAGES = [
   { file: 'servicios.html', image: 'servicios', kicker: 'Webs, mantenimiento, redes y asesoría', title: 'PAQUETES Y PRECIOS', size: 140, note: 'Cotizá en segundos y pedilo por WhatsApp' },
   { file: 'contacto.html', image: 'contacto', kicker: 'Propuesta en menos de 24 horas', title: 'ESCRIBIME', size: 200, note: 'WhatsApp · email · formulario' },
   { file: 'blog.html', image: 'blog', kicker: 'Consejos para emprendedores', title: 'BLOG', size: 260, note: 'Webs que venden, celular y mantenimiento' },
-  { file: 'privacidad.html', image: 'privacidad', kicker: 'Qué datos se usan y para qué', title: 'POLÍTICA DE PRIVACIDAD', size: 120, note: 'Tars 2.0 · Mendoza' },
+  { file: 'privacidad.html', image: 'privacidad', kicker: 'Qué datos se usan y para qué', title: 'POLÍTICA DE PRIVACIDAD', size: 120, note: 'Tars · Mendoza' },
   { file: 'articulo-landing-profesional.html', image: 'articulo-landing-profesional', kicker: 'Blog', title: '5 RAZONES PARA TENER UNA LANDING PROFESIONAL', size: 96, note: '4 min de lectura' },
   { file: 'articulo-sitio-en-celular.html', image: 'articulo-sitio-en-celular', kicker: 'Blog', title: 'TU WEB, BIEN EN CELULAR', size: 132, note: '5 min de lectura' },
   { file: 'articulo-mantenimiento-web.html', image: 'articulo-mantenimiento-web', kicker: 'Blog', title: 'QUÉ INCLUYE EL MANTENIMIENTO WEB', size: 112, note: '4 min de lectura' },
@@ -51,11 +51,11 @@ function template(p) {
   .title::before { color: #ff48b0; transform: translate(9px, 6px); }
   .title::after { color: #0078bf; transform: translate(-8px, -4px); }
   .tape { position: absolute; left: -20px; right: -20px; bottom: 34px; height: 74px; background: #ffe800; color: #141414; transform: rotate(-2deg); display: flex; align-items: center; justify-content: space-between; padding: 0 90px 0 150px; font-family: 'BSD'; font-weight: 900; font-size: 38px; text-transform: uppercase; }
-  .stamp { position: absolute; top: 46px; right: 56px; width: 150px; height: 150px; border-radius: 50%; background: #ff48b0; color: #141414; display: grid; place-items: center; text-align: center; font-family: 'BSD'; font-weight: 900; font-size: 34px; line-height: .9; transform: rotate(12deg); }
+  .stamp { position: absolute; top: 46px; right: 56px; width: 150px; height: 150px; border-radius: 50%; background: #ff48b0; color: #141414; display: grid; place-items: center; text-align: center; font-family: 'BSD'; font-weight: 900; font-size: 46px; line-height: .9; transform: rotate(12deg); }
   .grain { position: absolute; inset: 0; opacity: .08; mix-blend-mode: overlay; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
   </style></head><body>
-  <div class="margin"><div class="brand">T<span>2</span></div></div>
-  <div class="stamp">TARS<br>2.0</div>
+  <div class="margin"><div class="brand">TA<span>RS</span></div></div>
+  <div class="stamp">TARS</div>
   <div class="main">
     <p class="kicker">${esc(p.kicker)}</p>
     <h1 class="title" data-text="${esc(p.title)}">${esc(p.title)}</h1>
@@ -70,7 +70,7 @@ function updateMeta(p) {
   let html = fs.readFileSync(file, 'utf8');
   const nl = html.includes('\r\n') ? '\r\n' : '\n';
   const url = `${SITE}/og/${p.image}.png`;
-  const alt = `${p.kicker} · ${p.title.charAt(0) + p.title.slice(1).toLowerCase()} · Tars 2.0`;
+  const alt = `${p.kicker} · ${p.title.charAt(0) + p.title.slice(1).toLowerCase()} · Tars`;
   const tags = [
     `<meta property="og:image" content="${url}" />`,
     `  <meta property="og:image:width" content="1200" />`,

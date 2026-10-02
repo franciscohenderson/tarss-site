@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Tars 2.0 · relevo de contacto@tars.com.ar a Gmail
+   Tars · relevo de contacto@tars.com.ar a Gmail
    --------------------------------------------------------------------------
    Por qué existe: con el reenvío directo de Email Routing, Cloudflare marca
    los mails como «Reenviado» pero Gmail descarta en silencio los que salieron

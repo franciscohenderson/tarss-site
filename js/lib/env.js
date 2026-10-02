@@ -1,4 +1,4 @@
-/* Tars 2.0 · entorno y utilidades compartidas
+/* Tars · entorno y utilidades compartidas
    Constantes, preferencias del sistema y el resorte que usan varios módulos. */
 
 export const WHATSAPP_NUMBER = '5492617459362';

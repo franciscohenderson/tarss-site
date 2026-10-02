@@ -1,4 +1,4 @@
-/* Tars 2.0 · avisos (toasts) y estado «imprimiendo»
+/* Tars · avisos (toasts) y estado «imprimiendo»
    Lo usan el formulario, el cotizador, el PDF y los cobros. */
 
 /* Arriba al centro; la región es role="status" para que los lectores de

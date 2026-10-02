@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Tars 2.0 · lógica del presupuesto (módulo puro: sin DOM)
+   Tars · lógica del presupuesto (módulo puro: sin DOM)
    --------------------------------------------------------------------------
    Única fuente de verdad de precios y cálculos. La usan:
    - el navegador (registradora, PDF),
@@ -53,7 +53,7 @@ export function createQuote(ids = []) {
 
 export function buildWhatsAppMessage(quote) {
   return [
-    '¡Hola! Quiero solicitar este presupuesto de Tars 2.0:',
+    '¡Hola! Quiero solicitar este presupuesto de Tars:',
     '',
     ...quote.items.map((item) => `• ${item.name}: ${priceLabel(item)}`),
     '',

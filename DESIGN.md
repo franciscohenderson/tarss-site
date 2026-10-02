@@ -1,4 +1,4 @@
-# Tars 2.0 — Constitución de diseño: «Imprenta Riso»
+# Tars — Constitución de diseño: «Imprenta Riso»
 
 La web es un **cartel de imprenta risográfica** pegado en una pared de Mendoza: tintas planas que se pisan, registro imperfecto, tipografía gigante como estructura. A eso se suma una **máquina registradora** (el cotizador) como pieza central táctil.
 

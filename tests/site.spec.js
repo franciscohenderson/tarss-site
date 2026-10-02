@@ -28,7 +28,7 @@ test.describe('Todas las páginas', () => {
 
       const response = await page.goto(path);
       expect(response?.status()).toBe(200);
-      await expect(page).toHaveTitle(/Tars 2\.0/);
+      await expect(page).toHaveTitle(/Tars/);
       await expect(page.locator('h1')).toHaveCount(1);
       if (h1) await expect(page.locator('h1')).toHaveAccessibleName(h1);
       expect(errors).toEqual([]);

@@ -1,4 +1,4 @@
-/* Tars 2.0 · núcleo (se carga en todas las páginas)
+/* Tars · núcleo (se carga en todas las páginas)
    Tema, menú, motor de scroll/desregistro, botones magnéticos y vigía del hero. */
 
 import { prefersReducedMotion, hasFinePointer, clamp, createSpring, stepSpring } from './lib/env.js';

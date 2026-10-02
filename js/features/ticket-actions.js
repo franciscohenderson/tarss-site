@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Tars 2.0 · acciones del ticket: PDF y pago online
+   Tars · acciones del ticket: PDF y pago online
    --------------------------------------------------------------------------
    Se carga después de la registradora (main.js) y usa su API (getQuote /
    onChange). Todo lo pesado es diferido:

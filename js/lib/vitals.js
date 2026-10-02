@@ -1,4 +1,4 @@
-/* Tars 2.0 · Core Web Vitals reales -> dataLayer (GTM / GA4)
+/* Tars · Core Web Vitals reales -> dataLayer (GTM / GA4)
    --------------------------------------------------------------------------
    Mide LCP, CLS e INP en las visitas reales con web-vitals (Google, Apache
    2.0, vendor/web-vitals/). Se usa el build «attribution» porque además dice

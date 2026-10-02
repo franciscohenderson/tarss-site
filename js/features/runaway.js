@@ -1,4 +1,4 @@
-/* Tars 2.0 · easter egg de la 404
+/* Tars · easter egg de la 404
    Se carga solo si existe .runaway-button. */
 
 import { prefersReducedMotion } from '../lib/env.js';

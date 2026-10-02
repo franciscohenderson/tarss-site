@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Tars 2.0 — «Imprenta Riso» · punto de entrada
+   Tars — «Imprenta Riso» · punto de entrada
    --------------------------------------------------------------------------
    Code splitting sin build: los módulos ES se cargan nativos en el navegador.
    - Núcleo (todas las páginas): medición, tema, menú, motor de desregistro,
