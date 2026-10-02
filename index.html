@@ -176,6 +176,44 @@
       </ul>
     </div>
 
+    <!-- PRUEBA DE IMPRENTA: la persona escribe el nombre de su negocio y elige
+         el rubro; la hoja se imprime con su nombre y un celular de muestra
+         (js/features/proof.js). La hoja es decorativa: lo que cambia se anuncia
+         en #proof-status. -->
+    <section class="proof" id="prueba" aria-labelledby="prueba-title">
+      <div class="proof-head">
+        <h2 id="prueba-title" class="display">Probá con<br>tu negocio</h2>
+        <p>Escribí el nombre, elegí el rubro y mirá cómo sale de la imprenta. Es una prueba de muestra: tu web real se arma con tus fotos, tus precios y tu marca.</p>
+      </div>
+      <form class="proof-form" id="proof-form" novalidate>
+        <label class="proof-label" for="proof-name">¿Cómo se llama tu negocio?</label>
+        <input class="proof-input" id="proof-name" name="negocio" type="text" maxlength="24" autocomplete="organization" autocapitalize="words" enterkeyhint="done" placeholder="Ej.: Panadería Lola" />
+        <fieldset class="proof-kinds">
+          <legend class="proof-label">Rubro</legend>
+          <label class="proof-kind"><input type="radio" name="rubro" value="restaurante" checked /><span>Restaurante</span></label>
+          <label class="proof-kind"><input type="radio" name="rubro" value="ropa" /><span>Local de ropa</span></label>
+          <label class="proof-kind"><input type="radio" name="rubro" value="barberia" /><span>Barbería</span></label>
+          <label class="proof-kind"><input type="radio" name="rubro" value="gimnasio" /><span>Gimnasio</span></label>
+          <label class="proof-kind"><input type="radio" name="rubro" value="otro" /><span>Otro</span></label>
+        </fieldset>
+        <a class="btn btn-pink" id="proof-request" href="https://wa.me/5492612408064?text=Hola%20Tars%2C%20vi%20la%20prueba%20de%20imprenta%20y%20quiero%20una%20web%20para%20mi%20negocio." target="_blank" rel="noopener noreferrer" data-magnetic>Quiero esta web</a>
+        <p class="sr-only" id="proof-status" aria-live="polite"></p>
+      </form>
+      <div class="proof-sheet" aria-hidden="true">
+        <div class="proof-print">
+          <div class="proof-copy">
+            <p class="proof-kicker">Sitio web para</p>
+            <p class="proof-name" data-text="Brasa &amp; Vid">Brasa &amp; Vid</p>
+            <p class="proof-line">Tu carta siempre al día</p>
+            <p class="proof-feats">Carta digital · Reservas · Pedidos por WhatsApp</p>
+            <p class="proof-sample">Muestra de diseño · negocio de ejemplo</p>
+          </div>
+          <div class="proof-phone"><div class="proof-screen" data-kind="restaurante"></div></div>
+        </div>
+        <span class="proof-roller"></span>
+      </div>
+    </section>
+
     <!-- AFICHES: cada servicio es una hoja a pantalla completa que se queda fija
          (sticky) mientras la siguiente sube y la tapa. js/core.js publica dos
          variables por afiche: --enter (cuánto entró) y --cover (cuánto lo tapó

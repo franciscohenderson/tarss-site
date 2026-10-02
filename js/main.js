@@ -7,6 +7,7 @@
    - Funciones por página (import dinámico, solo si su HTML existe):
        #ticket-form     -> features/register.js      (index, servicios)
                            + features/ticket-actions.js (PDF y pago)
+       #proof-form      -> features/proof.js         (index)
        #contact-form    -> features/contact-form.js  (contacto)
        .runaway-button  -> features/runaway.js       (404)
    Así la 404 o el blog no descargan el cotizador ni el formulario.
@@ -49,6 +50,7 @@ const features = [
     // PDF y pago online: después de la registradora, usando su API.
     (await import('./features/ticket-actions.js')).initTicketActions(register);
   }],
+  ['#proof-form', () => import('./features/proof.js').then((m) => m.initProof())],
   ['#contact-form', loadContactForm],
   ['.runaway-button', () => import('./features/runaway.js').then((m) => m.initRunawayButton())],
 ];
