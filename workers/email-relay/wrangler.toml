@@ -1,0 +1,17 @@
+# Relevo de contacto@tars.com.ar -> Gmail (Cloudflare Email Worker).
+# Deploy: cd workers/email-relay && npm install && npx wrangler deploy
+# Después, en Cloudflare > Email Routing > Reglas, la regla de
+# contacto@tars.com.ar tiene que tener la acción «Enviar a un Worker»
+# con este Worker (tars-email-relay).
+name = "tars-email-relay"
+main = "src/index.js"
+compatibility_date = "2026-09-01"
+workers_dev = false
+
+[vars]
+DESTINO = "franciscohenderson456@gmail.com"
+REMITENTE = "contacto@tars.com.ar"
+
+[[send_email]]
+name = "EMAIL"
+allowed_destination_addresses = ["franciscohenderson456@gmail.com"]

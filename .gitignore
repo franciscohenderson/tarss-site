@@ -22,3 +22,5 @@ playwright-report/
 # Capturas y snapshots del Playwright MCP
 .playwright-mcp/
 riso-*.png
+workers/*/dist/
+workers/*/.wrangler/

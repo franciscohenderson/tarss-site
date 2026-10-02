@@ -1,0 +1,15 @@
+{
+  "name": "tars-email-relay",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test test/relevo.test.js",
+    "deploy": "wrangler deploy"
+  },
+  "dependencies": {
+    "postal-mime": "4.0.2"
+  },
+  "devDependencies": {
+    "wrangler": "4.110.0"
+  }
+}
