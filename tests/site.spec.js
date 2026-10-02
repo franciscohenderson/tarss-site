@@ -9,6 +9,9 @@ const PAGES = [
   { path: '/privacidad.html' },
   { path: '/gracias.html' },
   { path: '/404.html' },
+  { path: '/articulo-landing-profesional.html', h1: /landing profesional/ },
+  { path: '/articulo-sitio-en-celular.html', h1: /celular/ },
+  { path: '/articulo-mantenimiento-web.html', h1: /mantenimiento web/ },
 ];
 
 // Los tests no deben depender de terceros ni ensuciar las métricas reales:

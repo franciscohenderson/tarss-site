@@ -644,6 +644,14 @@ h3 {
   transform: translateX(calc((1 - var(--enter)) * -8%));
 }
 
+/* La palabra se dibuja desde CSS (data-word): es pura decoración, así que
+   no es texto del documento (ni para lectores de pantalla ni para los
+   chequeos de contraste, que no aplican a una mancha de tinta). */
+.poster-word::before {
+  content: attr(data-word);
+  content: attr(data-word) / "";
+}
+
 .poster-label {
   position: absolute;
   z-index: 3;
@@ -2438,4 +2446,65 @@ h3 {
 .ticket-actions[hidden],
 .ticket-actions [hidden] {
   display: none;
+}
+
+/* --- Artículos del blog (modo lectura) -----------------------------------
+   El título va más chico que el de las páginas: es una frase larga. */
+.riso-title--article {
+  max-width: 20ch;
+  font-size: clamp(2.6rem, 5.5vw, 5.75rem);
+  line-height: 0.98;
+}
+
+.article-back {
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+}
+
+.article-back a {
+  text-underline-offset: 4px;
+}
+
+.article-back a::before {
+  content: "";
+  display: inline-block;
+  width: 0.55em;
+  height: 0.55em;
+  margin-right: 0.5em;
+  border-left: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg) translateY(-0.1em);
+}
+
+.article-meta {
+  margin-top: 1.25rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+.article-body {
+  font-size: 1.125rem;
+}
+
+.article-body p,
+.article-body li {
+  color: var(--fg);
+}
+
+/* Títulos de las entradas del blog: links a los artículos. */
+.zine-entry h3 a {
+  text-decoration: none;
+}
+
+@media (hover: hover) {
+  .zine-entry h3 a:hover {
+    color: var(--accent);
+    text-shadow: 3px -2px 0 var(--blue);
+  }
+}
+
+.zine-entry h3 a:focus-visible {
+  outline-offset: 6px;
 }

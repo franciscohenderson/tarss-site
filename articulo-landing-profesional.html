@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>
+    /* Aplica el tema ANTES de pintar la página (evita un destello del tema
+       equivocado): el que la persona eligió con el botón, o si nunca eligió,
+       OSCURO (el diseño principal). La lógica del botón: js/core.js (initThemeToggle). */
+    (function () {
+      var theme;
+      try { theme = localStorage.getItem('theme'); } catch (e) {}
+      document.documentElement.setAttribute('data-theme', theme === 'light' ? 'light' : 'dark');
+    })();
+  </script>
+  <!-- Google Tag Manager (GTM-WKXQ88DT): carga asíncrona, no frena la página.
+       Las etiquetas (Analytics, píxel de Meta, conversiones de Google Ads) se
+       configuran en tagmanager.google.com, no acá. Los eventos que manda el
+       sitio (generate_lead, quote_request, whatsapp_click, email_click) salen
+       de trackEvent() en js/lib/track.js. -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-WKXQ88DT');</script>
+  <!-- End Google Tag Manager -->
+  <meta name="description" content="Por qué una landing page propia convierte mejor que depender solo de las redes: un objetivo claro, independencia del algoritmo, presencia en Google, medición y confianza." />
+  <meta name="theme-color" content="#141414" />
+  <meta property="og:title" content="5 razones por las que tu negocio necesita una landing profesional | Tars 2.0" />
+  <meta property="og:site_name" content="Tars 2.0" />
+  <link rel="canonical" href="https://tarss-site.pages.dev/articulo-landing-profesional" />
+  <meta property="og:description" content="Por qué una landing page propia convierte mejor que depender solo de las redes: un objetivo claro, independencia del algoritmo, presencia en Google, medición y confianza." />
+  <meta property="twitter:title" content="5 razones por las que tu negocio necesita una landing profesional | Tars 2.0" />
+  <meta name="twitter:description" content="Por qué una landing page propia convierte mejor que depender solo de las redes: un objetivo claro, independencia del algoritmo, presencia en Google, medición y confianza." />
+  <meta name="twitter:creator" content="@tarss" />
+  <meta property="og:image" content="https://tarss-site.pages.dev/favicon.svg" />
+  <meta property="og:type" content="article" />
+  <meta property="og:locale" content="es_ES" />
+  <meta property="og:url" content="https://tarss-site.pages.dev/articulo-landing-profesional" />
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@tarss" />
+  <title>5 razones por las que tu negocio necesita una landing profesional | Tars 2.0</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="preload" href="/fonts/big-shoulders-display-var.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/fonts/libre-franklin-var.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="riso.css" />
+  <link rel="modulepreload" href="js/core.js" />
+  <link rel="modulepreload" href="js/lib/env.js" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "5 razones por las que tu negocio necesita una landing profesional",
+    "description": "Por qué una landing page propia convierte mejor que depender solo de las redes: un objetivo claro, independencia del algoritmo, presencia en Google, medición y confianza.",
+    "datePublished": "2026-10-01",
+    "dateModified": "2026-10-01",
+    "inLanguage": "es-AR",
+    "mainEntityOfPage": "https://tarss-site.pages.dev/articulo-landing-profesional",
+    "author": {
+      "@type": "Organization",
+      "name": "Tars 2.0",
+      "url": "https://tarss-site.pages.dev/"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Tars 2.0",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://tarss-site.pages.dev/favicon.svg"
+      }
+    }
+  }
+  </script>
+</head>
+<body class="riso">
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WKXQ88DT"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+  <a class="skip-link" href="#main-content">Saltar al contenido</a>
+
+  <!-- Margen de impresión (igual en todas las páginas, ver index.html). -->
+  <nav class="margin" aria-label="Menú principal">
+    <a class="margin-brand" href="index.html" aria-label="T2: Tars 2.0, inicio">T<span>2</span></a>
+    <div class="margin-actions">
+      <button class="theme-toggle" type="button" aria-label="Cambiar a modo claro" title="Modo claro">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+      </button>
+      <button class="nav-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="primary-navigation"><span></span></button>
+    </div>
+    <div class="margin-links" id="primary-navigation">
+      <a href="servicios.html">Servicios</a>
+      <a href="servicios.html#cotizador">Cotizador</a>
+      <a href="index.html#paquetes">Paquetes</a>
+      <a href="index.html#casos">Casos</a>
+      <a href="index.html#faq">FAQ</a>
+      <a href="blog.html" aria-current="page">Blog</a>
+      <a href="contacto.html">Contacto</a>
+    </div>
+    <svg class="reg-mark" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="6"/><path d="M12 0v24M0 12h24"/></svg>
+  </nav>
+
+  <main id="main-content">
+    <header class="page-hero page-hero--article">
+      <p class="article-back"><a href="blog.html">Volver al blog</a></p>
+      <h1 class="riso-title riso-title--article" data-text="5 razones por las que tu negocio necesita una landing profesional">5 razones por las que tu negocio necesita una landing profesional</h1>
+      <p class="article-meta"><time datetime="2026-10-01">1 de octubre de 2026</time> · 4 min de lectura</p>
+      <p class="hero-text">Un buen sitio web puede convertir más clientes que una publicación en redes. Acá te cuento por qué vale la pena invertir en una página simple, clara y pensada para vender.</p>
+    </header>
+
+    <article class="legal article-body" aria-labelledby="article-title-hidden">
+      <h2 id="article-title-hidden" class="sr-only">5 razones por las que tu negocio necesita una landing profesional</h2>
+      <p>Una <strong>landing page</strong> es una página web con un solo objetivo: que la persona que llega haga una acción concreta, como escribirte por WhatsApp, pedir un presupuesto o reservar un turno. No es «tener una web por tener»: es una herramienta de venta.</p>
+      
+      <h2>1. Una página, un objetivo</h2>
+      <p>En Instagram o Facebook compartís espacio con tu competencia, con memes y con publicidad. En tu landing, todo empuja hacia lo mismo: entender qué hacés, confiar en vos y contactarte. Menos distracciones, más consultas.</p>
+      
+      <h2>2. Es tuya (y el algoritmo no la apaga)</h2>
+      <p>Las redes cambian sus reglas todo el tiempo: un día tus publicaciones llegan a mucha gente y al siguiente casi a nadie. Tu sitio y tu dominio son tuyos. Las redes siguen sirviendo, pero como camino hacia tu página, no como único lugar donde existís.</p>
+      
+      <h2>3. Te encuentran cuando te buscan</h2>
+      <p>Cuando alguien busca en Google tu rubro y tu ciudad, ya tiene la intención de comprar. Una página con títulos claros, tu zona y tus servicios bien escritos te da la chance de aparecer en ese momento justo. En las redes, esa búsqueda casi no existe.</p>
+      
+      <h2>4. Medís qué funciona</h2>
+      <p>Con una landing podés saber cuántas personas entraron, de dónde vinieron y cuántas hicieron clic en WhatsApp o mandaron el formulario. Con esos números decidís dónde poner tu tiempo y tu presupuesto de publicidad, en vez de adivinar.</p>
+      
+      <h2>5. Genera confianza</h2>
+      <p>Antes de pagar, la gente busca señales: que existís, que tenés precios claros, cómo trabajás y cómo contactarte. Una página prolija responde esas dudas antes de que te las pregunten, y hace que tu negocio se vea más serio.</p>
+      
+      <h2>Qué tiene que tener una buena landing</h2>
+      <ul>
+        <li><strong>Un título que diga qué hacés y para quién</strong>, entendible en cinco segundos.</li>
+        <li><strong>Un botón de contacto siempre a mano</strong> (WhatsApp, formulario o los dos).</li>
+        <li><strong>Pruebas reales:</strong> trabajos hechos, comentarios de clientes con permiso, fotos propias.</li>
+        <li><strong>Precios o rangos claros</strong>, aunque sean «desde».</li>
+        <li><strong>Que cargue rápido y se vea bien en el celular</strong>: ahí llega la mayoría de la gente.</li>
+      </ul>
+      <p>Si tenés estas cinco cosas, ya estás por delante de muchos negocios que solo tienen redes.</p>
+    </article>
+
+    <section class="closing" aria-labelledby="cierre-title">
+      <div>
+        <h2 id="cierre-title" class="display">¿Cuánto saldría la tuya?</h2>
+        <p>Armá el presupuesto en segundos con el cotizador y mandámelo por WhatsApp.</p>
+      </div>
+      <a class="btn btn-pink" href="index.html#cotizador" data-magnetic>Ir al cotizador</a>
+    </section>
+  </main>
+
+  <footer class="colophon">
+    <p class="colophon-word" aria-hidden="true">TARS 2.0</p>
+    <div class="colophon-cols">
+      <div>
+        <p class="colophon-brand">Tars 2.0</p>
+        <p>Soluciones digitales para emprendimientos y pequeños negocios. Impreso en Mendoza.</p>
+      </div>
+      <div>
+        <h2>Contacto</h2>
+        <p><a href="mailto:Franciscohenderson456@gmail.com">Franciscohenderson456@gmail.com</a></p>
+      </div>
+      <div>
+        <h2>Enlaces</h2>
+        <p><a href="index.html">Inicio</a></p>
+        <p><a href="servicios.html">Servicios detallados</a></p>
+        <p><a href="contacto.html">Contacto</a></p>
+      </div>
+    </div>
+    <p class="colophon-copy">© 2026 Tars 2.0. Todos los derechos reservados. · <a href="privacidad.html">Política de privacidad</a></p>
+  </footer>
+
+  <a class="wa-stamp" href="https://wa.me/5492617459362" target="_blank" rel="noopener noreferrer" aria-label="Chat por WhatsApp">WhatsApp</a>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
