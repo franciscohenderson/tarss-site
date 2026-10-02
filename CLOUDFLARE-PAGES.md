@@ -19,7 +19,7 @@ El sitio es estático (HTML/CSS/JS). Cloudflare Pages puede desplegarlo directam
 - En el panel del proyecto, ve a **Custom domains** → **Add a domain**.
 - Agrega tu dominio (ej. `midominio.com`).
 - Cloudflare te dará instrucciones DNS. Generalmente:
-  - Para subdominio `www`: añade un CNAME a `tarss-site.pages.dev`.
+  - Para subdominio `www`: añade un CNAME a `tars.com.ar`.
   - Para dominio raíz: configura un registro `A` con los valores que Cloudflare indique o usa el método recomendado por Pages.
 - Verifica y activa la opción de HTTPS (Cloudflare gestiona certificados automáticamente).
 

@@ -19,7 +19,7 @@ const BUSINESS = {
   tagline: 'Imprenta digital · Mendoza',
   whatsapp: '+54 9 261 745-9362',
   email: 'Franciscohenderson456@gmail.com',
-  web: 'tarss-site.pages.dev',
+  web: 'tars.com.ar',
 };
 
 const TYPES = {
