@@ -18,7 +18,7 @@ const BUSINESS = {
   name: 'TARS 2.0',
   tagline: 'Imprenta digital · Mendoza',
   whatsapp: '+54 9 261 745-9362',
-  email: 'Franciscohenderson456@gmail.com',
+  email: 'contacto@tars.com.ar',
   web: 'tars.com.ar',
 };
 
