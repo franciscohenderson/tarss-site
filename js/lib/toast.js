@@ -17,8 +17,10 @@ function getToastRegion() {
     // Esc cierra el aviso más reciente.
     document.addEventListener("keydown", (event) => {
       if (event.key !== "Escape") return;
-      const last = region.querySelector(".toast.is-visible:last-child");
-      last?.dispatchEvent(new CustomEvent("toast:close"));
+      // El último que no se esté yendo, aunque todavía esté entrando (antes
+      // solo miraba los ya visibles: un Esc muy rápido no cerraba nada).
+      const open = region.querySelectorAll(".toast:not(.is-leaving)");
+      open[open.length - 1]?.dispatchEvent(new CustomEvent("toast:close"));
     });
   }
   return region;
@@ -48,17 +50,19 @@ export function showToast(message, { type = "info", duration = 4000 } = {}) {
   toast.append(icon, text, close);
 
   // Límite: si ya hay TOAST_LIMIT, se cierra el más viejo.
-  const visible = region.querySelectorAll(".toast");
+  const visible = region.querySelectorAll(".toast:not(.is-leaving)");
   if (visible.length >= TOAST_LIMIT) visible[0].dispatchEvent(new CustomEvent("toast:close"));
 
   region.appendChild(toast);
-  requestAnimationFrame(() => toast.classList.add("is-visible"));
+  // Si se cerró antes del primer cuadro, no tiene que volver a aparecer.
+  requestAnimationFrame(() => { if (!toast.classList.contains("is-leaving")) toast.classList.add("is-visible"); });
 
   let hideTimer = 0;
   let remaining = duration;
   let startedAt = 0;
   const hide = () => {
     clearTimeout(hideTimer);
+    toast.classList.add("is-leaving");
     toast.classList.remove("is-visible");
     toast.addEventListener("transitionend", () => toast.remove(), { once: true });
     setTimeout(() => toast.remove(), 600); // respaldo si no hay transición

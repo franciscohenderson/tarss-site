@@ -87,8 +87,9 @@ test.describe('PDF y cobros (sin navegador)', () => {
   });
 
   test('POST real (sandbox): token cacheado y cuerpo con la estructura de Nave', async () => {
-    const { clearTokenCache } = await load('functions/_lib/nave.js');
+    const { clearTokenCache, clearRateCache } = await load('functions/_lib/nave.js');
     clearTokenCache();
+    clearRateCache(); // la cotización cacheada por otro test no debe influir
     const env = {
       NAVE_ENABLED: 'true', NAVE_CLIENT_ID: 'cid', NAVE_CLIENT_SECRET: 'secreto', NAVE_AUDIENCE: 'aud',
       NAVE_POS_ID: 'pos-1', NAVE_USD_ARS_RATE: '1000',
@@ -120,8 +121,9 @@ test.describe('PDF y cobros (sin navegador)', () => {
   });
 
   test('POST real: si Nave falla, el navegador recibe un mensaje genérico (sin secretos)', async () => {
-    const { clearTokenCache } = await load('functions/_lib/nave.js');
+    const { clearTokenCache, clearRateCache } = await load('functions/_lib/nave.js');
     clearTokenCache();
+    clearRateCache(); // la cotización cacheada por otro test no debe influir
     const env = { NAVE_ENABLED: 'true', NAVE_CLIENT_ID: 'cid', NAVE_CLIENT_SECRET: 'super-secreto', NAVE_AUDIENCE: 'aud', NAVE_POS_ID: 'p', NAVE_USD_ARS_RATE: '1000' };
     const failing = async () => new Response('{"message":"invalid client super-secreto"}', { status: 401 });
     const originalError = console.error;
