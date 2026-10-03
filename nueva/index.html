@@ -142,14 +142,14 @@
   .tile p { max-width: 34ch; color: var(--muted); font: 500 16px/1.5 'LF'; }
   .t-phone { grid-column: span 2; grid-row: span 2; }
   .t-chat { grid-column: span 4; }
-  .t-days { grid-column: span 2; }
+  .t-days { grid-column: span 4; }
   .t-me { grid-column: span 2; background: var(--pink); color: #120a10; }
   .t-me p { color: #3b0a26; }
 
   /* Celular que sube */
-  .t-phone .mini { margin: auto auto -120px; width: min(250px, 80%); transform: translateY(60px); opacity: 0; transition: transform 900ms var(--ease-out), opacity 500ms var(--ease-out); }
+  .t-phone .mini { margin: auto; width: min(270px, 74%); transform: translateY(60px); opacity: 0; transition: transform 900ms var(--ease-out), opacity 500ms var(--ease-out); }
   .t-phone.is-in .mini { transform: none; opacity: 1; }
-  .t-phone .proof-phone { width: 100%; margin: 0; outline-width: 7px; }
+  .t-phone .proof-phone { width: 100%; margin: 0; outline-width: 7px; box-shadow: 0 30px 60px rgb(0 0 0 / 0.45); }
 
   /* Chat de WhatsApp */
   .chat { margin-top: auto; display: grid; gap: 8px; max-width: 520px; width: 100%; align-self: flex-end; }
@@ -179,18 +179,20 @@
   .t-chat { min-height: 480px; }
   .item span.p.ask { font: 800 15px 'LF'; color: var(--pink); }
 
-  /* Línea de días */
-  .days { margin-top: auto; display: grid; gap: 10px; }
-  .day { display: grid; grid-template-columns: 54px 1fr; align-items: center; gap: 12px; font: 600 14px 'LF'; color: var(--muted); }
-  .day b { font: 900 18px 'BSD'; color: var(--fg); }
-  .day span { position: relative; height: 8px; border-radius: 99px; background: #26262b; overflow: hidden; }
-  .day span::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background: var(--pink); transform: scaleX(0); transform-origin: 0 50%; transition: transform 700ms var(--ease-out); }
-  .t-days.is-in .day span::after { transform: scaleX(1); }
-  .t-days.is-in .day:nth-child(2) span::after { transition-delay: 250ms; }
-  .t-days.is-in .day:nth-child(3) span::after { transition-delay: 500ms; }
-  .t-days.is-in .day:nth-child(4) span::after { transition-delay: 750ms; }
-  .t-days.is-in .day:nth-child(5) span::after { transition-delay: 1000ms; }
-  .day em { font-style: normal; grid-column: 2; margin-top: -4px; font-size: 12.5px; }
+  /* Semana de trabajo: un número gigante cuenta los días y cada casillero se tilda. */
+  .tile .count { margin-top: auto; color: var(--fg); max-width: none; font: 900 clamp(84px, 8vw, 132px)/0.8 'BSD'; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
+  .tile .count.is-live { color: var(--pink); }
+  .week { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; margin-top: 14px; }
+  .wd { display: grid; justify-items: center; gap: 6px; padding: 10px 0 9px; border-radius: 12px; background: #222227; transition: background-color 300ms var(--ease-out), color 300ms var(--ease-out); }
+  .wd b { font: 800 11px 'LF'; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+  .wd svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+  .wd svg path { stroke-dasharray: 24; stroke-dashoffset: 24; }
+  .wd span { font: 600 10.5px 'LF'; color: var(--muted); }
+  .wd.is-done { background: #2c1a25; }
+  .wd.is-done svg path { stroke-dashoffset: 0; transition: stroke-dashoffset 420ms var(--ease-out); }
+  .wd.is-done svg { color: var(--pink); }
+  .wd.is-live { background: var(--pink); }
+  .wd.is-live b, .wd.is-live span, .wd.is-live svg { color: #120a10; }
 
   /* Una sola persona */
   .t-me h3 { font: 900 clamp(40px, 4vw, 64px)/0.9 'BSD'; text-transform: uppercase; letter-spacing: 0; max-width: none; }
@@ -248,6 +250,8 @@
     .inside .mock { display: none; }
     .inside h1, .inside h2 { font-size: clamp(46px, 13vw, 72px); }
     .builder { grid-template-columns: minmax(0, 1fr); }
+    .item { grid-template-columns: auto minmax(0, 1fr); row-gap: 10px; }
+    .item span.p { grid-column: 2; }
     .bento { grid-template-columns: minmax(0, 1fr); }
     .t-phone, .t-chat, .t-days, .t-me { grid-column: auto; grid-row: auto; }
     .tile { min-height: 0; }
@@ -282,25 +286,19 @@
       <div class="bento">
         <article class="tile t-phone"><h3>Se ve bien en el celular</h3><p>Que es desde donde te van a encontrar. Rápida aunque la señal no ayude.</p>
           <div class="mini" aria-hidden="true"><div class="proof-phone"><div class="proof-screen" data-kind="restaurante"></div></div></div></article>
-        <article class="tile t-chat"><span class="ai">Asistente con IA</span><h3>Tu WhatsApp atiende solo, las 24 horas</h3><p>Responde como una persona de tu negocio: toma pedidos, da turnos y contesta precios. Si le preguntan, aclara que es un asistente virtual; y si algo no se puede cerrar, te pasa la charla a vos.</p>
+        <article class="tile t-chat"><span class="ai">Asistente con IA</span><h3>Tu WhatsApp atiende solo, las 24 horas</h3><p>Responde como una persona de tu negocio: toma pedidos, da turnos y contesta precios. Y cuando algo no se puede cerrar, le pasa la charla a tu equipo o a tu WhatsApp empresarial.</p>
           <div class="chat" aria-hidden="true">
-            <div class="msg out">Hola! ¿Hacen envíos a Godoy Cruz? Quiero 2 sweaters talle M<small>03:12</small></div>
+            <div class="msg out">¡Hola! ¿Hacen envíos a Godoy Cruz? Quiero 2 sweaters talle M<small>03:12</small></div>
             <div class="typing"><i></i><i></i><i></i></div>
             <div class="msg in"><span class="who">Lana Cruda</span>¡Hola! Sí, llegan en 24 h. Te separo 2 Sweater Andes talle M: $ 117.800. ¿Pagás con link o transferencia?<small>03:12</small></div>
-            <div class="msg out">¿Sos una persona?<small>03:13</small></div>
-            <div class="msg in"><span class="who">Lana Cruda</span>Soy el asistente virtual de Lana Cruda. Si preferís, te paso con alguien del equipo.<small>03:13</small></div>
-            <span class="handoff">Hablar con un asesor</span>
+            <div class="msg out">Y si quiero 10 para mi local, ¿me hacen precio?<small>03:13</small></div>
+            <div class="msg in"><span class="who">Lana Cruda</span>¡Buenísimo! Para un pedido por cantidad te paso con Sofi, que lo arma con vos. Te escribe a primera hora por acá.<small>03:13</small></div>
+            <span class="handoff">Charla pasada a tu WhatsApp empresarial</span>
           </div></article>
         <article class="tile t-days"><h3>Lista en 3 a 5 días</h3><p>Una landing en menos de una semana; un sitio de 4 o 5 páginas, en 7 a 10 días.</p>
-          <div class="days" aria-hidden="true">
-            <div class="day"><b>Día 1</b><span></span><em>Propuesta</em></div>
-            <div class="day"><b>Día 2</b><span></span><em>Diseño</em></div>
-            <div class="day"><b>Día 3</b><span></span><em>Armado</em></div>
-            <div class="day"><b>Día 4</b><span></span><em>Ajustes</em></div>
-            <div class="day"><b>Día 5</b><span></span><em>Online</em></div>
-          </div></article>
-        <article class="tile t-me"><h3>Te atiende una sola persona</h3><p>Soy Francisco. Hago tu web de punta a punta y te respondo yo, sin pasarte de mano en mano. Propuesta en menos de 24 horas.</p>
-          <a class="btn" href="https://wa.me/5492612408064" target="_blank" rel="noopener">Escribime</a></article>
+          <p class="count" aria-hidden="true"><span>Día 1</span></p>
+          <div class="week" aria-hidden="true"><div class="wd"><b>Lun</b><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Propuesta</span></div><div class="wd"><b>Mar</b><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Diseño</span></div><div class="wd"><b>Mié</b><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Armado</span></div><div class="wd"><b>Jue</b><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Ajustes</span></div><div class="wd"><b>Vie</b><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Online</span></div></div>
+          </article>
       </div>
     </section>
 
@@ -311,7 +309,7 @@
         <div class="items">
           <label class="item"><input type="checkbox" data-price="149" data-name="Landing page" checked disabled><span><b>Landing page</b><small>Una página que presenta tu negocio y lleva a WhatsApp.</small></span><span class="p">USD 149</span></label>
           <label class="item"><input type="checkbox" data-month="50" data-name="Mantenimiento"><span><b>Mantenimiento</b><small>Cambios, copias de seguridad y que todo siga andando rápido.</small></span><span class="p">USD 50 <small>/mes</small></span></label>
-          <label class="item"><input type="checkbox" data-ask="1" data-name="Asistente de IA para WhatsApp"><span><b>Asistente de IA para WhatsApp</b><small>Atiende tu WhatsApp las 24 horas como una persona de tu negocio, y te pasa la charla cuando hace falta.</small></span><span class="p ask">A consultar</span></label>
+          <label class="item"><input type="checkbox" data-ask="1" data-name="Asistente de IA para WhatsApp"><span><b>Asistente de IA para WhatsApp</b><small>Atiende tu WhatsApp las 24 horas como una persona de tu negocio, y le pasa la charla a tu equipo cuando hace falta.</small></span><span class="p ask">A consultar</span></label>
           <label class="item"><input type="checkbox" data-price="80" data-name="SEO local"><span><b>SEO local</b><small>Para que te encuentren en Google cuando buscan lo tuyo en Mendoza.</small></span><span class="p">USD 80</span></label>
         </div>
         <aside class="total" aria-live="polite">
@@ -329,8 +327,8 @@
       <div class="faq">
         <details><summary>¿Cuánto tarda?</summary><p>Una landing page queda lista en 3 a 5 días. Un sitio de 4 o 5 páginas, en 7 a 10 días. La propuesta te llega en menos de 24 horas.</p></details>
         <details><summary>¿Qué necesito tener?</summary><p>Tus fotos, tus precios y ganas. Si no tenés fotos o textos, te ayudo a armarlos.</p></details>
-        <details><summary>¿Qué hace el asistente de IA?</summary><p>Atiende tu WhatsApp las 24 horas: responde precios y horarios, toma pedidos y reservas, y da turnos, con lo que vos le cargás de tu negocio. Si una venta o un pedido no se puede cerrar, ofrece hablar con un asesor y te pasa la charla.</p></details>
-        <details><summary>¿Se hace pasar por una persona?</summary><p>Habla con naturalidad, como alguien de tu negocio, pero no engaña: si un cliente le pregunta, aclara que es un asistente virtual y le ofrece hablar con una persona del equipo.</p></details>
+        <details><summary>¿Qué hace el asistente de IA?</summary><p>Atiende tu WhatsApp las 24 horas: responde precios y horarios, toma pedidos y reservas, y da turnos, con lo que vos le cargás de tu negocio. Si una venta o un pedido no se puede cerrar, le pasa la charla a tu equipo o a tu WhatsApp empresarial para que lo terminen ustedes.</p></details>
+        <details><summary>¿Los clientes notan que es un asistente?</summary><p>Habla con naturalidad, como alguien de tu negocio, y no anda aclarando que es un programa. Si un cliente lo pregunta directamente, no le miente.</p></details>
         <details><summary>¿Los ejemplos son clientes reales?</summary><p>No: son muestras de diseño con negocios de ejemplo, para que veas cómo puede quedar la tuya.</p></details>
         <details><summary>¿Y después de publicarla?</summary><p>Con el mantenimiento mensual me ocupo de los cambios, las copias de seguridad y de que siga andando rápido.</p></details>
       </div>
@@ -338,7 +336,7 @@
 
     <section class="sec close" id="contacto">
       <h2>Hable<em>mos</em></h2>
-      <p class="lead">Contame qué hacés. Te respondo hoy.</p>
+      <p class="lead">Soy Francisco. Hago tu web de punta a punta y te respondo yo, sin pasarte de mano en mano. Contame qué hacés y en menos de 24 horas tenés la propuesta.</p>
       <div class="row"><a class="btn" id="close-wa" href="https://wa.me/5492612408064" target="_blank" rel="noopener">Escribime por WhatsApp</a><a class="btn btn--ghost" href="mailto:contacto@tars.com.ar">contacto@tars.com.ar</a></div>
     </section>
   </main>
@@ -466,6 +464,19 @@
     addEventListener('scroll', () => { if (!frame) frame = requestAnimationFrame(move); }, { passive: true });
     move();
   }
+
+  /* Semana de trabajo: cuenta de Día 1 a Día 5 y termina en ONLINE. */
+  const daysTile = document.querySelector('.t-days');
+  const count = daysTile.querySelector('.count span');
+  const wds = [...daysTile.querySelectorAll('.wd')];
+  const runWeek = () => {
+    wds.forEach((wd, i) => setTimeout(() => {
+      wd.classList.add('is-done');
+      count.textContent = i < wds.length - 1 ? `Día ${i + 1}` : 'ONLINE';
+      if (i === wds.length - 1) { wd.classList.add('is-live'); count.parentElement.classList.add('is-live'); }
+    }, reduce ? 0 : 300 + i * 520));
+  };
+  new IntersectionObserver((entries, obs) => { if (entries[0].isIntersecting) { obs.disconnect(); runWeek(); } }, { threshold: 0.5 }).observe(daysTile);
 
   /* Lo que te llevás: el subrayado de tinta entra una vez. */
   const io = new IntersectionObserver((entries) => entries.forEach((entry) => {
