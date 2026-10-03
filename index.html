@@ -1,20 +1,11 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tars · Webs para tu negocio</title>
   <meta name="google-site-verification" content="bKJtFAA3xVGMMSRyAC5OsypyU90CIGofXfjCXuoE2UI" />
   <meta name="facebook-domain-verification" content="mdoa867nw8yjdg9oe8csbfz0wczlds" />
-  <script>
-    /* Aplica el tema ANTES de pintar la página (evita un destello del tema
-       equivocado): el que la persona eligió con el botón, o si nunca eligió,
-       OSCURO (el diseño principal). La lógica del botón: js/core.js (initThemeToggle). */
-    (function () {
-      var theme;
-      try { theme = localStorage.getItem('theme'); } catch (e) {}
-      document.documentElement.setAttribute('data-theme', theme === 'light' ? 'light' : 'dark');
-    })();
-  </script>
   <!-- Google Tag Manager (GTM-WKXQ88DT): carga asíncrona, no frena la página.
        Las etiquetas (Analytics, píxel de Meta, conversiones de Google Ads) se
        configuran en tagmanager.google.com, no acá. Los eventos que manda el
@@ -26,36 +17,36 @@
   'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
   })(window,document,'script','dataLayer','GTM-WKXQ88DT');</script>
   <!-- End Google Tag Manager -->
-  <meta name="description" content="Tars crea sitios web, soporte digital y marketing para emprendedores que quieren vender más y crecer rápido." />
-  <meta name="keywords" content="sitios web, mantenimiento web, marketing digital, redes sociales, pymes, emprendedores" />
-  <meta name="theme-color" content="#141414" />
-  <meta property="og:title" content="Tars | Soluciones Digitales" />
-  <meta property="og:site_name" content="Tars" />
+  <meta name="description" content="Webs a medida para negocios de Mendoza, con un asistente de IA que atiende tu WhatsApp. Elegí tu rubro, mirá cómo puede quedar la tuya y armá tu precio." />
+  <meta name="theme-color" content="#0e0e10" />
   <link rel="canonical" href="https://tars.com.ar/" />
-  <meta property="og:description" content="Tars crea sitios web, soporte digital y marketing para emprendedores que quieren vender más online." />
-  <meta property="twitter:title" content="Tars | Soluciones Digitales" />
-  <meta name="twitter:description" content="Tars crea sitios web, soporte digital y marketing para emprendedores que quieren vender más online." />
-  <meta name="twitter:creator" content="@tarss" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="preload" href="/fonts/big-shoulders-display-var.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/fonts/libre-franklin-var.woff2" as="font" type="font/woff2" crossorigin />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Tars" />
+  <meta property="og:title" content="Tars · Webs para tu negocio" />
+  <meta property="og:description" content="Webs a medida para negocios de Mendoza, con un asistente de IA que atiende tu WhatsApp. Elegí tu rubro, mirá cómo puede quedar la tuya y armá tu precio." />
+  <meta property="og:url" content="https://tars.com.ar/" />
+  <meta property="og:locale" content="es_AR" />
   <meta property="og:image" content="https://tars.com.ar/og/inicio.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="Ayudo a tu negocio a · Vender más · Tars" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Tars · Webs para tu negocio" />
+  <meta name="twitter:description" content="Webs a medida para negocios de Mendoza, con un asistente de IA que atiende tu WhatsApp. Elegí tu rubro, mirá cómo puede quedar la tuya y armá tu precio." />
   <meta name="twitter:image" content="https://tars.com.ar/og/inicio.png" />
-  <meta property="og:type" content="website" />
-  <meta property="og:locale" content="es_ES" />
-  <meta property="og:url" content="https://tars.com.ar/" />
-  <meta property="twitter:card" content="summary_large_image" />
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
     "name": "Tars",
-    "description": "Desarrollo de sitios web de alta conversión para emprendedores y pequeños negocios: landing pages, mantenimiento, SEO local y asesoría digital.",
+    "description": "Webs a medida para negocios de Mendoza, con asistente de IA para WhatsApp: landing pages, sitios completos, mantenimiento y SEO local.",
     "url": "https://tars.com.ar/",
     "logo": "https://tars.com.ar/favicon.svg",
     "telephone": "+5492612408064",
     "email": "contacto@tars.com.ar",
-    "priceRange": "USD 149 - USD 599",
+    "priceRange": "USD 39 - USD 349",
     "currenciesAccepted": "USD",
     "areaServed": "AR",
     "address": {
@@ -106,382 +97,639 @@
     }
   }
   </script>
-  <meta name="twitter:site" content="@tarss" />
-  <title>Tars | Soluciones Digitales</title>
-  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
-  <link rel="preload" href="/fonts/big-shoulders-display-var.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="preload" href="/fonts/libre-franklin-var.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="stylesheet" href="riso.css?v=20261002-tinta" />
-  <link rel="modulepreload" href="js/core.js" />
-  <link rel="modulepreload" href="js/lib/env.js" />
+<link rel="stylesheet" href="prototipos/telefono.css">
+<style>
+  @font-face { font-family: 'BSD'; src: url('fonts/big-shoulders-display-var.woff2') format('woff2'); font-weight: 100 900; font-display: optional; }
+  @font-face { font-family: 'LF'; src: url('fonts/libre-franklin-var.woff2') format('woff2'); font-weight: 100 900; font-display: optional; }
+
+  /* Tars · web nueva. La portada son cinco paneles: cada visitante abre el
+     de su negocio y ve solo lo suyo (nada de recorridos obligatorios). Lo
+     que elige adapta el resto de la página: textos, precio y WhatsApp. */
+  :root {
+    --bg: #0e0e10;
+    --bg2: #17171a;
+    --fg: #f3efe7;
+    --muted: #a7a29a;
+    --line: rgb(243 239 231 / 0.14);
+    --pink: #ff48b0;
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    --ease-io: cubic-bezier(0.77, 0, 0.175, 1);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { background: var(--bg); color: var(--fg); scrollbar-color: #3a3a40 var(--bg); scroll-behavior: smooth; }
+  body { font-family: 'LF', system-ui, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: clip; }
+  ::selection { background: var(--pink); color: var(--bg); }
+  :focus-visible { outline: 3px solid var(--pink); outline-offset: 4px; }
+  a { color: inherit; }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px; padding: 0 26px; border-radius: 999px; background: var(--pink); color: #120a10; font: 800 15px 'LF'; text-decoration: none; border: 0; cursor: pointer; transition: transform 140ms var(--ease-out), background-color 200ms var(--ease-out); }
+  .btn:active { transform: scale(0.97); }
+  .btn--ghost { background: transparent; color: var(--fg); box-shadow: inset 0 0 0 1.5px var(--line); }
+  @media (hover: hover) {
+    .btn:hover { background: var(--fg); }
+    .btn--ghost:hover { background: var(--bg2); box-shadow: inset 0 0 0 1.5px var(--fg); }
+  }
+
+  .skip-link { position: fixed; z-index: 100; left: 16px; top: -80px; padding: 12px 18px; border-radius: 999px; background: var(--pink); color: #120a10; font: 800 14px 'LF'; text-decoration: none; }
+  .skip-link:focus-visible { top: 12px; }
+  main:focus { outline: none; }
+
+  /* Barra */
+  .bar { position: fixed; z-index: 50; inset: 0 0 auto; display: flex; align-items: center; gap: 28px; height: 68px; padding: 0 clamp(16px, 3vw, 40px); background: rgb(14 14 16 / 0.86); backdrop-filter: saturate(140%) blur(12px); box-shadow: 0 1px 0 var(--line); }
+  .bar .brand { margin-right: auto; font: 900 28px/1 'BSD'; letter-spacing: 0.03em; text-decoration: none; }
+  .bar .brand i { font-style: normal; color: var(--pink); }
+  .bar nav { display: flex; gap: 26px; }
+  .bar nav a { font: 600 14px 'LF'; color: var(--muted); text-decoration: none; transition: color 160ms var(--ease-out); }
+  @media (hover: hover) { .bar nav a:hover { color: var(--fg); } }
+  .bar .btn { min-height: 42px; padding: 0 18px; font-size: 14px; }
+
+  /* ===== Portada: cinco paneles ===== */
+  .hero { display: flex; gap: 8px; height: 100svh; min-height: 620px; padding: 76px 8px 8px; }
+  .panel { position: relative; flex: 1 1 0; min-width: 0; overflow: hidden; border-radius: 22px; background: var(--bg2); cursor: pointer; transition: flex-grow 700ms var(--ease-io); outline-offset: -3px; }
+  .panel.is-open { flex-grow: 5.2; cursor: default; }
+  .panel img.photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) brightness(0.55) contrast(1.05); transform: scale(1.08); transition: filter 600ms var(--ease-out), transform 1200ms var(--ease-out); }
+  .panel.flip img.photo { scale: -1 1; }
+  .panel.is-open img.photo { filter: none; transform: scale(1); }
+  .panel::after { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, rgb(8 8 10 / 0.92), rgb(8 8 10 / 0.25) 46%, rgb(8 8 10 / 0) 70%); pointer-events: none; }
+  .panel[data-kind="tars"] { background: radial-gradient(90% 70% at 70% 30%, #4a1238, #1a0d16 55%, var(--bg2)); }
+  .panel[data-kind="tars"]::after { display: none; }
+  /* Marca calada gigante: llena el panel de inicio sin competir con el título. */
+  .ghost { position: absolute; z-index: 1; left: clamp(14px, 2.4vw, 36px); top: 10px; font: 900 clamp(120px, 19vw, 330px)/0.82 'BSD'; letter-spacing: 0.02em; color: transparent; -webkit-text-stroke: 1.5px rgb(255 72 176 / 0.55); pointer-events: none; user-select: none; opacity: 0; transition: opacity 500ms var(--ease-out) 200ms; }
+  .panel.is-open .ghost { opacity: 1; }
+
+  /* Etiqueta vertical (panel cerrado) */
+  .tab { position: absolute; z-index: 2; left: 50%; bottom: 26px; translate: -50% 0; writing-mode: vertical-rl; rotate: 180deg; font: 900 clamp(26px, 2.4vw, 40px)/1 'BSD'; text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap; transition: opacity 300ms var(--ease-out); }
+  .tab small { display: block; margin-bottom: 10px; font: 700 11px 'LF'; letter-spacing: 0.2em; color: var(--muted); }
+  .panel.is-open .tab { opacity: 0; pointer-events: none; }
+
+  /* Contenido (panel abierto) */
+  .inside { position: absolute; z-index: 3; left: clamp(20px, 3vw, 44px); right: clamp(20px, 3vw, 44px); bottom: clamp(22px, 4vh, 44px); display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 28px; opacity: 0; transform: translateY(18px); pointer-events: none; transition: opacity 260ms var(--ease-out), transform 260ms var(--ease-out); }
+  .panel.is-open .inside { opacity: 1; transform: none; pointer-events: auto; transition: opacity 500ms var(--ease-out) 260ms, transform 600ms var(--ease-out) 260ms; }
+  .inside h1, .inside h2 { font: 900 clamp(52px, 7vw, 124px)/0.86 'BSD'; text-transform: uppercase; letter-spacing: -0.005em; text-wrap: balance; }
+  .inside h1 em, .inside h2 em { font-style: normal; color: var(--pink); }
+  .inside p { max-width: 36ch; margin-top: 16px; color: #d9d4cb; font: 500 clamp(16px, 1.3vw, 19px)/1.5 'LF'; }
+  .inside .row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+  .inside .mock { width: clamp(170px, 14vw, 230px); transform: translateY(40px) rotate(4deg); opacity: 0; transition: transform 700ms var(--ease-out) 380ms, opacity 400ms var(--ease-out) 380ms; }
+  .panel.is-open .inside .mock { transform: rotate(4deg); opacity: 1; }
+  .inside .mock .proof-phone { width: 100%; margin: 0; outline-width: 7px; box-shadow: 0 30px 60px rgb(0 0 0 / 0.5); }
+  .chooser { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+  .chooser button { min-height: 40px; padding: 0 16px; border: 0; border-radius: 999px; background: rgb(243 239 231 / 0.1); color: var(--fg); font: 700 14px 'LF'; cursor: pointer; transition: background-color 160ms var(--ease-out), transform 120ms var(--ease-out); }
+  .chooser button:active { transform: scale(0.96); }
+  @media (hover: hover) { .chooser button:hover { background: var(--fg); color: var(--bg); } }
+  .muestra { position: absolute; z-index: 3; top: 18px; right: 20px; padding: 6px 10px; border-radius: 999px; background: rgb(8 8 10 / 0.6); color: #cfc9be; font: 700 10px 'LF'; letter-spacing: 0.14em; text-transform: uppercase; opacity: 0; transition: opacity 300ms var(--ease-out); }
+  .panel.is-open .muestra { opacity: 1; }
+
+  /* Tinta viva (js/features/ink.js) dentro del panel de inicio. */
+  .hero-ink { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; mix-blend-mode: screen; opacity: 0; transition: opacity 700ms var(--ease-out); pointer-events: none; }
+  .hero-ink.is-on { opacity: 1; }
+
+  /* Entrada: los paneles suben uno tras otro (una sola vez por carga). */
+  @keyframes rise { from { opacity: 0; transform: translateY(26px); } }
+  @keyframes panel-in { from { opacity: 0; transform: translateY(60px) scale(0.98); } }
+  @media (prefers-reduced-motion: no-preference) {
+    .panel { animation: panel-in 900ms var(--ease-out) backwards; }
+    .panel:nth-child(2) { animation-delay: 70ms; }
+    .panel:nth-child(3) { animation-delay: 140ms; }
+    .panel:nth-child(4) { animation-delay: 210ms; }
+    .panel:nth-child(5) { animation-delay: 280ms; }
+    /* Al abrir: título, texto y botones suben escalonados. */
+    .panel.is-open .inside > div > * { animation: rise 700ms var(--ease-out) backwards; }
+    .panel.is-open .inside > div > :nth-child(1) { animation-delay: 260ms; }
+    .panel.is-open .inside > div > :nth-child(2) { animation-delay: 340ms; }
+    .panel.is-open .inside > div > :nth-child(3) { animation-delay: 420ms; }
+  }
+  /* El celular de muestra se inclina en 3D siguiendo al mouse. */
+  .inside { perspective: 1200px; }
+  .panel.is-open .inside .mock { transform: rotateY(var(--my, -10deg)) rotateX(var(--mx, 4deg)) rotate(3deg); }
+
+  /* Cursor propio: dice qué pasa si hacés clic. */
+  .cursor { position: fixed; z-index: 90; left: 0; top: 0; display: grid; place-items: center; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; background: var(--pink); pointer-events: none; translate: var(--cx, -100px) var(--cy, -100px); transition: width 280ms var(--ease-out), height 280ms var(--ease-out), margin 280ms var(--ease-out), background-color 200ms var(--ease-out); }
+  .cursor span { font: 900 13px 'BSD'; letter-spacing: 0.14em; color: #120a10; opacity: 0; transition: opacity 180ms var(--ease-out); }
+  .cursor[data-label]:not([data-label=""]) { width: 78px; height: 78px; margin: -39px 0 0 -39px; }
+  .cursor[data-label]:not([data-label=""]) span { opacity: 1; }
+  .cursor[data-mode="link"] { width: 38px; height: 38px; margin: -19px 0 0 -19px; background: rgb(255 72 176 / 0.35); }
+  @media (hover: none), (pointer: coarse) { .cursor { display: none; } }
+
+  /* Grano de papel, muy sutil, encima de todo. */
+  body::after { content: ""; position: fixed; inset: 0; z-index: 80; pointer-events: none; opacity: 0.07; mix-blend-mode: overlay; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+
+  /* Cinta de frases: corre con el scroll. */
+  .runs { overflow: hidden; padding: 4vh 0; border-block: 1px solid var(--line); }
+  .run { display: flex; align-items: center; gap: 0.4em; width: max-content; font: 900 clamp(56px, 9vw, 150px)/0.95 'BSD'; text-transform: uppercase; white-space: nowrap; transform: translateX(var(--x, 0px)); }
+  .run em { font-style: normal; color: transparent; -webkit-text-stroke: 1.5px var(--fg); }
+  .run i { flex: none; width: 0.3em; height: 0.3em; background: var(--pink); transform: rotate(45deg); }
+
+  /* «+ USD 80» que salta junto al total al prender un servicio. */
+  .total { position: relative; }
+  .bump { position: absolute; right: 30px; top: 40px; font: 900 34px 'BSD'; color: var(--pink); pointer-events: none; }
+
+  /* ===== Secciones ===== */
+  .alias { position: relative; top: -80px; display: block; }
+  .sec { padding: clamp(80px, 13vh, 150px) clamp(16px, 6vw, 96px); }
+  .sec > h2 { max-width: 16ch; font: 900 clamp(48px, 7vw, 116px)/0.88 'BSD'; text-transform: uppercase; text-wrap: balance; }
+  .sec > h2 em { font-style: normal; color: var(--pink); }
+  .lead { max-width: 52ch; margin-top: 20px; color: var(--muted); font: 500 clamp(17px, 1.4vw, 20px)/1.5 'LF'; }
+
+  /* Lo que te llevás: mosaicos que muestran cada cosa (una animación chica la
+     primera vez que aparecen). Tamaños distintos: no es una fila de tarjetas. */
+  .bento { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 14px; margin-top: 56px; }
+  .tile { position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 10px; min-height: 360px; padding: clamp(22px, 2.4vw, 34px); border-radius: 26px; background: var(--bg2); }
+  .tile h3 { max-width: 15ch; font: 800 clamp(24px, 2.2vw, 34px)/1.05 'LF'; letter-spacing: -0.03em; }
+  .tile p { max-width: 34ch; color: var(--muted); font: 500 16px/1.5 'LF'; }
+  .t-phone { grid-column: span 2; grid-row: span 2; }
+  .t-chat { grid-column: span 4; }
+  .t-days { grid-column: span 4; }
+  .t-me { grid-column: span 2; background: var(--pink); color: #120a10; }
+  .t-me p { color: #3b0a26; }
+
+  /* Celular que sube */
+  .t-phone .mini { margin: auto; width: min(270px, 74%); transform: translateY(60px); opacity: 0; transition: transform 900ms var(--ease-out), opacity 500ms var(--ease-out); }
+  .t-phone.is-in .mini { transform: none; opacity: 1; }
+  .t-phone .proof-phone { width: 100%; margin: 0; outline-width: 7px; box-shadow: 0 30px 60px rgb(0 0 0 / 0.45); }
+
+  /* Chat de WhatsApp */
+  .chat { margin-top: auto; display: grid; gap: 8px; max-width: 520px; width: 100%; align-self: flex-end; }
+  .msg { max-width: 78%; padding: 10px 14px 18px; border-radius: 16px; font: 500 15px/1.4 'LF'; position: relative; opacity: 0; transform: translateY(12px) scale(0.98); transition: opacity 400ms var(--ease-out), transform 500ms var(--ease-out); }
+  .msg small { position: absolute; right: 10px; bottom: 4px; font: 600 10px 'LF'; opacity: 0.6; }
+  .msg.in { justify-self: start; background: #26262b; border-top-left-radius: 4px; }
+  .msg.out { justify-self: end; background: #144d37; color: #e7fff3; border-top-right-radius: 4px; }
+  .t-chat.is-in .msg { opacity: 1; transform: none; }
+  .t-chat.is-in .msg:nth-child(2) { transition-delay: 700ms; }
+  .t-chat.is-in .msg:nth-child(3) { transition-delay: 1500ms; }
+  .typing { justify-self: end; display: flex; gap: 4px; padding: 12px 14px; border-radius: 16px; background: #144d37; opacity: 0; }
+  .typing i { width: 6px; height: 6px; border-radius: 50%; background: #9fe6c4; animation: dot 1s infinite; }
+  .typing i:nth-child(2) { animation-delay: 150ms; } .typing i:nth-child(3) { animation-delay: 300ms; }
+  @keyframes dot { 0%, 60%, 100% { opacity: 0.3; transform: none; } 30% { opacity: 1; transform: translateY(-3px); } }
+  .t-chat.is-in .typing { animation: blink 900ms linear 500ms both; }
+  @keyframes blink { 0% { opacity: 0; } 15%, 85% { opacity: 1; } 100% { opacity: 0; } }
+
+  /* Asistente de IA: etiqueta, respuesta rápida y botón de asesor dentro del chat. */
+  .ai { display: inline-flex; align-items: center; gap: 8px; align-self: flex-start; padding: 6px 12px; border-radius: 999px; background: rgb(255 72 176 / 0.14); color: var(--pink); font: 800 12px 'LF'; letter-spacing: 0.12em; text-transform: uppercase; }
+  .ai::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--pink); box-shadow: 0 0 0 4px rgb(255 72 176 / 0.25); }
+  .msg .who { display: block; margin-bottom: 2px; font: 800 11px 'LF'; letter-spacing: 0.06em; color: #9fe6c4; }
+  .msg.in .who { color: var(--pink); }
+  .handoff { justify-self: start; display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px; border-radius: 999px; box-shadow: inset 0 0 0 1.5px var(--pink); color: var(--pink); font: 800 13px 'LF'; opacity: 0; transform: translateY(10px); transition: opacity 400ms var(--ease-out), transform 500ms var(--ease-out); }
+  .t-chat.is-in .handoff { opacity: 1; transform: none; transition-delay: 3900ms; }
+  .t-chat.is-in .msg:nth-child(4) { transition-delay: 2300ms; }
+  .t-chat.is-in .msg:nth-child(5) { transition-delay: 3100ms; }
+  .t-chat { min-height: 480px; }
+  .item span.p.ask { font: 800 15px 'LF'; color: var(--pink); }
+
+  /* Semana de trabajo: la persona toca un día y ve qué se hace y qué recibe. */
+  .week { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; margin-top: auto; }
+  .wd { display: grid; justify-items: center; gap: 4px; padding: 12px 0 10px; border: 0; border-radius: 14px; background: #222227; color: var(--fg); cursor: pointer; transition: background-color 200ms var(--ease-out), transform 120ms var(--ease-out); }
+  .wd:active { transform: scale(0.96); }
+  .wd b { font: 900 22px/1 'BSD'; letter-spacing: 0.02em; text-transform: uppercase; }
+  .wd span { font: 600 11px 'LF'; color: var(--muted); }
+  .wd.is-past { background: #2c1a25; }
+  .wd.is-past span { color: #e7a9c9; }
+  .wd[aria-selected="true"] { background: var(--pink); color: #120a10; }
+  .wd[aria-selected="true"] span { color: #3b0a26; }
+  @media (hover: hover) { .wd:not([aria-selected="true"]):hover { background: #2e2e35; } }
+  .wd:focus-visible { outline: 3px solid var(--pink); outline-offset: 3px; }
+  .daycard { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 20px; align-items: start; margin-top: 12px; padding: 18px 20px; border-radius: 16px; background: #1f1f24; }
+  .daycard h4 { font: 800 20px 'LF'; letter-spacing: -0.02em; }
+  .daycard p { grid-column: 1; max-width: 52ch; color: var(--muted); font: 500 15px/1.5 'LF'; }
+  .daycard .get { grid-column: 2; grid-row: 1 / span 2; align-self: center; display: grid; gap: 4px; padding: 12px 14px; border-radius: 12px; background: rgb(255 72 176 / 0.12); color: var(--fg); font: 700 14px 'LF'; text-align: left; }
+  .daycard .get small { font: 800 10px 'LF'; letter-spacing: 0.16em; text-transform: uppercase; color: var(--pink); }
+  .daycard .next { grid-column: 1 / -1; justify-self: start; margin-top: 4px; padding: 0; border: 0; background: none; color: var(--pink); font: 800 14px 'LF'; cursor: pointer; }
+  .daycard .next:hover { text-decoration: underline; text-underline-offset: 4px; }
+  .daycard.is-swap { animation: rise 420ms var(--ease-out); }
+  @media (max-width: 860px) {
+    .daycard { grid-template-columns: minmax(0, 1fr); }
+    .daycard .get { grid-column: 1; grid-row: auto; }
+    .wd b { font-size: 18px; }
+  }
+
+  /* Una sola persona */
+  .t-me h3 { font: 900 clamp(40px, 4vw, 64px)/0.9 'BSD'; text-transform: uppercase; letter-spacing: 0; max-width: none; }
+  .t-me .btn { margin-top: auto; align-self: flex-start; background: #120a10; color: var(--fg); }
+  @media (hover: hover) { .t-me .btn:hover { background: var(--fg); color: #120a10; } }
+
+
+  /* Armá tu precio */
+  .builder { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 24px; margin-top: 56px; align-items: start; }
+  .items { display: grid; gap: 12px; }
+  .item { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 18px; padding: 22px 24px; border-radius: 20px; background: var(--bg2); box-shadow: inset 0 0 0 1.5px transparent; cursor: pointer; transition: box-shadow 200ms var(--ease-out), background-color 200ms var(--ease-out); }
+  .item:has(input:checked) { box-shadow: inset 0 0 0 1.5px var(--pink); background: #1d1219; }
+  .item input { appearance: none; width: 46px; height: 28px; border-radius: 999px; background: #3a3a40; position: relative; cursor: pointer; transition: background-color 200ms var(--ease-out); }
+  .item input::after { content: ""; position: absolute; left: 3px; top: 3px; width: 22px; height: 22px; border-radius: 50%; background: var(--fg); transition: transform 260ms var(--ease-out); }
+  .item input:checked { background: var(--pink); }
+  .item input:checked::after { transform: translateX(18px); }
+  .item input:disabled { cursor: not-allowed; opacity: 0.9; }
+  .item b { display: block; font: 800 19px 'LF'; }
+  .item small { display: block; margin-top: 4px; color: var(--muted); font: 500 15px/1.45 'LF'; }
+  .item span.p { font: 900 30px 'BSD'; white-space: nowrap; }
+  .item span.p small { display: inline; font: 700 13px 'LF'; }
+  .total { position: sticky; top: 96px; padding: 30px; border-radius: 24px; background: var(--fg); color: var(--bg); }
+  .total p { font: 700 13px 'LF'; letter-spacing: 0.16em; text-transform: uppercase; color: #5b5750; }
+  .total output { display: block; margin: 10px 0 4px; font: 900 clamp(64px, 7vw, 104px)/0.9 'BSD'; font-variant-numeric: tabular-nums; }
+  .total .monthly { font: 800 22px 'LF'; color: var(--bg); min-height: 1.4em; margin-top: 8px; }
+  .total .once-label { margin-top: -2px; letter-spacing: 0.1em; }
+  .total .btn { width: 100%; margin-top: 22px; background: var(--bg); color: var(--fg); }
+  @media (hover: hover) { .total .btn:hover { background: var(--pink); color: #120a10; } }
+  .total .note { margin-top: 14px; font: 500 14px/1.45 'LF'; color: #5b5750; letter-spacing: 0; text-transform: none; }
+
+  /* Pasos del armado: web (opciones), asistente (barra por alcance), extras. */
+  .step-title { margin: 6px 0 2px; font: 800 12px 'LF'; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+  .step-title:first-child { margin-top: 0; }
+  .webs { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .web { position: relative; display: grid; gap: 6px; padding: 22px 24px; border-radius: 20px; background: var(--bg2); box-shadow: inset 0 0 0 1.5px transparent; cursor: pointer; transition: box-shadow 200ms var(--ease-out), background-color 200ms var(--ease-out); }
+  .web input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
+  .web:has(input:checked) { box-shadow: inset 0 0 0 1.5px var(--pink); background: #1d1219; }
+  .web:has(input:focus-visible) { outline: 3px solid var(--pink); outline-offset: 3px; }
+  .web b { font: 800 19px 'LF'; }
+  .web small { color: var(--muted); font: 500 15px/1.45 'LF'; }
+  .web span.p { font: 900 34px/1 'BSD'; margin-top: 4px; }
+  .reach { display: grid; gap: 14px; padding: 24px; border-radius: 20px; background: var(--bg2); }
+  .reach-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; }
+  .reach-head b { font: 800 19px 'LF'; }
+  .reach-head output { font: 900 34px/1 'BSD'; color: var(--pink); white-space: nowrap; }
+  .reach input[type="range"] { width: 100%; accent-color: var(--pink); height: 28px; cursor: pointer; }
+  .ticks { display: grid; grid-template-columns: repeat(4, 1fr); font: 700 12px 'LF'; color: var(--muted); }
+  .ticks span:nth-child(2), .ticks span:nth-child(3) { text-align: center; }
+  .ticks span:last-child { text-align: right; }
+  .reach p { color: var(--muted); font: 500 15px/1.5 'LF'; }
+  .reach p strong { color: var(--fg); }
+  .fine { margin-top: 10px; color: var(--muted); font: 500 13px/1.5 'LF'; }
+
+  /* Preguntas */
+  .faq { margin-top: 48px; border-top: 1px solid var(--line); max-width: 920px; }
+  .faq details { border-bottom: 1px solid var(--line); }
+  .faq summary { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 26px 0; font: 800 clamp(19px, 1.7vw, 24px) 'LF'; letter-spacing: -0.02em; cursor: pointer; list-style: none; }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after { content: ""; flex: none; width: 14px; height: 14px; border-right: 2.5px solid var(--pink); border-bottom: 2.5px solid var(--pink); rotate: 45deg; translate: 0 -4px; transition: rotate 300ms var(--ease-out), translate 300ms var(--ease-out); }
+  .faq details[open] summary::after { rotate: -135deg; translate: 0 4px; }
+  .faq details p { padding: 0 0 26px; max-width: 64ch; color: var(--muted); font: 500 18px/1.6 'LF'; }
+
+  /* Cierre */
+  .close { text-align: center; padding-bottom: 120px; }
+  .close h2 { margin: 0 auto; max-width: none; font-size: clamp(80px, 17vw, 300px); line-height: 0.82; }
+  .close .lead { margin-inline: auto; }
+  .close .row { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; margin-top: 36px; }
+  footer .legal { display: flex; flex-wrap: wrap; gap: 18px; }
+  footer .legal a { color: var(--muted); text-decoration: none; }
+  footer .legal a:hover { color: var(--fg); text-decoration: underline; text-underline-offset: 4px; }
+  footer .legal .regret { color: var(--pink); font-weight: 700; }
+  .total .note a { color: inherit; font-weight: 700; }
+  footer { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding: 28px clamp(16px, 6vw, 96px); border-top: 1px solid var(--line); color: var(--muted); font: 500 13px 'LF'; }
+
+  /* ===== Celular: los paneles se apilan; se abre uno por vez ===== */
+  @media (max-width: 860px) {
+    .bar nav { display: none; }
+    .hero { flex-direction: column; height: auto; min-height: 0; padding-top: 76px; }
+    .panel { flex: none; height: 76px; transition: height 600ms var(--ease-io); }
+    .panel.is-open { height: min(78svh, 640px); }
+    .tab { writing-mode: horizontal-tb; rotate: none; left: 20px; bottom: auto; top: 50%; translate: 0 -50%; font-size: 30px; }
+    .tab small { display: inline; margin: 0 10px 0 0; }
+    .inside { grid-template-columns: minmax(0, 1fr); }
+    .inside .mock { display: none; }
+    .inside h1, .inside h2 { font-size: clamp(46px, 13vw, 72px); }
+    .builder { grid-template-columns: minmax(0, 1fr); }
+    .item { grid-template-columns: auto minmax(0, 1fr); row-gap: 10px; }
+    .item span.p { grid-column: 2; }
+    .webs { grid-template-columns: minmax(0, 1fr); }
+    .bento { grid-template-columns: minmax(0, 1fr); }
+    .t-phone, .t-chat, .t-days, .t-me { grid-column: auto; grid-row: auto; }
+    .tile { min-height: 0; }
+    .t-phone { min-height: 420px; }
+    .total { position: static; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition-duration: 0ms !important; }
+    .run { transform: none; }
+  }
+</style>
 </head>
-<body class="riso">
+<body>
   <!-- Google Tag Manager (noscript) -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WKXQ88DT"
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <!-- End Google Tag Manager (noscript) -->
   <a class="skip-link" href="#main-content">Saltar al contenido</a>
+  <header class="bar">
+    <a class="brand" href="#">TA<i>RS</i></a>
+    <nav aria-label="Secciones"><a href="#que">Qué te llevás</a><a href="#precio">Precio</a><a href="#preguntas">Preguntas</a></nav>
+    <a class="btn" id="bar-wa" href="https://wa.me/5492612408064" target="_blank" rel="noopener">WhatsApp</a>
+  </header>
+  <div class="cursor" aria-hidden="true"><span></span></div>
 
-  <!-- Margen de impresión: en escritorio es una columna fija a la izquierda con
-       el menú en vertical; en celular, una tira arriba con el menú a pantalla
-       completa. La marca de registro (cruz) es decorativa. -->
-  <nav class="margin" aria-label="Menú principal">
-    <a class="margin-brand" href="index.html" aria-label="Tars, inicio">TA<span>RS</span></a>
-    <div class="margin-actions">
-      <button class="theme-toggle" type="button" aria-label="Cambiar a modo claro" title="Modo claro">
-        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
-        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
-      </button>
-      <button class="nav-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="primary-navigation"><span></span></button>
-    </div>
-    <div class="margin-links" id="primary-navigation">
-      <a href="#servicios">Servicios</a>
-      <a href="#cotizador">Cotizador</a>
-      <a href="#paquetes">Paquetes</a>
-      <a href="#casos">Proyectos</a>
-      <a href="#faq">FAQ</a>
-      <a href="blog.html">Blog</a>
-      <a href="#contacto">Contacto</a>
-    </div>
-    <svg class="reg-mark" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="6"/><path d="M12 0v24M0 12h24"/></svg>
-  </nav>
+  <main id="main-content" tabindex="-1">
+    <section class="hero" aria-label="Elegí tu negocio"></section>
 
-  <main id="main-content">
-    <!-- HERO: «VENDER MÁS» a pantalla completa. Cada palabra gigante lleva dos
-         capas decorativas (rosa y azul, con ::before/::after y data-text) que
-         js/core.js corre siguiendo el cursor: el «desregistro» de la imprenta. -->
-    <header class="hero" id="inicio">
-      <!-- Tinta viva: manchas rosa y azul en trama que salpican al cargar y
-           siguen al cursor (js/features/ink.js). Decorativa. -->
-      <canvas class="hero-ink" aria-hidden="true"></canvas>
-      <h1 class="hero-title">
-        <span class="hero-lead">Ayudo a tu negocio a</span>
-        <span class="riso-word" data-text="VENDER">VENDER</span>
-        <span class="riso-word riso-word--indent" data-text="MÁS">MÁS</span>
-      </h1>
-      <div class="hero-foot">
-        <p class="hero-text">Webs rápidas y claras, hechas una por una desde Mendoza para que tus visitas se conviertan en consultas.</p>
-        <div class="hero-actions">
-          <a class="btn btn-pink" href="#cotizador" data-magnetic>Armá tu presupuesto</a>
-          <a class="btn btn-line" href="https://wa.me/5492612408064" target="_blank" rel="noopener noreferrer" data-magnetic>WhatsApp</a>
-        </div>
-      </div>
-      <p class="stamp stamp--price" aria-hidden="true"><span>desde</span>USD 149</p>
-      <p class="stamp stamp--city" aria-hidden="true">Mendoza · AR</p>
-      <p class="stamp stamp--time" aria-hidden="true">propuesta<br>en 24 h</p>
-    </header>
-
-    <!-- Cinta de papel: se desplaza con el scroll (no sola), ver js/core.js. -->
-    <div class="tape" role="region" aria-label="Por qué Tars">
-      <ul class="tape-track">
-        <li>Sitios ultra rápidos</li><li>100% adaptables</li><li>Optimización SEO</li><li>Seguros</li><li>Enfocados en ventas</li>
-        <li aria-hidden="true">Sitios ultra rápidos</li><li aria-hidden="true">100% adaptables</li><li aria-hidden="true">Optimización SEO</li><li aria-hidden="true">Seguros</li><li aria-hidden="true">Enfocados en ventas</li>
-      </ul>
+    <div class="runs" aria-hidden="true">
+      <div class="run" data-speed="-0.45"><span>Webs que venden</span><i></i><em>Hechas a mano</em><i></i><span>Mendoza</span><i></i><em>Desde USD 149</em><i></i><span>Propuesta en 24 h</span><i></i><em>Webs que venden</em></div>
     </div>
 
-    <!-- PRUEBA DE IMPRENTA: la persona escribe el nombre de su negocio y elige
-         el rubro; la hoja se imprime con su nombre y un celular de muestra
-         (js/features/proof.js). La hoja es decorativa: lo que cambia se anuncia
-         en #proof-status. -->
-    <section class="proof" id="prueba" aria-labelledby="prueba-title">
-      <div class="proof-head">
-        <h2 id="prueba-title" class="display">Probá con<br>tu negocio</h2>
-        <p>Escribí el nombre, elegí el rubro y mirá cómo sale de la imprenta. Es una prueba de muestra: tu web real se arma con tus fotos, tus precios y tu marca.</p>
-      </div>
-      <form class="proof-form" id="proof-form" novalidate>
-        <label class="proof-label" for="proof-name">¿Cómo se llama tu negocio?</label>
-        <input class="proof-input" id="proof-name" name="negocio" type="text" maxlength="24" autocomplete="organization" autocapitalize="words" enterkeyhint="done" placeholder="Ej.: Panadería Lola" />
-        <fieldset class="proof-kinds">
-          <legend class="proof-label">Rubro</legend>
-          <label class="proof-kind"><input type="radio" name="rubro" value="restaurante" checked /><span>Restaurante</span></label>
-          <label class="proof-kind"><input type="radio" name="rubro" value="ropa" /><span>Local de ropa</span></label>
-          <label class="proof-kind"><input type="radio" name="rubro" value="barberia" /><span>Barbería</span></label>
-          <label class="proof-kind"><input type="radio" name="rubro" value="gimnasio" /><span>Gimnasio</span></label>
-          <label class="proof-kind"><input type="radio" name="rubro" value="otro" /><span>Otro</span></label>
-        </fieldset>
-        <a class="btn btn-pink" id="proof-request" href="https://wa.me/5492612408064?text=Hola%20Tars%2C%20vi%20la%20prueba%20de%20imprenta%20y%20quiero%20una%20web%20para%20mi%20negocio." target="_blank" rel="noopener noreferrer" data-magnetic>Quiero esta web</a>
-        <p class="sr-only" id="proof-status" aria-live="polite"></p>
-      </form>
-      <div class="proof-sheet" aria-hidden="true">
-        <div class="proof-print">
-          <div class="proof-copy">
-            <p class="proof-kicker">Sitio web para</p>
-            <p class="proof-name" data-text="Brasa &amp; Vid">Brasa &amp; Vid</p>
-            <p class="proof-line">Tu carta siempre al día</p>
-            <p class="proof-feats">Carta digital · Reservas · Pedidos por WhatsApp</p>
-            <p class="proof-sample">Muestra de diseño · negocio de ejemplo</p>
-          </div>
-          <div class="proof-phone"><div class="proof-screen" data-kind="restaurante"></div></div>
-        </div>
-        <span class="proof-roller"></span>
+    <section class="sec" id="que"><span id="servicios" class="alias"></span><span id="casos" class="alias"></span>
+      <h2>Lo que <em>te llevás</em></h2>
+      <p class="lead" id="que-lead">Una web hecha para tu negocio, no una plantilla con tu logo.</p>
+      <div class="bento">
+        <article class="tile t-phone"><h3>Se ve bien en el celular</h3><p>Que es desde donde te van a encontrar. Rápida aunque la señal no ayude.</p>
+          <div class="mini" aria-hidden="true"><div class="proof-phone"><div class="proof-screen" data-kind="restaurante"></div></div></div></article>
+        <article class="tile t-chat"><span class="ai">Asistente con IA</span><h3>Tu WhatsApp atiende solo, las 24 horas</h3><p>Responde como una persona de tu negocio: toma pedidos, da turnos y contesta precios. Y cuando algo no se puede cerrar, le pasa la charla a tu equipo o a tu WhatsApp empresarial.</p>
+          <div class="chat" aria-hidden="true">
+            <div class="msg out">¡Hola! ¿Hacen envíos a Godoy Cruz? Quiero 2 sweaters talle M<small>03:12</small></div>
+            <div class="typing"><i></i><i></i><i></i></div>
+            <div class="msg in"><span class="who">Lana Cruda</span>¡Hola! Sí, llegan en 24 h. Te separo 2 Sweater Andes talle M: $ 117.800. ¿Pagás con link o transferencia?<small>03:12</small></div>
+            <div class="msg out">Y si quiero 10 para mi local, ¿me hacen precio?<small>03:13</small></div>
+            <div class="msg in"><span class="who">Lana Cruda</span>¡Buenísimo! Para un pedido por cantidad te paso con Sofi, que lo arma con vos. Te escribe a primera hora por acá.<small>03:13</small></div>
+            <span class="handoff">Charla pasada a tu WhatsApp empresarial</span>
+          </div></article>
+        <article class="tile t-days"><h3>Lista en 3 a 5 días</h3><p>Una landing en menos de una semana; un sitio de 4 o 5 páginas, en 7 a 10 días.</p>
+          <div class="week" role="tablist" aria-label="Qué se hace cada día"><button type="button" class="wd" role="tab" aria-selected="true" aria-controls="daycard" data-day="0"><b>Lun</b><span>Propuesta</span></button><button type="button" class="wd" role="tab" aria-selected="false" aria-controls="daycard" data-day="1"><b>Mar</b><span>Diseño</span></button><button type="button" class="wd" role="tab" aria-selected="false" aria-controls="daycard" data-day="2"><b>Mié</b><span>Armado</span></button><button type="button" class="wd" role="tab" aria-selected="false" aria-controls="daycard" data-day="3"><b>Jue</b><span>Ajustes</span></button><button type="button" class="wd" role="tab" aria-selected="false" aria-controls="daycard" data-day="4"><b>Vie</b><span>Online</span></button></div>
+          <div class="daycard" id="daycard" role="tabpanel" aria-live="polite"></div>
+          </article>
       </div>
     </section>
 
-    <!-- AFICHES: cada servicio es una hoja a pantalla completa que se queda fija
-         (sticky) mientras la siguiente sube y la tapa. js/core.js publica dos
-         variables por afiche: --enter (cuánto entró) y --cover (cuánto lo tapó
-         el siguiente) y el CSS las convierte en giro y escala. -->
-    <section class="posters" id="servicios" aria-labelledby="servicios-title">
-      <div class="posters-head">
-        <h2 id="servicios-title" class="display">Servicios</h2>
-        <p>Cuatro trabajos. Una sola persona que te atiende de principio a fin.</p>
-      </div>
-
-      <article class="poster poster--pink">
-        <div class="poster-sheet">
-          <p class="poster-word" aria-hidden="true" data-word="WEB"></p>
-          <div class="poster-label">
-            <h3>Web profesional</h3>
-            <p>Sitios modernos, adaptados a celular y pensados para vender.</p>
-            <p class="poster-price">Landing desde <strong>USD 149</strong></p>
+    <section class="sec" id="precio"><span id="cotizador" class="alias"></span><span id="paquetes" class="alias"></span>
+      <h2>Armá tu <em>precio</em></h2>
+      <p class="lead">Prendé lo que necesitás y mandame el pedido por WhatsApp. Sin letra chica.</p>
+      <div class="builder">
+        <div class="items">
+          <p class="step-title">1 · Tu web</p>
+          <div class="webs" role="radiogroup" aria-label="Tipo de web">
+            <label class="web"><input type="radio" name="web" value="149" data-name="Landing page" checked><b>Landing page</b><small>Una página que presenta tu negocio y lleva a WhatsApp. Lista en 3 a 5 días.</small><span class="p">USD 149</span></label>
+            <label class="web"><input type="radio" name="web" value="349" data-name="Sitio completo (4 o 5 páginas)"><b>Sitio completo</b><small>4 o 5 páginas: servicios, carta o catálogo, nosotros y contacto. 7 a 10 días.</small><span class="p">USD 349</span></label>
           </div>
-          <p class="stamp stamp--poster" aria-hidden="true">3–5<br>días</p>
-        </div>
-      </article>
-
-      <article class="poster poster--blue">
-        <div class="poster-sheet">
-          <p class="poster-word" aria-hidden="true" data-word="AL DÍA"></p>
-          <div class="poster-label">
-            <h3>Mantenimiento</h3>
-            <p>Actualizaciones, optimización y soporte técnico continuo.</p>
-            <p class="poster-price"><strong>USD 50</strong> por mes</p>
+          <p class="step-title">2 · Asistente de IA para WhatsApp · abono mensual</p>
+          <div class="reach">
+            <div class="reach-head"><b>¿Cuántas personas te escriben por mes?</b><output id="reach-out">Sin asistente</output></div>
+            <input id="reach" type="range" min="0" max="3" step="1" value="0" aria-label="Personas que te escriben por mes">
+            <div class="ticks" aria-hidden="true"><span>Sin asistente</span><span>Hasta 200</span><span>Hasta 800</span><span>Hasta 2.500</span></div>
+            <p id="reach-note">Movés la barra y ves el plan que te conviene. La instalación del asistente va incluida.</p>
           </div>
+          <p class="step-title">3 · Extras</p>
+          <label class="item"><input type="checkbox" data-month="50" data-name="Mantenimiento"><span><b>Mantenimiento</b><small>Cambios, copias de seguridad y que todo siga andando rápido.</small></span><span class="p">USD 50 <small>/mes</small></span></label>
+          <label class="item"><input type="checkbox" data-price="80" data-name="SEO local"><span><b>SEO local</b><small>Para que te encuentren en Google cuando buscan lo tuyo en Mendoza.</small></span><span class="p">USD 80</span></label>
+          <p class="fine">Precios en dólares estadounidenses, o su equivalente en pesos al tipo de cambio oficial del día de pago. Si WhatsApp (Meta) cobra algún tipo de mensaje del asistente, ese costo va aparte y te lo explico antes.</p>
         </div>
-      </article>
-
-      <article class="poster poster--yellow">
-        <div class="poster-sheet">
-          <p class="poster-word" aria-hidden="true" data-word="REDES"></p>
-          <div class="poster-label">
-            <h3>Redes sociales</h3>
-            <p>Publicaciones y gestión básica para mejorar tu presencia online.</p>
-          </div>
-        </div>
-      </article>
-
-      <article class="poster poster--paper">
-        <div class="poster-sheet">
-          <p class="poster-word" aria-hidden="true" data-word="PLAN"></p>
-          <div class="poster-label">
-            <h3>Asesoría digital</h3>
-            <p>Propuestas claras para mejorar ventas y comunicación con clientes.</p>
-          </div>
-        </div>
-      </article>
-    </section>
-
-    <!-- REGISTRADORA: teclas a la izquierda, ticket fijo a la derecha. Los
-         precios salen del catálogo de js/lib/quote.js (data-service = id). js/features/register.js arma el ticket y el link a WhatsApp. -->
-    <section class="register" id="cotizador" aria-labelledby="cotizador-title">
-      <div class="register-intro">
-        <h2 id="cotizador-title" class="display">Armá tu<br>presupuesto</h2>
-        <p>Tocá las teclas de lo que necesitás. El ticket se imprime solo y lo mandás por WhatsApp con un clic.</p>
-      </div>
-
-      <form class="register-keys" id="ticket-form" aria-describedby="ticket-hint">
-        <fieldset>
-          <legend>Servicios</legend>
-          <label class="key">
-            <input type="checkbox" name="service" value="Landing Page" data-service="landing" />
-            <span class="key-cap"><span class="key-name">Landing Page</span><span class="key-price">USD 149</span></span>
-          </label>
-          <label class="key">
-            <input type="checkbox" name="service" value="Mantenimiento" data-service="mantenimiento" />
-            <span class="key-cap"><span class="key-name">Mantenimiento</span><span class="key-price">USD 50/mes</span></span>
-          </label>
-          <label class="key">
-            <input type="checkbox" name="service" value="SEO Local" data-service="seo-local" />
-            <span class="key-cap"><span class="key-name">SEO Local</span><span class="key-price">USD 80</span></span>
-          </label>
-        </fieldset>
-      </form>
-
-      <aside class="ticket-rail" aria-label="Tu ticket">
-        <div class="ticket" id="ticket">
-          <div class="ticket-head">
-            <p class="ticket-brand">TARS</p>
-            <p>Imprenta digital · Mendoza</p>
-            <p><time id="ticket-date"></time></p>
-          </div>
-          <ul class="ticket-lines" id="ticket-lines">
-            <li class="ticket-empty">Todavía no marcaste nada.</li>
-          </ul>
-          <div class="ticket-totals">
-            <div class="ticket-total">
-              <span>Pago único</span>
-              <span class="odometer" data-odometer="once" aria-hidden="true"></span>
-            </div>
-            <div class="ticket-total">
-              <span>Por mes</span>
-              <span class="odometer" data-odometer="monthly" aria-hidden="true"></span>
-            </div>
-          </div>
-          <p class="sr-only" id="ticket-live" aria-live="polite"></p>
-          <a class="btn btn-ink ticket-cta" id="ticket-request" aria-disabled="true" target="_blank" rel="noopener noreferrer">Pedir por WhatsApp</a>
-          <p class="ticket-hint" id="ticket-hint">Elegí al menos un servicio.</p>
-          <!-- Acciones del ticket: PDF y pago. Ocultas hasta que carga su módulo
-               (sin JavaScript no funcionan, así que no se muestran). -->
-          <div class="ticket-actions" id="ticket-actions" hidden>
-            <button class="btn btn-line ticket-pdf" id="ticket-pdf" type="button" disabled>Descargar PDF</button>
-            <button class="btn btn-pink ticket-pay" id="ticket-pay" type="button" hidden>Pagar ahora</button>
-          </div>
-        </div>
-      </aside>
-    </section>
-
-    <!-- PROYECTOS DE MUESTRA: maquetas de demostración, no clientes. Cada
-         «prueba de imprenta» tiene dos planchas (azul = estructura, rosa =
-         acentos) desfasadas como en la riso; al pasar el mouse o enfocar el
-         botón entran en registro. El dibujo es decorativo (aria-hidden): lo
-         que importa para leer está en el texto de cada artículo. -->
-    <section class="demos" id="casos" aria-labelledby="casos-title">
-      <div class="demos-head">
-        <h2 id="casos-title" class="display">Proyectos de muestra</h2>
-        <p>Tars todavía no publica trabajos de clientes. Estas son maquetas de demostración para que veas cómo puede quedar tu web; si te sirve una, la armo con tu marca, tus fotos y tus precios.</p>
-      </div>
-
-      <article class="demo demo--shop" aria-labelledby="demo-shop-title">
-        <div class="mock mock--screen" aria-hidden="true">
-          <div class="plate plate--blue"><i class="m-bar"></i><i class="m-img"></i><i class="m-img"></i><i class="m-img"></i><i class="m-img"></i><i class="m-line"></i><i class="m-line"></i><i class="m-line"></i><i class="m-line"></i></div>
-          <div class="plate plate--pink"><i class="m-cart"></i><i class="m-price"></i><i class="m-price"></i><i class="m-price"></i><i class="m-price"></i></div>
-        </div>
-        <div class="demo-body">
-          <h3 id="demo-shop-title">Tienda online base</h3>
-          <p>Catálogo con fotos y precios, carrito y pedido directo por WhatsApp. Para vender lo tuyo sin pagar comisión por cada venta a un marketplace.</p>
-          <dl class="demo-meta">
-            <div><dt>Qué es</dt><dd>Maqueta de demostración</dd></div>
-            <div><dt>Precio</dt><dd>A cotizar según el catálogo</dd></div>
-          </dl>
-          <a class="btn btn-line" href="https://wa.me/5492612408064?text=Hola%2C%20vi%20la%20maqueta%20de%20tienda%20online%20en%20tars.com.ar%20y%20quiero%20una%20as%C3%AD." target="_blank" rel="noopener noreferrer" data-magnetic>Quiero una tienda así</a>
-        </div>
-        <p class="demo-stamp" aria-hidden="true">Muestra</p>
-      </article>
-
-      <article class="demo demo--landing" aria-labelledby="demo-landing-title">
-        <div class="mock mock--phone" aria-hidden="true">
-          <div class="plate plate--blue"><i class="m-bar"></i><i class="m-head"></i><i class="m-head"></i><i class="m-head m-head--short"></i><i class="m-line"></i><i class="m-line"></i><i class="m-line m-line--short"></i></div>
-          <div class="plate plate--pink"><i class="m-mark"></i><i class="m-button"></i></div>
-        </div>
-        <div class="demo-body">
-          <h3 id="demo-landing-title">Landing de servicios</h3>
-          <p>Una sola página para un profesional u oficio: qué hacés, cuánto sale y un botón para escribirte. Carga rápido en el celular, que es donde te van a buscar.</p>
-          <dl class="demo-meta">
-            <div><dt>Qué es</dt><dd>Maqueta de demostración</dd></div>
-            <div><dt>Precio</dt><dd>Desde USD 149</dd></div>
-            <div><dt>Entrega</dt><dd>3 a 5 días</dd></div>
-          </dl>
-          <a class="btn btn-line" href="https://wa.me/5492612408064?text=Hola%2C%20vi%20la%20maqueta%20de%20landing%20de%20servicios%20en%20tars.com.ar%20y%20quiero%20una%20as%C3%AD." target="_blank" rel="noopener noreferrer" data-magnetic>Quiero una landing así</a>
-        </div>
-        <p class="demo-stamp" aria-hidden="true">Muestra</p>
-      </article>
-
-      <article class="demo demo--menu" aria-labelledby="demo-menu-title">
-        <div class="mock mock--phone" aria-hidden="true">
-          <div class="plate plate--blue"><i class="m-bar"></i><i class="m-dish"></i><i class="m-dish"></i><i class="m-dish"></i><i class="m-dish"></i><i class="m-dish"></i></div>
-          <div class="plate plate--pink"><i class="m-tab"></i><i class="m-cost"></i><i class="m-cost"></i><i class="m-cost"></i><i class="m-cost"></i><i class="m-cost"></i></div>
-        </div>
-        <div class="demo-body">
-          <h3 id="demo-menu-title">Menú para restaurante</h3>
-          <p>Carta digital que se abre con un código QR en la mesa: platos, precios y horarios que cambiás sin reimprimir nada. Pedidos y reservas por WhatsApp.</p>
-          <dl class="demo-meta">
-            <div><dt>Qué es</dt><dd>Maqueta de demostración</dd></div>
-            <div><dt>Precio</dt><dd>A cotizar según la carta</dd></div>
-          </dl>
-          <a class="btn btn-line" href="https://wa.me/5492612408064?text=Hola%2C%20vi%20la%20maqueta%20de%20men%C3%BA%20para%20restaurante%20en%20tars.com.ar%20y%20quiero%20uno%20as%C3%AD." target="_blank" rel="noopener noreferrer" data-magnetic>Quiero un menú así</a>
-        </div>
-        <p class="demo-stamp" aria-hidden="true">Muestra</p>
-      </article>
-
-      <div class="demos-foot">
-        <p>¿Lo tuyo no se parece a ninguna? Contame qué vendés y te armo una propuesta en menos de 24 horas.</p>
-        <a class="btn btn-pink" href="#cotizador" data-magnetic>Armá tu presupuesto</a>
+        <aside class="total" aria-live="polite">
+          <p>Total</p>
+          <output id="total">USD 149</output>
+          <p class="once-label">pago único</p>
+          <div class="monthly" id="monthly"></div>
+          <a class="btn" id="pedido" href="#" target="_blank" rel="noopener">Pedir por WhatsApp</a>
+          <p class="note">El primer número se paga una vez; lo mensual, cada mes. Te respondo con la propuesta en menos de 24 horas. Al pedirla aceptás los <a href="terminos.html">Términos y condiciones</a>.</p>
+        </aside>
       </div>
     </section>
 
-    <section class="method" aria-labelledby="metodo-title">
-      <h2 id="metodo-title" class="sr-only">Cómo trabajo</h2>
-      <p class="method-line">Escucho.</p>
-      <p class="method-line method-line--pink">Propongo un plan simple.</p>
-      <p class="method-line method-line--right">Ejecuto rápido.</p>
-      <p class="method-note">Comunicación clara de principio a fin y resultados que se pueden medir.</p>
-    </section>
-
-    <section class="packs" id="paquetes" aria-labelledby="paquetes-title">
-      <h2 id="paquetes-title" class="display">Paquetes</h2>
-      <article class="flyer flyer--a">
-        <h3>Pack inicial</h3>
-        <p>Landing page de venta en 1-2 secciones, con formulario y WhatsApp directo.</p>
-      </article>
-      <article class="flyer flyer--b">
-        <h3>Pack recomendado</h3>
-        <p>Sitio de 3-5 páginas + soporte básico + optimización móvil y velocidad.</p>
-      </article>
-      <article class="flyer flyer--c">
-        <h3>Pack full</h3>
-        <p>Web completa + blog + gestión de redes + asesoría para tu estrategia digital.</p>
-      </article>
-      <div class="offer">
-        <p class="offer-title">Oferta de lanzamiento</p>
-        <p>Primera web profesional desde USD 149 para emprendedores que quieren empezar rápido. Incluye diseño, formulario, WhatsApp y soporte inicial.</p>
-        <a class="btn btn-pink" href="#contacto" data-magnetic>Aprovechar oferta</a>
+    <section class="sec" id="preguntas"><span id="faq" class="alias"></span>
+      <h2>Preguntas</h2>
+      <div class="faq">
+        <details><summary>¿Cuánto tarda?</summary><p>Una landing page queda lista en 3 a 5 días. Un sitio de 4 o 5 páginas, en 7 a 10 días. La propuesta te llega en menos de 24 horas.</p></details>
+        <details><summary>¿Qué necesito tener?</summary><p>Tus fotos, tus precios y ganas. Si no tenés fotos o textos, te ayudo a armarlos.</p></details>
+        <details><summary>¿Qué hace el asistente de IA?</summary><p>Atiende tu WhatsApp las 24 horas: responde precios y horarios, toma pedidos y reservas, y da turnos, con lo que vos le cargás de tu negocio. Si una venta o un pedido no se puede cerrar, le pasa la charla a tu equipo o a tu WhatsApp empresarial para que lo terminen ustedes.</p></details>
+        <details><summary>¿El asistente queda mío?</summary><p>No: es un servicio que usás mientras tengas el plan, como un abono. Lo que sí es tuyo es tu número de WhatsApp, la información de tu negocio y las conversaciones con tus clientes; si algún día lo das de baja, te las entrego.</p></details>
+        <details><summary>¿Los clientes notan que es un asistente?</summary><p>Habla con naturalidad, como alguien de tu negocio, y no anda aclarando que es un programa. Si un cliente lo pregunta directamente, no le miente.</p></details>
+        <details><summary>¿Los ejemplos son clientes reales?</summary><p>No: son muestras de diseño con negocios de ejemplo, para que veas cómo puede quedar la tuya.</p></details>
+        <details><summary>¿Y después de publicarla?</summary><p>Con el mantenimiento mensual me ocupo de los cambios, las copias de seguridad y de que siga andando rápido.</p></details>
       </div>
     </section>
 
-
-    <section class="faq" id="faq" aria-labelledby="faq-title">
-      <h2 id="faq-title" class="display">Preguntas</h2>
-      <div class="faq-list">
-        <details><summary>¿Cuánto tarda el sitio?</summary><p>Un landing simple puede estar listo en 3-5 días. Un sitio completo de 4-5 páginas suele entregarse en 7-10 días.</p></details>
-        <details><summary>¿Qué incluye el soporte mensual?</summary><p>Incluye actualizaciones, correcciones rápidas y asistencia técnica para que tu sitio siga funcionando bien.</p></details>
-        <details><summary>¿Puedo cambiar algo después de entregar el sitio?</summary><p>Sí, hago ajustes rápidos y también ofrezco paquetes de mantenimiento para cambios continuos.</p></details>
-        <details><summary>¿Vale la pena invertir en una web ahora?</summary><p>Una web profesional ayuda a recibir más clientes, genera confianza y hace que tu negocio se vea más serio online.</p></details>
-        <details><summary>¿Qué resultados puedo esperar?</summary><p>El objetivo es convertir visitas en consultas: una web clara, rápida y con contacto directo está pensada para eso. Además, el sitio mide cuántas consultas llegan, así sabés qué funciona.</p></details>
-      </div>
-    </section>
-
-    <section class="contact" id="contacto" aria-labelledby="contacto-title">
-      <h2 id="contacto-title" class="display">Escribime</h2>
-      <div class="contact-direct">
-        <p>Respondo en menos de 24 horas.</p>
-        <a class="contact-big" href="https://wa.me/5492612408064" target="_blank" rel="noopener noreferrer">WhatsApp</a>
-        <a class="contact-mail" href="mailto:contacto@tars.com.ar">contacto@tars.com.ar</a>
-      </div>
-      <form action="https://formspree.io/f/xojgqzdb" method="POST" class="contact-form">
-        <input type="hidden" name="_subject" value="Nuevo mensaje desde Tars" />
-        <input type="hidden" name="_language" value="es" />
-        <input type="hidden" name="_next" value="https://tars.com.ar/gracias" />
-        <label>Nombre<input type="text" name="name" autocomplete="name" required /></label>
-        <label>Email<input type="email" name="_replyto" autocomplete="email" required /></label>
-        <label>Mensaje<textarea name="message" rows="4" required></textarea></label>
-        <button class="btn btn-pink" type="submit" data-magnetic>Enviar mensaje</button>
-        <p class="form-consent">Al enviar, aceptás la <a href="privacidad.html">política de privacidad</a>.</p>
-      </form>
+    <section class="sec close" id="contacto">
+      <h2>Hable<em>mos</em></h2>
+      <p class="lead">Soy Francisco. Hago tu web de punta a punta y te respondo yo, sin pasarte de mano en mano. Contame qué hacés y en menos de 24 horas tenés la propuesta.</p>
+      <div class="row"><a class="btn" id="close-wa" href="https://wa.me/5492612408064" target="_blank" rel="noopener">Escribime por WhatsApp</a><a class="btn btn--ghost" href="mailto:contacto@tars.com.ar">contacto@tars.com.ar</a></div>
     </section>
   </main>
+  <footer><span>Tars · Webs para negocios de Mendoza · WhatsApp +54 9 261 240-8064</span><nav class="legal" aria-label="Legales"><a href="terminos.html">Términos y condiciones</a><a href="contrato.html">Contrato modelo</a><a href="privacidad.html">Privacidad</a><a class="regret" href="terminos.html#arrepentimiento">Botón de arrepentimiento</a></nav></footer>
 
-  <footer class="colophon">
-    <p class="colophon-word" aria-hidden="true">TARS</p>
-    <div class="colophon-cols">
-      <div>
-        <p class="colophon-brand">Tars</p>
-        <p>Soluciones digitales para emprendimientos y pequeños negocios. Impreso en Mendoza.</p>
-      </div>
-      <div>
-        <h2>Contacto</h2>
-        <p><a href="mailto:contacto@tars.com.ar">contacto@tars.com.ar</a></p>
-      </div>
-      <div>
-        <h2>Enlaces</h2>
-        <p><a href="servicios.html">Servicios detallados</a></p>
-        <p><a href="contacto.html">Contacto</a></p>
-      </div>
-    </div>
-    <p class="colophon-copy">© 2026 Tars. Todos los derechos reservados. · <a href="privacidad.html">Política de privacidad</a></p>
-  </footer>
+<script type="module">
+  import { KINDS } from './js/features/proof.js';
 
-  <a class="wa-stamp" href="https://wa.me/5492612408064" target="_blank" rel="noopener noreferrer" aria-label="Chat por WhatsApp">WhatsApp</a>
-  <a class="ticket-stub" id="ticket-stub" href="#cotizador" hidden>Tu ticket <strong id="ticket-stub-total">USD 0</strong></a>
-  <script type="module" src="js/main.js?v=20261002-tinta"></script>
+  const WA = 'https://wa.me/5492612408064?text=';
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const RUBROS = [
+    { kind: 'tars', tab: 'Tu negocio', label: 'tu negocio' },
+    { kind: 'gimnasio', tab: 'Gimnasio', label: 'gimnasio', img: 'gimnasio', pos: '45% 30%', sample: 'Pulso', title: 'Tu gym <em>en el bolsillo</em>', text: 'Carnet digital con QR, reserva de clases y beneficios para cada socio.', lead: 'Una web para tu gimnasio que tus socios usen todos los días.' },
+    { kind: 'barberia', tab: 'Barbería', label: 'barbería', img: 'barberia', pos: '40% 35%', flip: true, sample: 'Filo Norte', title: 'Turnos <em>sin hacer fila</em>', text: 'Reserva online, elección de barbero y recordatorio por WhatsApp.', lead: 'Una web para tu barbería que te llene la agenda sola.' },
+    { kind: 'restaurante', tab: 'Restaurante', label: 'restaurante', img: 'restaurante', pos: '50% 30%', sample: 'Brasa &amp; Vid', title: 'Tu carta <em>siempre al día</em>', text: 'Carta digital, reservas online y pedidos por WhatsApp.', lead: 'Una web para tu restaurante que llene mesas y reciba pedidos.' },
+    { kind: 'ropa', tab: 'Tienda', label: 'tienda', img: 'ropa', pos: '50% 20%', sample: 'Lana Cruda', title: 'Tu tienda <em>abierta 24 h</em>', text: 'Catálogo con talles, cuotas y envíos a todo el país.', lead: 'Una web para tu tienda que venda mientras dormís.' },
+  ];
+  const state = { rubro: null }; // el que eligió la persona (null = todavía nada)
+
+  const hero = document.querySelector('.hero');
+  RUBROS.forEach((r, i) => {
+    const el = document.createElement('article');
+    el.className = `panel${r.flip ? ' flip' : ''}${i === 0 ? ' is-open' : ''}`;
+    el.dataset.kind = r.kind;
+    el.tabIndex = 0;
+    el.setAttribute('aria-label', r.tab);
+    if (r.kind === 'tars') {
+      el.setAttribute('data-ink-host', '');
+      el.innerHTML = `<canvas class="hero-ink" aria-hidden="true"></canvas><p class="ghost" aria-hidden="true">TARS</p><p class="tab"><small>Inicio</small>Tars</p>
+        <div class="inside"><div><h1>Webs para<br><em>tu negocio</em></h1><p>Diseño a medida en Mendoza, con un asistente de IA que atiende tu WhatsApp. Elegí tu rubro y mirá cómo puede quedar la tuya.</p>
+        <div class="chooser">${RUBROS.slice(1).map((x, j) => `<button type="button" data-go="${j + 1}">${x.tab}</button>`).join('')}</div></div></div>`;
+    } else {
+      el.innerHTML = `<img class="photo" src="prototipos/img/${r.img}.webp" alt="" loading="${i < 3 ? 'eager' : 'lazy'}" style="object-position:${r.pos}">
+        <p class="tab"><small>0${i}</small>${r.tab}</p>
+        <span class="muestra">Muestra de diseño · negocio de ejemplo</span>
+        <div class="inside"><div><h2>${r.title}</h2><p>${r.text}</p><div class="row"><a class="btn" href="${WA}${encodeURIComponent(`Hola Tars, quiero una web para mi ${r.label}.`)}" target="_blank" rel="noopener">Quiero esta web</a><a class="btn btn--ghost" href="#precio">Ver precio</a></div></div>
+        <div class="mock" aria-hidden="true"><div class="proof-phone"><div class="proof-screen" data-kind="${r.kind}">${KINDS[r.kind].screen(r.sample)}</div></div></div></div>`;
+    }
+    hero.append(el);
+  });
+  const panels = [...hero.children];
+
+  // Celulares de muestra: la pantalla se escala al ancho real.
+  const fit = () => hero.querySelectorAll('.proof-phone').forEach((p) => p.style.setProperty('--s', (p.clientWidth / 312).toFixed(4)));
+  new ResizeObserver(fit).observe(hero);
+
+  function open(index, chosen) {
+    panels.forEach((p, i) => p.classList.toggle('is-open', i === index));
+    requestAnimationFrame(fit);
+    if (chosen && index > 0) choose(index);
+  }
+
+  // Elegir un rubro adapta la página: texto de «Lo que te llevás» y los WhatsApp.
+  function choose(index) {
+    state.rubro = RUBROS[index];
+    document.getElementById('que-lead').textContent = state.rubro.lead;
+    const msg = `Hola Tars, quiero una web para mi ${state.rubro.label}.`;
+    document.getElementById('bar-wa').href = WA + encodeURIComponent(msg);
+    document.getElementById('close-wa').href = WA + encodeURIComponent(msg);
+    updateTotal();
+  }
+
+  const fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
+  panels.forEach((panel, i) => {
+    // Con mouse: pasar abre (sin elegir); clic elige. En táctiles: tocar abre y elige.
+    if (fine) panel.addEventListener('pointerenter', () => open(i, false));
+    panel.addEventListener('click', (e) => {
+      const go = e.target.closest('[data-go]');
+      if (go) { open(Number(go.dataset.go), true); return; }
+      if (!e.target.closest('a')) open(i, true);
+    });
+    panel.addEventListener('keydown', (e) => { if ((e.key === 'Enter' || e.key === ' ') && e.target === panel) { e.preventDefault(); open(i, true); } });
+    panel.addEventListener('focusin', () => open(i, false));
+  });
+  if (fine) hero.addEventListener('pointerleave', () => { const keep = state.rubro ? RUBROS.indexOf(state.rubro) : 0; open(keep, false); });
+
+  // Tinta viva en el panel de inicio (mismo módulo que el sitio publicado).
+  import('./js/features/ink.js').then((m) => m.initInk()).catch(() => {});
+
+  /* Celular de muestra que se inclina hacia el mouse. */
+  if (fine && !reduce) {
+    hero.addEventListener('pointermove', (e) => {
+      const panel = hero.querySelector('.panel.is-open');
+      const mock = panel?.querySelector('.mock');
+      if (!mock) return;
+      const r = panel.getBoundingClientRect();
+      mock.style.setProperty('--my', `${(((e.clientX - r.left) / r.width - 0.5) * -22).toFixed(2)}deg`);
+      mock.style.setProperty('--mx', `${(((e.clientY - r.top) / r.height - 0.5) * 14).toFixed(2)}deg`);
+    }, { passive: true });
+  }
+
+  /* Cursor propio: ABRIR sobre un panel cerrado, ELEGIR sobre el abierto. */
+  if (fine) {
+    const cursor = document.querySelector('.cursor');
+    const label = cursor.querySelector('span');
+    let cx = -100, cy = -100, x = -100, y = -100, raf = 0;
+    const loop = () => {
+      x += (cx - x) * 0.28; y += (cy - y) * 0.28;
+      cursor.style.setProperty('--cx', `${x.toFixed(1)}px`);
+      cursor.style.setProperty('--cy', `${y.toFixed(1)}px`);
+      raf = Math.abs(cx - x) + Math.abs(cy - y) > 0.3 ? requestAnimationFrame(loop) : 0;
+    };
+    addEventListener('pointermove', (e) => {
+      cx = e.clientX; cy = e.clientY;
+      const t = e.target;
+      const panel = t.closest?.('.panel');
+      let text = '';
+      if (t.closest?.('a, button, label, summary')) cursor.dataset.mode = 'link';
+      else {
+        cursor.dataset.mode = '';
+        if (panel && !panel.classList.contains('is-open')) text = 'ABRIR';
+        else if (panel && panel.dataset.kind !== 'tars') text = state.rubro?.kind === panel.dataset.kind ? 'ELEGIDO' : 'ELEGIR';
+      }
+      cursor.dataset.label = text;
+      label.textContent = text;
+      if (!raf) raf = requestAnimationFrame(loop);
+    }, { passive: true });
+  }
+
+  /* Cinta: el scroll la corre. */
+  const run = document.querySelector('.run');
+  if (!reduce) {
+    let frame = 0;
+    const move = () => { frame = 0; run.style.setProperty('--x', `${((innerHeight - run.getBoundingClientRect().top) * Number(run.dataset.speed) - 120).toFixed(1)}px`); };
+    addEventListener('scroll', () => { if (!frame) frame = requestAnimationFrame(move); }, { passive: true });
+    move();
+  }
+
+  /* Semana de trabajo: cada día muestra qué se hace y qué recibís. */
+  const WORK = [
+    { title: 'Día 1 · Propuesta', text: 'Charlamos por WhatsApp: me contás tu negocio, qué vendés y a quién. Te mando la propuesta con precio cerrado y fecha de entrega.', get: 'La propuesta por escrito' },
+    { title: 'Día 2 · Diseño', text: 'Armo el diseño con tus colores, tus fotos y tus textos. Lo ves y me decís qué cambiarías antes de seguir.', get: 'Una vista previa para aprobar' },
+    { title: 'Día 3 · Armado', text: 'Construyo la web: rápida, pensada primero para el celular y con los botones de WhatsApp, reservas o pedidos donde hacen falta.', get: 'Un link privado de prueba' },
+    { title: 'Día 4 · Ajustes', text: 'La revisás tranquilo desde tu celular. Corrijo textos, fotos y detalles hasta que quede como la querés.', get: 'La versión final para aprobar' },
+    { title: 'Día 5 · Online', text: 'La publico con tu dominio, la conecto con Google y te muestro cómo pedirme cambios cuando los necesites.', get: 'Tu web online' },
+  ];
+  const daysTile = document.querySelector('.t-days');
+  const wds = [...daysTile.querySelectorAll('.wd')];
+  const card = daysTile.querySelector('.daycard');
+  function showDay(i, animate) {
+    wds.forEach((wd, n) => { wd.setAttribute('aria-selected', String(n === i)); wd.classList.toggle('is-past', n < i); wd.tabIndex = n === i ? 0 : -1; });
+    const w = WORK[i];
+    card.innerHTML = `<h4>${w.title}</h4><div class="get"><small>Recibís</small>${w.get}</div><p>${w.text}</p>${i < WORK.length - 1 ? '<button type="button" class="next">Siguiente día →</button>' : ''}`;
+    if (animate && !reduce) { card.classList.remove('is-swap'); void card.offsetWidth; card.classList.add('is-swap'); }
+    card.querySelector('.next')?.addEventListener('click', () => { showDay(i + 1, true); wds[i + 1].focus(); });
+  }
+  wds.forEach((wd, i) => wd.addEventListener('click', () => showDay(i, true)));
+  daysTile.querySelector('.week').addEventListener('keydown', (e) => {
+    const i = wds.findIndex((w) => w.getAttribute('aria-selected') === 'true');
+    const n = e.key === 'ArrowRight' ? Math.min(i + 1, 4) : e.key === 'ArrowLeft' ? Math.max(i - 1, 0) : i;
+    if (n !== i) { e.preventDefault(); showDay(n, true); wds[n].focus(); }
+  });
+  showDay(0, false);
+
+  /* Lo que te llevás: el subrayado de tinta entra una vez. */
+  const io = new IntersectionObserver((entries) => entries.forEach((entry) => {
+    if (entry.isIntersecting) { entry.target.classList.add('is-in'); io.unobserve(entry.target); }
+  }), { threshold: 0.35 });
+  document.querySelectorAll('.tile').forEach((t) => io.observe(t));
+  // Pantalla del celular del mosaico.
+  const mini = document.querySelector('.t-phone .proof-screen');
+  mini.innerHTML = KINDS.restaurante.screen('Brasa &amp; Vid');
+  const miniPhone = mini.parentElement;
+  new ResizeObserver(() => miniPhone.style.setProperty('--s', (miniPhone.clientWidth / 312).toFixed(4))).observe(miniPhone);
+
+  /* Armá tu precio: web (única) + asistente por alcance (mensual) + extras. */
+  const PLANS = [
+    null,
+    { name: 'Asistente de IA · Arranque (hasta 200 personas por mes)', short: 'Arranque', month: 39, note: 'Para negocios que reciben pocas consultas pero no quieren perder ninguna, ni de noche.' },
+    { name: 'Asistente de IA · Negocio (hasta 800 personas por mes)', short: 'Negocio', month: 79, note: 'El más elegido: toma pedidos, da turnos y contesta precios todo el día.' },
+    { name: 'Asistente de IA · Alto volumen (hasta 2.500 personas por mes)', short: 'Alto volumen', month: 149, note: 'Para locales con mucho movimiento: atiende y le pasa a tu equipo lo que hay que cerrar.' },
+  ];
+  const boxes = [...document.querySelectorAll('.item input')];
+  const webs = [...document.querySelectorAll('.web input')];
+  const reach = document.getElementById('reach');
+  const reachOut = document.getElementById('reach-out');
+  const reachNote = document.getElementById('reach-note');
+  const out = document.getElementById('total');
+  const monthly = document.getElementById('monthly');
+  const pedido = document.getElementById('pedido');
+  let shown = 149;
+  function animateTo(value) {
+    if (reduce) { out.textContent = `USD ${value}`; shown = value; return; }
+    const from = shown, start = performance.now();
+    const step = (now) => {
+      const t = Math.min(1, (now - start) / 420);
+      const v = Math.round(from + (value - from) * (1 - Math.pow(1 - t, 3)));
+      out.textContent = `USD ${v}`;
+      if (t < 1) requestAnimationFrame(step); else shown = value;
+    };
+    requestAnimationFrame(step);
+  }
+  function updateTotal() {
+    const web = webs.find((w) => w.checked);
+    const plan = PLANS[Number(reach.value)];
+    const extras = boxes.filter((b) => b.checked);
+    const once = Number(web.value) + extras.reduce((s, b) => s + Number(b.dataset.price || 0), 0);
+    const month = (plan ? plan.month : 0) + extras.reduce((s, b) => s + Number(b.dataset.month || 0), 0);
+    animateTo(once);
+    monthly.textContent = month ? `+ USD ${month} por mes` : '';
+    reachOut.textContent = plan ? `${plan.short} · USD ${plan.month}/mes` : 'Sin asistente';
+    reachNote.innerHTML = plan ? `<strong>${plan.short}:</strong> ${plan.note} Instalación incluida.` : 'Movés la barra y ves el plan que te conviene. La instalación del asistente va incluida.';
+    const what = [web.dataset.name, plan ? plan.name : '', ...extras.map((b) => b.dataset.name)].filter(Boolean).join(', ');
+    const forWhat = state.rubro ? ` para mi ${state.rubro.label}` : '';
+    pedido.href = WA + encodeURIComponent(`Hola Tars, quiero ${what}${forWhat}. Total: USD ${once} de pago único${month ? ` + USD ${month} por mes` : ''}.`);
+  }
+  webs.forEach((w) => w.addEventListener('change', updateTotal));
+  reach.addEventListener('input', updateTotal);
+  const totalBox = document.querySelector('.total');
+  boxes.forEach((b) => b.addEventListener('change', () => {
+    updateTotal();
+    if (!b.checked || reduce) return;
+    const bump = document.createElement('span');
+    bump.className = 'bump';
+    if (b.dataset.ask) return;
+    bump.textContent = b.dataset.month ? `+ USD ${b.dataset.month}/mes` : `+ USD ${b.dataset.price}`;
+    totalBox.append(bump);
+    bump.animate([
+      { opacity: 0, transform: 'translateY(10px) scale(0.9)' },
+      { opacity: 1, transform: 'translateY(-14px) scale(1)', offset: 0.35 },
+      { opacity: 0, transform: 'translateY(-46px) scale(1)' },
+    ], { duration: 900, easing: 'cubic-bezier(0.23, 1, 0.32, 1)' }).finished.then(() => bump.remove());
+  }));
+  updateTotal();
+  fit();
+</script>
+<script type="module">
+  import { initLinkTracking, trackEvent } from './js/lib/track.js';
+  initLinkTracking();
+  // Pedido armado en «Armá tu precio»: cuenta como pedido de presupuesto.
+  document.getElementById('pedido')?.addEventListener('click', () => {
+    trackEvent('quote_request', { total: document.getElementById('total')?.textContent, monthly: document.getElementById('monthly')?.textContent, page_path: location.pathname });
+  });
+  const vitals = () => import('./js/lib/vitals.js').then((m) => m.initWebVitals()).catch(() => {});
+  const later = () => ('requestIdleCallback' in window ? requestIdleCallback(vitals, { timeout: 4000 }) : setTimeout(vitals, 1500));
+  if (document.readyState === 'complete') later(); else addEventListener('load', later, { once: true });
+</script>
 </body>
 </html>

@@ -6,43 +6,6 @@ test.beforeEach(async ({ page }) => {
   await page.route(/^https?:\/\/(?!localhost)/, (route) => route.abort());
 });
 
-test.describe('Proyectos de muestra', () => {
-  test('tres maquetas rotuladas como muestra, sin clientes', async ({ page }) => {
-    await page.goto('/index.html#casos');
-    const section = page.locator('#casos');
-    await expect(section.getByRole('heading', { level: 2 })).toHaveText('Proyectos de muestra');
-    const demos = section.locator('article.demo');
-    await expect(demos).toHaveCount(3);
-    for (const demo of await demos.all()) {
-      await expect(demo.locator('dd').first()).toHaveText('Maqueta de demostración');
-      // El dibujo es decorativo: no lo lee el lector de pantalla.
-      await expect(demo.locator('.mock')).toHaveAttribute('aria-hidden', 'true');
-    }
-    await expect(section).not.toContainText(/cliente real|testimonio/i);
-  });
-
-  test('cada maqueta se pide por WhatsApp con su nombre y se mide', async ({ page }) => {
-    await page.goto('/index.html');
-    const link = page.getByRole('link', { name: 'Quiero una landing así' });
-    await expect(link).toHaveAttribute('href', /wa\.me\/5492612408064\?text=.*landing/);
-    // Al enfocar con teclado, las planchas entran en registro.
-    await link.focus();
-    await expect(link).toBeFocused();
-    await expect.poll(() => link.evaluate((el) =>
-      getComputedStyle(el.closest('.demo').querySelector('.plate--pink')).transform)).toMatch(/none|matrix\(1, 0, 0, 1, 0, 0\)/);
-    await page.context().route('https://wa.me/**', (route) => route.abort());
-    await link.click();
-    const events = await page.evaluate(() => window.dataLayer.filter((e) => e.event === 'whatsapp_click'));
-    expect(events.at(-1).link_text).toBe('Quiero una landing así');
-  });
-
-  test('no hay scroll horizontal en la sección', async ({ page }) => {
-    await page.goto('/index.html#casos');
-    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
-    expect(overflow).toBeLessThanOrEqual(0);
-  });
-});
-
 test.describe('Core Web Vitals', () => {
   test('LCP y CLS llegan al dataLayer con el esquema acordado', async ({ page, browserName }) => {
     test.skip(browserName !== 'chromium', 'las APIs de LCP/CLS son de Chromium');

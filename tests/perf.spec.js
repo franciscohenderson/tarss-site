@@ -4,7 +4,7 @@
 const { test, expect } = require('@playwright/test');
 
 const EXPECTED = {
-  '/index.html': { loads: ['register.js'], skips: ['contact-form.js', 'runaway.js'] },
+  '/index.html': { loads: ['proof.js', 'track.js'], skips: ['register.js', 'contact-form.js', 'runaway.js'] },
   '/servicios.html': { loads: ['register.js'], skips: ['contact-form.js', 'runaway.js'] },
   '/contacto.html': { loads: ['contact-form.js', 'toast.js'], skips: ['register.js', 'runaway.js'] },
   '/blog.html': { loads: [], skips: ['register.js', 'contact-form.js', 'runaway.js', 'toast.js'] },
