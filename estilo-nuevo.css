@@ -191,3 +191,26 @@ input:not([type="checkbox"]):not([type="radio"]), textarea, select { border-radi
 .colophon { background: var(--bg); border-top: 1px solid var(--line); }
 .colophon-copy a { color: var(--muted); }
 .colophon-copy .regret { color: var(--accent); font-weight: 700; }
+
+/* --- Cotizador de servicios: link al armado completo de la portada -------- */
+.register-more { margin-top: 1rem; color: var(--muted); }
+.register-more a { color: var(--fg); font-weight: 700; text-decoration-color: var(--accent); text-underline-offset: 4px; }
+
+/* --- Teclas del cotizador: tarjetas oscuras; elegida = borde rosa ---------- */
+.key-cap { background: var(--bg2); color: var(--fg); border: 0; border-radius: 20px; box-shadow: 0 6px 0 #26262c; }
+.key-name { font-size: clamp(1.6rem, 2.6vw, 2.2rem); }
+.key-price { color: var(--muted); }
+@media (hover: hover) { .key:hover .key-cap { box-shadow: 0 8px 0 #26262c; } }
+.key:active .key-cap { box-shadow: 0 1px 0 #26262c; }
+.key input:checked + .key-cap { background: #1d1219; box-shadow: inset 0 0 0 1.5px var(--accent), 0 2px 0 #3a1a2c; }
+.key input:checked + .key-cap .key-price { color: var(--accent); }
+
+/* --- Botones dentro del ticket de papel: tinta oscura, que se vean -------- */
+.ticket .btn-ink { background: #120a10; color: var(--paper); }
+.ticket .btn-ink[aria-disabled="true"] { background: #d9d3c8; color: #6b655a; }
+.ticket .btn-line { color: #120a10; box-shadow: inset 0 0 0 1.5px #120a10; }
+.ticket .btn-line:disabled { color: #8d877c; box-shadow: inset 0 0 0 1.5px #c9c2b6; }
+@media (hover: hover) {
+  .ticket .btn-ink:not([aria-disabled="true"]):hover { background: var(--accent); color: #120a10; }
+  .ticket .btn-line:not(:disabled):hover { background: #120a10; color: var(--paper); }
+}
