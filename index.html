@@ -387,6 +387,15 @@
   .reach p strong { color: var(--fg); }
   .fine { margin-top: 10px; color: var(--muted); font: 500 13px/1.5 'LF', system-ui, 'Segoe UI', Roboto, sans-serif; }
 
+  /* Barra del total (solo celular) */
+  .dock { position: fixed; z-index: 60; left: 12px; right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 8px 8px 20px; border-radius: 999px; background: var(--fg); color: var(--bg); box-shadow: 0 14px 34px rgb(0 0 0 / 0.5); transform: translateY(160%); pointer-events: none; transition: transform 420ms var(--ease-out); }
+  .dock.is-on { transform: none; pointer-events: auto; }
+  .dock b { display: block; font: 900 26px/1 'BSD', 'Arial Narrow', sans-serif-condensed, Impact, sans-serif; font-variant-numeric: tabular-nums; }
+  .dock small { display: block; margin-top: 2px; font: 700 12px 'LF', system-ui, sans-serif; color: #5b5750; }
+  .total .dock .btn { width: auto; min-height: 46px; margin: 0; padding: 0 22px; background: var(--bg); color: var(--fg); }
+  @media (min-width: 861px) { .dock { display: none; } }
+  @media (prefers-reduced-motion: reduce) { .dock { transition: none; } }
+
   /* Preguntas */
   .faq { margin-top: 48px; border-top: 1px solid var(--line); max-width: 920px; }
   .faq details { border-bottom: 1px solid var(--line); }
@@ -516,6 +525,9 @@
           <p class="once-label">pago único</p>
           <div class="monthly" id="monthly"></div>
           <a class="btn" id="pedido" href="#" target="_blank" rel="noopener">Pedir por WhatsApp</a>
+          <!-- Celular: el total viaja abajo mientras se arma el precio (copia del de arriba;
+               los lectores de pantalla usan el original). -->
+          <div class="dock" id="dock" aria-hidden="true"><span><b id="dock-total">USD 149</b><small id="dock-month"></small></span><a class="btn" id="dock-pedido" href="#" target="_blank" rel="noopener" tabindex="-1">Pedir</a></div>
           <p class="note">El primer número se paga una vez; lo mensual, cada mes. Te respondo con la propuesta en menos de 24 horas. Al pedirla aceptás los <a href="terminos.html">Términos y condiciones</a>.</p>
         </aside>
       </div>
@@ -743,7 +755,23 @@
     const what = [web.dataset.name, plan ? plan.name : '', ...extras.map((b) => b.dataset.name)].filter(Boolean).join(', ');
     const forWhat = state.rubro ? ` para mi ${state.rubro.label}` : '';
     pedido.href = WA + encodeURIComponent(`Hola Tars, quiero ${what}${forWhat}. Total: USD ${once} de pago único${month ? ` + USD ${month} por mes` : ''}.`);
+    dockTotal.textContent = `USD ${once}`;
+    dockMonth.textContent = month ? `+ USD ${month} por mes` : 'pago único';
+    dockPedido.href = pedido.href;
   }
+  /* Barra del total en celular: visible mientras se arma el precio y el total
+     de verdad todavía no se ve. */
+  const dock = document.getElementById('dock');
+  const dockTotal = document.getElementById('dock-total');
+  const dockMonth = document.getElementById('dock-month');
+  const dockPedido = document.getElementById('dock-pedido');
+  const seen = { builder: false, total: false };
+  const dockIO = new IntersectionObserver((entries) => {
+    entries.forEach((e) => { if (e.target.classList.contains('total')) seen.total = e.intersectionRatio > 0.35; else seen.builder = e.isIntersecting; });
+    dock.classList.toggle('is-on', seen.builder && !seen.total);
+  }, { threshold: [0, 0.4] });
+  dockIO.observe(document.querySelector('.builder .items'));
+  dockIO.observe(document.querySelector('.total'));
   webs.forEach((w) => w.addEventListener('change', updateTotal));
   reach.addEventListener('input', updateTotal);
   const totalBox = document.querySelector('.total');
@@ -768,9 +796,11 @@
   import { initLinkTracking, trackEvent } from './js/lib/track.js';
   initLinkTracking();
   // Pedido armado en «Armá tu precio»: cuenta como pedido de presupuesto.
-  document.getElementById('pedido')?.addEventListener('click', () => {
+  const quoteRequest = () => {
     trackEvent('quote_request', { total: document.getElementById('total')?.textContent, monthly: document.getElementById('monthly')?.textContent, page_path: location.pathname });
-  });
+  };
+  document.getElementById('pedido')?.addEventListener('click', quoteRequest);
+  document.getElementById('dock-pedido')?.addEventListener('click', quoteRequest);
   const vitals = () => import('./js/lib/vitals.js').then((m) => m.initWebVitals()).catch(() => {});
   const later = () => ('requestIdleCallback' in window ? requestIdleCallback(vitals, { timeout: 4000 }) : setTimeout(vitals, 1500));
   if (document.readyState === 'complete') later(); else addEventListener('load', later, { once: true });
