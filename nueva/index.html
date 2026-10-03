@@ -164,8 +164,20 @@
   .typing i { width: 6px; height: 6px; border-radius: 50%; background: #9fe6c4; animation: dot 1s infinite; }
   .typing i:nth-child(2) { animation-delay: 150ms; } .typing i:nth-child(3) { animation-delay: 300ms; }
   @keyframes dot { 0%, 60%, 100% { opacity: 0.3; transform: none; } 30% { opacity: 1; transform: translateY(-3px); } }
-  .t-chat.is-in .typing { animation: blink 900ms linear 2300ms both; }
+  .t-chat.is-in .typing { animation: blink 900ms linear 500ms both; }
   @keyframes blink { 0% { opacity: 0; } 15%, 85% { opacity: 1; } 100% { opacity: 0; } }
+
+  /* Asistente de IA: etiqueta, respuesta rápida y botón de asesor dentro del chat. */
+  .ai { display: inline-flex; align-items: center; gap: 8px; align-self: flex-start; padding: 6px 12px; border-radius: 999px; background: rgb(255 72 176 / 0.14); color: var(--pink); font: 800 12px 'LF'; letter-spacing: 0.12em; text-transform: uppercase; }
+  .ai::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--pink); box-shadow: 0 0 0 4px rgb(255 72 176 / 0.25); }
+  .msg .who { display: block; margin-bottom: 2px; font: 800 11px 'LF'; letter-spacing: 0.06em; color: #9fe6c4; }
+  .msg.in .who { color: var(--pink); }
+  .handoff { justify-self: start; display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px; border-radius: 999px; box-shadow: inset 0 0 0 1.5px var(--pink); color: var(--pink); font: 800 13px 'LF'; opacity: 0; transform: translateY(10px); transition: opacity 400ms var(--ease-out), transform 500ms var(--ease-out); }
+  .t-chat.is-in .handoff { opacity: 1; transform: none; transition-delay: 3900ms; }
+  .t-chat.is-in .msg:nth-child(4) { transition-delay: 2300ms; }
+  .t-chat.is-in .msg:nth-child(5) { transition-delay: 3100ms; }
+  .t-chat { min-height: 480px; }
+  .item span.p.ask { font: 800 15px 'LF'; color: var(--pink); }
 
   /* Línea de días */
   .days { margin-top: auto; display: grid; gap: 10px; }
@@ -270,12 +282,14 @@
       <div class="bento">
         <article class="tile t-phone"><h3>Se ve bien en el celular</h3><p>Que es desde donde te van a encontrar. Rápida aunque la señal no ayude.</p>
           <div class="mini" aria-hidden="true"><div class="proof-phone"><div class="proof-screen" data-kind="restaurante"></div></div></div></article>
-        <article class="tile t-chat"><h3>Cada pantalla termina en un mensaje</h3><p>Botones de WhatsApp, reservas o pedidos: la idea es que te escriban, no que miren.</p>
+        <article class="tile t-chat"><span class="ai">Asistente con IA</span><h3>Tu WhatsApp atiende solo, las 24 horas</h3><p>Responde como una persona de tu negocio: toma pedidos, da turnos y contesta precios. Si le preguntan, aclara que es un asistente virtual; y si algo no se puede cerrar, te pasa la charla a vos.</p>
           <div class="chat" aria-hidden="true">
-            <div class="msg out">Hola! Vi la web, ¿tienen mesa para 4 el sábado?<small>21:02</small></div>
-            <div class="msg in">¡Hola! Sí, te reservo a las 21:30 junto al fuego.<small>21:03</small></div>
-            <div class="msg out">Genial, ahí estamos. ¡Gracias!<small>21:03</small></div>
+            <div class="msg out">Hola! ¿Hacen envíos a Godoy Cruz? Quiero 2 sweaters talle M<small>03:12</small></div>
             <div class="typing"><i></i><i></i><i></i></div>
+            <div class="msg in"><span class="who">Lana Cruda</span>¡Hola! Sí, llegan en 24 h. Te separo 2 Sweater Andes talle M: $ 117.800. ¿Pagás con link o transferencia?<small>03:12</small></div>
+            <div class="msg out">¿Sos una persona?<small>03:13</small></div>
+            <div class="msg in"><span class="who">Lana Cruda</span>Soy el asistente virtual de Lana Cruda. Si preferís, te paso con alguien del equipo.<small>03:13</small></div>
+            <span class="handoff">Hablar con un asesor</span>
           </div></article>
         <article class="tile t-days"><h3>Lista en 3 a 5 días</h3><p>Una landing en menos de una semana; un sitio de 4 o 5 páginas, en 7 a 10 días.</p>
           <div class="days" aria-hidden="true">
@@ -297,6 +311,7 @@
         <div class="items">
           <label class="item"><input type="checkbox" data-price="149" data-name="Landing page" checked disabled><span><b>Landing page</b><small>Una página que presenta tu negocio y lleva a WhatsApp.</small></span><span class="p">USD 149</span></label>
           <label class="item"><input type="checkbox" data-month="50" data-name="Mantenimiento"><span><b>Mantenimiento</b><small>Cambios, copias de seguridad y que todo siga andando rápido.</small></span><span class="p">USD 50 <small>/mes</small></span></label>
+          <label class="item"><input type="checkbox" data-ask="1" data-name="Asistente de IA para WhatsApp"><span><b>Asistente de IA para WhatsApp</b><small>Atiende tu WhatsApp las 24 horas como una persona de tu negocio, y te pasa la charla cuando hace falta.</small></span><span class="p ask">A consultar</span></label>
           <label class="item"><input type="checkbox" data-price="80" data-name="SEO local"><span><b>SEO local</b><small>Para que te encuentren en Google cuando buscan lo tuyo en Mendoza.</small></span><span class="p">USD 80</span></label>
         </div>
         <aside class="total" aria-live="polite">
@@ -314,6 +329,8 @@
       <div class="faq">
         <details><summary>¿Cuánto tarda?</summary><p>Una landing page queda lista en 3 a 5 días. Un sitio de 4 o 5 páginas, en 7 a 10 días. La propuesta te llega en menos de 24 horas.</p></details>
         <details><summary>¿Qué necesito tener?</summary><p>Tus fotos, tus precios y ganas. Si no tenés fotos o textos, te ayudo a armarlos.</p></details>
+        <details><summary>¿Qué hace el asistente de IA?</summary><p>Atiende tu WhatsApp las 24 horas: responde precios y horarios, toma pedidos y reservas, y da turnos, con lo que vos le cargás de tu negocio. Si una venta o un pedido no se puede cerrar, ofrece hablar con un asesor y te pasa la charla.</p></details>
+        <details><summary>¿Se hace pasar por una persona?</summary><p>Habla con naturalidad, como alguien de tu negocio, pero no engaña: si un cliente le pregunta, aclara que es un asistente virtual y le ofrece hablar con una persona del equipo.</p></details>
         <details><summary>¿Los ejemplos son clientes reales?</summary><p>No: son muestras de diseño con negocios de ejemplo, para que veas cómo puede quedar la tuya.</p></details>
         <details><summary>¿Y después de publicarla?</summary><p>Con el mantenimiento mensual me ocupo de los cambios, las copias de seguridad y de que siga andando rápido.</p></details>
       </div>
@@ -351,7 +368,7 @@
     if (r.kind === 'tars') {
       el.setAttribute('data-ink-host', '');
       el.innerHTML = `<canvas class="hero-ink" aria-hidden="true"></canvas><p class="ghost" aria-hidden="true">TARS</p><p class="tab"><small>Inicio</small>Tars</p>
-        <div class="inside"><div><h1>Webs para<br><em>tu negocio</em></h1><p>Diseño a medida en Mendoza. Elegí tu rubro y mirá cómo puede quedar la tuya.</p>
+        <div class="inside"><div><h1>Webs para<br><em>tu negocio</em></h1><p>Diseño a medida en Mendoza, con un asistente de IA que atiende tu WhatsApp. Elegí tu rubro y mirá cómo puede quedar la tuya.</p>
         <div class="chooser">${RUBROS.slice(1).map((x, j) => `<button type="button" data-go="${j + 1}">${x.tab}</button>`).join('')}</div></div></div>`;
     } else {
       el.innerHTML = `<img class="photo" src="../prototipos/img/${r.img}.webp" alt="" loading="${i < 3 ? 'eager' : 'lazy'}" style="object-position:${r.pos}">
@@ -483,10 +500,11 @@
     const once = on.reduce((s, b) => s + Number(b.dataset.price || 0), 0);
     const month = on.reduce((s, b) => s + Number(b.dataset.month || 0), 0);
     animateTo(once);
-    monthly.textContent = month ? `+ USD ${month} por mes` : '';
+    const ask = on.some((b) => b.dataset.ask);
+    monthly.textContent = [month ? `+ USD ${month} por mes` : '', ask ? '+ asistente de IA (a consultar)' : ''].filter(Boolean).join(' · ');
     const what = on.map((b) => b.dataset.name).join(', ');
     const forWhat = state.rubro ? ` para mi ${state.rubro.label}` : '';
-    pedido.href = WA + encodeURIComponent(`Hola Tars, quiero ${what}${forWhat}. Total: USD ${once}${month ? ` + USD ${month} por mes` : ''}.`);
+    pedido.href = WA + encodeURIComponent(`Hola Tars, quiero ${what}${forWhat}. Total: USD ${once}${month ? ` + USD ${month} por mes` : ''}${ask ? ' + el asistente de IA (a consultar)' : ''}.`);
   }
   const totalBox = document.querySelector('.total');
   boxes.forEach((b) => b.addEventListener('change', () => {
@@ -494,6 +512,7 @@
     if (!b.checked || reduce) return;
     const bump = document.createElement('span');
     bump.className = 'bump';
+    if (b.dataset.ask) return;
     bump.textContent = b.dataset.month ? `+ USD ${b.dataset.month}/mes` : `+ USD ${b.dataset.price}`;
     totalBox.append(bump);
     bump.animate([
