@@ -77,8 +77,8 @@ body::after { display: none; } /* sin grano de papel */
 
 /* --- Botones --------------------------------------------------------------- */
 .btn { border: 0; border-radius: 999px; box-shadow: inset 0 0 0 1.5px var(--line); }
-.btn-pink { color: #120a10; box-shadow: none; }
-.btn-ink { background: var(--fg); color: var(--bg); box-shadow: none; }
+.btn-pink { color: #120a10; box-shadow: none; border: 0 !important; }
+.btn-ink { background: var(--fg); color: var(--bg); box-shadow: none; border: 0 !important; }
 @media (hover: hover) {
   .btn-pink:hover { background: var(--fg); color: var(--bg); }
   .btn-line:hover { background: var(--bg2); color: var(--fg); box-shadow: inset 0 0 0 1.5px var(--fg); }
@@ -108,6 +108,68 @@ main section,
 .note, .demo, .key-cap, .ticket, .ticket-rail, .poster-sheet, .faq details, .contact-form, form fieldset,
 input:not([type="checkbox"]):not([type="radio"]), textarea, select { border-radius: 14px; }
 
+/* --- Encabezado de página: aire bajo la barra ------------------------------ */
+.page-hero { padding-top: clamp(3.5rem, 9vw, 7.5rem); }
+.page-hero .hero-text { color: var(--muted); font-size: clamp(1.05rem, 1.4vw, 1.25rem); line-height: 1.5; }
+
+/* --- Lista de servicios: título y descripción alineados arriba -------------- */
+.work-list li { align-items: start; gap: 1rem 3rem; padding-block: 1.75rem; border-top-width: 1px; border-color: var(--line); }
+.work-list li:last-child { border-bottom: 1px solid var(--line); }
+.work-list h3 { font-size: clamp(2.2rem, 5vw, 4.5rem); line-height: 0.9; }
+.spec .work-list p { padding-top: 0.4rem; font-size: 1.08rem; line-height: 1.55; }
+@media (hover: hover) { .work-list li:hover h3 { text-shadow: none; } }
+
+/* --- Precios: tarjetas planas como en la portada (sin carteles torcidos) --- */
+.prices { align-items: stretch; }
+.price-flyer { display: flex; flex-direction: column; gap: 0.25rem; padding: clamp(1.6rem, 2.4vw, 2.2rem); border-radius: 26px; background: var(--bg2) !important; color: var(--fg); transform: none !important; margin-top: 0 !important; box-shadow: none; border: 0 !important; }
+.price-flyer--b { background: var(--accent) !important; color: #120a10; }
+.price-flyer h3 { font-size: clamp(1.6rem, 2.2vw, 2.2rem); }
+.price-flyer .price { margin: 0.4rem 0 0.2rem; line-height: 0.9; }
+.price-flyer > p:not(.price) { color: var(--muted); }
+.price-flyer--b > p:not(.price) { color: #3b0a26; }
+.price-flyer ul,
+.includes ul { border-top: 1px solid var(--line) !important; font-weight: 600; }
+.price-flyer--b ul { border-color: rgb(18 10 16 / 0.25) !important; }
+.price-flyer li::before { background: var(--accent); }
+.price-flyer--b li::before { background: #120a10; }
+
+/* --- Siempre incluido: tarjetas en vez de tabla de imprenta --------------- */
+.includes { gap: 14px; }
+.includes article,
+.includes article + article { border: 0 !important; border-radius: 22px; background: var(--bg2); padding: clamp(1.4rem, 2.2vw, 2rem); }
+.includes li::before { background: var(--accent); }
+
+/* --- Blog: artículos en tres tarjetas parejas (sin zigzag) ----------------- */
+.zine-list { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.zine-entry,
+.zine-entry:nth-child(n) { grid-column: auto; margin-top: 0; position: relative; display: flex; flex-direction: column; padding: clamp(1.4rem, 2.2vw, 2rem); border: 0; border-radius: 22px; background: var(--bg2); transition: background-color 200ms var(--ease-out, ease-out); }
+.zine-entry h3 { font-size: clamp(1.6rem, 2.3vw, 2.3rem); line-height: 0.95; }
+.zine-entry h3 a { text-decoration: none; }
+.zine-entry h3 a::after { content: ""; position: absolute; inset: 0; border-radius: inherit; } /* toda la tarjeta es el link */
+.zine-entry h3 a:focus-visible { outline: none; }
+.zine-entry:has(a:focus-visible) { outline: 3px solid var(--accent); outline-offset: 3px; }
+@media (hover: hover) { .zine-entry:hover { background: #1f1f24; } .zine-entry:hover h3 { color: var(--accent); } }
+@media (max-width: 860px) { .zine-list { grid-template-columns: minmax(0, 1fr); } }
+
+/* --- Consejos: tarjetas planas; solo la primera en rosa -------------------- */
+.note,
+.note--pink, .note--paper, .note--yellow { transform: none !important; margin-top: 0 !important; border-radius: 22px; background: var(--bg2); color: var(--fg); }
+.note--pink { background: var(--accent); color: #120a10; }
+.note p { color: var(--muted); }
+.note--pink p { color: #3b0a26; }
+
+/* --- Formulario de contacto: tarjeta oscura, derecha y campos redondeados -- */
+.form-sheet { transform: none; border: 0; border-radius: 26px; background: var(--bg2); color: var(--fg); }
+.form-sheet .contact-form input,
+.form-sheet .contact-form textarea { color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 14px; }
+.form-sheet .contact-form input::placeholder,
+.form-sheet .contact-form textarea::placeholder { color: #8d887f; }
+.form-sheet .contact-form input:focus,
+.form-sheet .contact-form textarea:focus { border-color: var(--accent); outline: 3px solid rgb(255 72 176 / 0.35); outline-offset: 1px; }
+.form-sheet .form-consent { color: var(--muted); }
+.form-sheet .form-consent a { color: var(--fg); }
+.form-sheet .btn-pink { border: 0; }
+
 /* --- WhatsApp flotante: píldora rosa -------------------------------------- */
 .wa-stamp {
   width: auto;
@@ -121,6 +183,8 @@ input:not([type="checkbox"]):not([type="radio"]), textarea, select { border-radi
   letter-spacing: 0;
   text-transform: none;
 }
+/* Borde oscuro y sombra: se distingue aunque pase por encima de algo rosa. */
+.wa-stamp { box-shadow: 0 0 0 3px var(--bg), 0 12px 30px rgb(0 0 0 / 0.45); }
 @media (hover: hover) { .wa-stamp:hover { transform: translateY(-2px); } }
 
 /* --- Pie: links legales ---------------------------------------------------- */
