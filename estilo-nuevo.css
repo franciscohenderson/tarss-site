@@ -140,7 +140,7 @@ input:not([type="checkbox"]):not([type="radio"]), textarea, select { border-radi
 .includes li::before { background: var(--accent); }
 
 /* --- Blog: artículos en tres tarjetas parejas (sin zigzag) ----------------- */
-.zine-list { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.zine-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
 .zine-entry,
 .zine-entry:nth-child(n) { grid-column: auto; margin-top: 0; position: relative; display: flex; flex-direction: column; padding: clamp(1.4rem, 2.2vw, 2rem); border: 0; border-radius: 22px; background: var(--bg2); transition: background-color 200ms var(--ease-out, ease-out); }
 .zine-entry h3 { font-size: clamp(1.6rem, 2.3vw, 2.3rem); line-height: 0.95; }

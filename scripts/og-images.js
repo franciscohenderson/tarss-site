@@ -30,6 +30,7 @@ const PAGES = [
   { file: 'terminos.html', image: 'terminos', kicker: 'En lenguaje claro', title: 'Términos *y condiciones*', size: 128, note: 'Cómo trabajo y qué derechos tenés' },
   { file: 'contrato.html', image: 'contrato', kicker: 'Para completar y firmar', title: 'Contrato *modelo*', size: 150, note: 'Contrato directo con Francisco Miranda Henderson' },
   { file: 'privacidad.html', image: 'privacidad', kicker: 'Qué datos se usan y para qué', title: 'Política de *privacidad*', size: 120, note: 'Tars · Mendoza' },
+  { file: 'articulo-asistente-ia-whatsapp.html', image: 'articulo-asistente-ia-whatsapp', kicker: 'Blog', title: 'Asistente de IA para *WhatsApp*: qué hace y qué no', size: 96, note: '4 min de lectura' },
   { file: 'articulo-landing-profesional.html', image: 'articulo-landing-profesional', kicker: 'Blog', title: '5 razones para tener una *landing profesional*', size: 92, note: '4 min de lectura' },
   { file: 'articulo-sitio-en-celular.html', image: 'articulo-sitio-en-celular', kicker: 'Blog', title: 'Tu web, *bien en celular*', size: 128, note: '5 min de lectura' },
   { file: 'articulo-mantenimiento-web.html', image: 'articulo-mantenimiento-web', kicker: 'Blog', title: 'Qué incluye el *mantenimiento web*', size: 104, note: '4 min de lectura' },

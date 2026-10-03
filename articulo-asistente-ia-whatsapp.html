@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>
+    /* Aplica el tema ANTES de pintar la página (evita un destello del tema
+       equivocado): el que la persona eligió con el botón, o si nunca eligió,
+       OSCURO (el diseño principal). La lógica del botón: js/core.js (initThemeToggle). */
+    (function () {
+      var theme;
+      try { theme = localStorage.getItem('theme'); } catch (e) {}
+      document.documentElement.setAttribute('data-theme', theme === 'light' ? 'light' : 'dark');
+    })();
+  </script>
+  <!-- Google Tag Manager (GTM-WKXQ88DT): carga asíncrona, no frena la página.
+       Las etiquetas (Analytics, píxel de Meta, conversiones de Google Ads) se
+       configuran en tagmanager.google.com, no acá. Los eventos que manda el
+       sitio (generate_lead, quote_request, whatsapp_click, email_click) salen
+       de trackEvent() en js/lib/track.js. -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-WKXQ88DT');</script>
+  <!-- End Google Tag Manager -->
+  <meta name="description" content="Cómo funciona un asistente de inteligencia artificial que atiende el WhatsApp de tu negocio: qué responde, cuándo le pasa la charla a una persona, qué es tuyo y cuánto cuesta." />
+  <meta name="theme-color" content="#141414" />
+  <meta property="og:title" content="Asistente de IA para WhatsApp: qué hace y qué no | Tars" />
+  <meta property="og:site_name" content="Tars" />
+  <link rel="canonical" href="https://tars.com.ar/articulo-asistente-ia-whatsapp" />
+  <meta property="og:description" content="Cómo funciona un asistente de inteligencia artificial que atiende el WhatsApp de tu negocio: qué responde, cuándo le pasa la charla a una persona, qué es tuyo y cuánto cuesta." />
+  <meta property="twitter:title" content="Asistente de IA para WhatsApp: qué hace y qué no | Tars" />
+  <meta name="twitter:description" content="Cómo funciona un asistente de inteligencia artificial que atiende el WhatsApp de tu negocio: qué responde, cuándo le pasa la charla a una persona, qué es tuyo y cuánto cuesta." />
+  <meta name="twitter:creator" content="@tarss" />
+  <meta property="og:image" content="https://tars.com.ar/og/articulo-asistente-ia-whatsapp.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Blog · Asistente de IA para WhatsApp: qué hace y qué no · Tars" />
+  <meta name="twitter:image" content="https://tars.com.ar/og/articulo-asistente-ia-whatsapp.jpg" />
+  <meta property="og:type" content="article" />
+  <meta property="og:locale" content="es_ES" />
+  <meta property="og:url" content="https://tars.com.ar/articulo-asistente-ia-whatsapp" />
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@tarss" />
+  <title>Asistente de IA para WhatsApp: qué hace y qué no | Tars</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="preload" href="/fonts/big-shoulders-display-var.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/fonts/libre-franklin-var.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="riso.css" />
+  <link rel="stylesheet" href="estilo-nuevo.css" />
+  <link rel="modulepreload" href="js/core.js" />
+  <link rel="modulepreload" href="js/lib/env.js" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Asistente de IA para WhatsApp: qué hace y qué no",
+    "description": "Cómo funciona un asistente de inteligencia artificial que atiende el WhatsApp de tu negocio: qué responde, cuándo le pasa la charla a una persona, qué es tuyo y cuánto cuesta.",
+    "datePublished": "2026-10-03",
+    "dateModified": "2026-10-03",
+    "inLanguage": "es-AR",
+    "mainEntityOfPage": "https://tars.com.ar/articulo-asistente-ia-whatsapp",
+    "author": {
+      "@type": "Organization",
+      "name": "Tars",
+      "url": "https://tars.com.ar/"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Tars",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://tars.com.ar/favicon.svg"
+      }
+    }
+  }
+  </script>
+</head>
+<body class="riso">
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WKXQ88DT"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+  <a class="skip-link" href="#main-content">Saltar al contenido</a>
+
+  <!-- Margen de impresión (igual en todas las páginas, ver index.html). -->
+  <nav class="margin" aria-label="Menú principal">
+    <a class="margin-brand" href="index.html" aria-label="Tars, inicio">TA<span>RS</span></a>
+    <div class="margin-actions">
+      <button class="theme-toggle" type="button" aria-label="Cambiar a modo claro" title="Modo claro">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+      </button>
+      <button class="nav-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="primary-navigation"><span></span></button>
+    </div>
+    <div class="margin-links" id="primary-navigation">
+      <a href="servicios.html">Servicios</a>
+      <a href="index.html#precio">Precios</a>
+      <a href="index.html#preguntas">Preguntas</a>
+      <a href="blog.html" aria-current="page">Blog</a>
+      <a href="contacto.html">Contacto</a>
+    </div>
+    <svg class="reg-mark" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="6"/><path d="M12 0v24M0 12h24"/></svg>
+  </nav>
+
+  <main id="main-content">
+    <header class="page-hero page-hero--article">
+      <p class="article-back"><a href="blog.html">Volver al blog</a></p>
+      <h1 class="riso-title riso-title--article" data-text="Asistente de IA para WhatsApp: qué hace y qué no">Asistente de IA para WhatsApp: qué hace y qué no</h1>
+      <p class="article-meta"><time datetime="2026-10-03">3 de octubre de 2026</time> · 4 min de lectura</p>
+      <p class="hero-text">Responde como alguien de tu negocio, de día y de noche. Acá te cuento qué puede hacer, qué no, y cómo saber si te conviene.</p>
+    </header>
+
+    <article class="legal article-body" aria-labelledby="article-title-hidden">
+      <h2 id="article-title-hidden" class="sr-only">Asistente de IA para WhatsApp: qué hace y qué no</h2>
+      <p>Muchos mensajes de WhatsApp se repiten: cuánto sale, a qué hora abren, si hacen envíos, si queda talle. Si tardás en contestar, el cliente le escribe a otro. Un asistente de IA atiende esas consultas al instante, las 24 horas, con la información de tu negocio.</p>
+
+      <h2>Qué hace</h2>
+      <ul>
+        <li><strong>Responde</strong> precios, horarios y preguntas frecuentes, con lo que vos le cargás de tu negocio.</li>
+        <li><strong>Toma pedidos y reservas</strong> y <strong>da turnos</strong>.</li>
+        <li><strong>Habla con naturalidad</strong>, como una persona de tu negocio, no como un menú de opciones.</li>
+      </ul>
+
+      <h2>Cuándo le pasa la charla a una persona</h2>
+      <p>Si una venta o un pedido no se puede cerrar (un pedido por cantidad, un reclamo, algo fuera de lo habitual), le pasa la charla a tu equipo o a tu WhatsApp empresarial para que la terminen ustedes. Las decisiones importantes, como devoluciones, reclamos o pagos fuera de lo habitual, siempre las toma una persona.</p>
+
+      <h2>¿Los clientes se dan cuenta?</h2>
+      <p>Habla con naturalidad y no anda aclarando que es un programa. Pero si un cliente le pregunta directamente, no le miente.</p>
+
+      <h2>Lo que conviene saber</h2>
+      <ul>
+        <li>Funciona con servicios de inteligencia artificial de terceros y <strong>puede equivocarse</strong>. Sobre todo al principio, conviene revisar lo que responde y avisar cualquier error para corregirlo.</li>
+        <li>Sabe lo que le cargás: si cambian tus precios o tus horarios, hay que actualizarlo.</li>
+        <li>No reemplaza a tu equipo en lo importante: lo libera de lo repetitivo.</li>
+      </ul>
+
+      <h2>Qué es tuyo</h2>
+      <p>El asistente es un servicio que usás mientras tengas el plan, como un abono. Lo que sí es tuyo es tu número de WhatsApp, la información de tu negocio y las conversaciones con tus clientes; si algún día lo das de baja, te las entrego.</p>
+
+      <h2>Cuánto cuesta</h2>
+      <p>Depende de cuántas personas te escriben por mes. La instalación va incluida:</p>
+      <ul>
+        <li>Hasta 200 personas: <strong>USD 39 por mes</strong>.</li>
+        <li>Hasta 800 personas: <strong>USD 79 por mes</strong>.</li>
+        <li>Hasta 2.500 personas: <strong>USD 149 por mes</strong>.</li>
+      </ul>
+      <p>No tiene permanencia mínima: lo podés cancelar cuando quieras, avisando con 30 días. Si WhatsApp (Meta) cobra algún tipo de mensaje del asistente, ese costo va aparte y te lo explico antes.</p>
+
+      <h2>¿Te conviene?</h2>
+      <p>Probablemente sí, si recibís muchas consultas repetidas, si te escriben fuera de horario o si alguna vez perdiste una venta por tardar en contestar.</p>
+    </article>
+
+    <section class="closing" aria-labelledby="cierre-title">
+      <div>
+        <h2 id="cierre-title" class="display">Asistente desde USD 39/mes</h2>
+        <p>Mové la barra en «Armá tu precio» y mirá qué plan te conviene según cuántas personas te escriben.</p>
+      </div>
+      <a class="btn btn-pink" href="index.html#precio" data-magnetic>Armá tu precio</a>
+    </section>
+  </main>
+
+  <footer class="colophon">
+    <p class="colophon-word" aria-hidden="true">TARS</p>
+    <div class="colophon-cols">
+      <div>
+        <p class="colophon-brand">Tars</p>
+        <p>Webs a medida y asistente de IA para negocios. Hecho en Mendoza.</p>
+      </div>
+      <div>
+        <h2>Contacto</h2>
+        <p><a href="mailto:contacto@tars.com.ar">contacto@tars.com.ar</a></p>
+      </div>
+      <div>
+        <h2>Enlaces</h2>
+        <p><a href="index.html">Inicio</a></p>
+        <p><a href="servicios.html">Servicios y precios</a></p>
+        <p><a href="contacto.html">Contacto</a></p>
+      </div>
+    </div>
+    <p class="colophon-copy">© 2026 Tars. Todos los derechos reservados. · <a href="privacidad.html">Política de privacidad</a> · <a href="terminos.html">Términos y condiciones</a> · <a href="contrato.html">Contrato modelo</a> · <a class="regret" href="terminos.html#arrepentimiento">Botón de arrepentimiento</a></p>
+  </footer>
+
+  <a class="wa-stamp" href="https://wa.me/5492612408064" target="_blank" rel="noopener noreferrer" aria-label="Chat por WhatsApp">WhatsApp</a>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
