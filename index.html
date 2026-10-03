@@ -463,6 +463,13 @@
     #preguntas > .lead { grid-column: 1; max-width: 30ch; }
     #preguntas .faq { grid-column: 2; grid-row: 1 / span 2; margin-top: 0; max-width: none; }
   }
+  /* Abrir/cerrar suave (donde el navegador lo soporta; si no, abre como siempre) */
+  @supports (interpolate-size: allow-keywords) {
+    .faq details { interpolate-size: allow-keywords; }
+    .faq details::details-content { height: 0; overflow: clip; opacity: 0; transition: height 280ms var(--ease-out), opacity 220ms var(--ease-out), content-visibility 280ms allow-discrete; }
+    .faq details[open]::details-content { height: auto; opacity: 1; }
+    @media (prefers-reduced-motion: reduce) { .faq details::details-content { transition: none; } }
+  }
   .faq details p a { color: var(--fg); font-weight: 700; text-decoration-color: var(--pink); text-underline-offset: 4px; }
   .faq details p { padding: 0 0 26px; max-width: 64ch; color: var(--muted); font: 500 18px/1.6 'LF', system-ui, 'Segoe UI', Roboto, sans-serif; }
 
