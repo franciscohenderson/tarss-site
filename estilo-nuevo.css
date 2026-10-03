@@ -225,3 +225,9 @@ input:not([type="checkbox"]):not([type="radio"]), textarea, select { border-radi
 @media (max-width: 860px) { .tips, .tips:not(:has(.note:nth-of-type(3))) { grid-template-columns: minmax(0, 1fr); } }
 .tips .note { grid-column: auto; display: flex; flex-direction: column; gap: 0.4rem; }
 .tips .note p:last-child:has(a) { margin-top: auto; padding-top: 0.6rem; }
+
+/* --- Pantallas grandes: el contenido no pasa de 1400 px y queda centrado
+       (riso.css usa --gutter también para separaciones, por eso no se toca). */
+@media (min-width: 1500px) {
+  main > section, main > header, .colophon { padding-inline: max(var(--gutter), calc((100% - 1400px) / 2)) !important; }
+}
