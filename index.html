@@ -147,6 +147,8 @@
     --pink: #ff48b0;
     --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
     --ease-io: cubic-bezier(0.77, 0, 0.175, 1);
+    /* Resorte real (k 210, c 22: rebote 2,6 %) muestreado en linear(). */
+    --spring: linear(0, 0.034, 0.116, 0.226, 0.347, 0.467, 0.579, 0.679, 0.764, 0.835, 0.892, 0.936, 0.969, 0.993, 1.008, 1.018, 1.024, 1.026, 1.025, 1.023, 1.021, 1.018, 1.015, 1.012, 1.009, 1.007, 1.005, 1.003, 1);
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -513,6 +515,34 @@
   .item input { background: rgb(255 255 255 / 0.14); }
   .total { box-shadow: 0 1px 0 rgb(255 255 255 / 0.6) inset, 0 30px 80px rgb(0 0 0 / 0.45); }
 
+  /* ===== Fase 2: movimiento y toque =====
+     Presión: «scale» (no transform) para no pisar el imán («translate»). */
+  .btn { transition: scale 160ms var(--ease-out), translate 240ms var(--spring), box-shadow 220ms var(--ease-out), background-color 200ms var(--ease-out); }
+  .btn:active { transform: none; scale: 0.97; }
+  .chooser button:active, .wd:active { transform: none; scale: 0.96; }
+  .web, .item { transition: scale 160ms var(--ease-out), box-shadow 200ms var(--ease-out), background-color 200ms var(--ease-out); }
+  .web:active, .item:active { scale: 0.98; }
+  .item input { transition: background-color 200ms var(--ease-out), scale 160ms var(--ease-out); }
+  .item:active input { scale: 0.94; }
+  .item input::after { transition: transform 320ms var(--spring); }
+  .reach input[type="range"]:active { cursor: grabbing; }
+
+  /* Brillo magnético en los botones de acción (solo con mouse) */
+  @media (hover: hover) and (pointer: fine) {
+    .btn:not(.btn--ghost) { background-image: radial-gradient(140px circle at var(--gx, 50%) var(--gy, 50%), rgb(255 255 255 / 0.32), rgb(255 255 255 / 0) 60%); background-size: 100% 100%; background-repeat: no-repeat; }
+    .btn:not(.btn--ghost):hover { box-shadow: 0 10px 30px -6px rgb(255 72 176 / 0.55); }
+    .total .btn:hover, .dock .btn:hover { box-shadow: 0 10px 30px -8px rgb(0 0 0 / 0.5); }
+  }
+
+  /* Entradas al hacer scroll: suben 14 px y aparecen (solo lo que está abajo) */
+  .rv { opacity: 0; translate: 0 14px; }
+  .rv.is-in { opacity: 1; translate: 0 0; transition: opacity 360ms var(--ease-out), translate 420ms var(--spring); transition-delay: var(--rd, 0ms); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rv { opacity: 1; translate: none; }
+    .btn, .web, .item { transition-duration: 0ms; }
+  }
+
   /* Sin backdrop-filter (navegadores viejos): superficie sólida, igual de legible */
   @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
     .web, .reach, .item, .msg.in { background: var(--bg2); }
@@ -872,6 +902,39 @@
     if (entry.isIntersecting) { entry.target.classList.add('is-in'); io.unobserve(entry.target); }
   }), { threshold: 0.35 });
   document.querySelectorAll('.tile').forEach((t) => io.observe(t));
+
+  /* Entradas al hacer scroll (Fase 2): solo lo que todavía está abajo de la
+     pantalla, así nada parpadea al cargar. Títulos primero, después el resto. */
+  if (!reduce) {
+    const revealIO = new IntersectionObserver((entries) => entries.forEach((entry) => {
+      if (entry.isIntersecting) { entry.target.classList.add('is-in'); revealIO.unobserve(entry.target); }
+    }), { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+    document.querySelectorAll('.sec').forEach((sec) => {
+      [...sec.querySelectorAll(':scope > h2, :scope > .lead, :scope > .bento, :scope > .builder, :scope > .faq, :scope > .row')].forEach((el, i) => {
+        if (el.getBoundingClientRect().top < innerHeight) return;
+        el.classList.add('rv');
+        el.style.setProperty('--rd', Math.min(i, 3) * 60 + 'ms');
+        revealIO.observe(el);
+      });
+    });
+  }
+
+  /* Brillo magnético (Fase 2): el brillo sigue al mouse y el botón se
+     acerca hasta 3 px. Solo con mouse y sin «reducir movimiento». */
+  if (!reduce && matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    document.querySelectorAll('.btn:not(.btn--ghost)').forEach((btn) => {
+      btn.addEventListener('pointermove', (e) => {
+        const r = btn.getBoundingClientRect();
+        const x = e.clientX - r.left, y = e.clientY - r.top;
+        btn.style.setProperty('--gx', x + 'px');
+        btn.style.setProperty('--gy', y + 'px');
+        // Desplazamiento proporcional a la distancia al centro, con tope de 3 px.
+        const dx = (x / r.width - 0.5) * 6, dy = (y / r.height - 0.5) * 6;
+        btn.style.translate = `${dx.toFixed(1)}px ${dy.toFixed(1)}px`;
+      });
+      btn.addEventListener('pointerleave', () => { btn.style.translate = ''; });
+    });
+  }
   // Pantalla del celular del mosaico.
   const mini = document.querySelector('.t-phone .proof-screen');
   mini.innerHTML = KINDS.restaurante.screen('Brasa &amp; Vid');
