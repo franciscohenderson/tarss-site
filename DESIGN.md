@@ -1,38 +1,35 @@
-# Tars — Constitución de diseño: «Imprenta Riso»
+# Tars — Constitución de diseño (2026-10)
 
-La web es un **cartel de imprenta risográfica** pegado en una pared de Mendoza: tintas planas que se pisan, registro imperfecto, tipografía gigante como estructura. A eso se suma una **máquina registradora** (el cotizador) como pieza central táctil.
+Reemplaza a «Imprenta Riso». La web es **oscura, precisa y táctil**: profundidad con capas y bordes finísimos (Linear), materiales y respuesta al toque (Apple / iOS), un solo acento rosa. La personalidad la ponen la tipografía condensada gigante y las fotos de rubros, no la decoración.
 
-## Paleta (tintas reales de risografía)
-| Token | Hex | Uso |
+## Paleta
+| Token | Valor | Uso |
 |---|---|---|
-| `--paper` | `#F1ECE2` | Papel. Fondo del modo claro; texto del modo oscuro. |
-| `--ink` | `#141414` | Tinta negra. Fondo del modo oscuro (por defecto); texto del modo claro. |
-| `--pink` | `#FF48B0` | Rosa fluo. Capa de registro, acento principal, afiches. |
-| `--blue` | `#0078BF` | Azul medio. Capa de registro y afiches. **Solo tamaños grandes** (3.9–4.0:1). |
-| `--yellow` | `#FFE800` | Amarillo. Cinta, sellos, ticket. Siempre con tinta encima. |
-| `--accent` | rosa fluo (oscuro) / `#C8006A` (claro) | Rosa como **texto, línea o foco**. Sobre papel el fluo da 2.62:1 y no pasa ni en títulos grandes; la «tinta rosa» `#C8006A` da 4.87:1. Los rellenos siguen en fluo. |
-
-Reglas de contraste: texto de lectura solo tinta↔papel, tinta sobre rosa (6:1) o tinta sobre amarillo (14.7:1). El azul nunca lleva texto chico ni va como texto chico.
-En el tema claro, todo lo que es papel sobre papel (afiche «PLAN», ticket, notas) o amarillo sobre papel (cinta, sellos) lleva un filo de tinta para no desaparecer.
-Las capas decorativas (`::before/::after` con `data-text`) usan `content: attr(data-text) / ""` para que el lector de pantalla no las lea tres veces.
-Mezcla de capas: `multiply` sobre papel, `screen` sobre tinta (así se comporta la tinta riso real sobre papel claro u oscuro).
+| `--bg` | `#09090b` (zinc-950) | Fondo. Nunca negro puro. |
+| `--bg2` | `#141417` | Superficies (mosaicos, tarjetas). |
+| `--fg` | `#f3efe7` | Texto principal (blanco cálido, no `#fff`). |
+| `--muted` | `#a7a29a` | Texto secundario (≥ 7:1 sobre `--bg`). |
+| `--pink` | `#ff48b0` | **Único acento**: CTA, foco, estados activos, precios destacados. |
+| `--line` | `rgb(255 255 255 / 0.07)` | Bordes y separadores (hairline 1 px). |
+| `--glass` | `rgb(255 255 255 / 0.045)` + blur | Vidrio: solo chat del asistente y calculadora. |
 
 ## Tipografía
-- **Big Shoulders Display** (variable 100–900): títulos, palabras-afiche, precios. Mayúsculas, condensada, gigante, a sangre. Interlineado 0.82–0.9.
-- **Libre Franklin** (variable): texto, botones, formularios. 1rem–1.25rem, interlineado 1.55, medida 60–68ch.
-- Números del ticket: Libre Franklin con `tabular-nums` (es dato real, no disfraz).
+- **Big Shoulders Display** (900): títulos, mayúsculas, tracking −0.01 em, interlineado 0.88–0.95.
+- **Libre Franklin**: todo lo demás. Cuerpo 16–20 px, interlineado 1.5. Títulos de tarjeta con tracking −0.03 em.
+- Siempre con respaldo (`'Arial Narrow'`, `system-ui`): con `font-display: optional` a veces no llegan.
 
-## Estructura
-- **Margen de impresión**: menú vertical fijo a la izquierda (escritorio) con marcas de registro; en celular, tira superior + menú a pantalla completa.
-- **Grilla rota**: títulos que se salen del contenedor, sellos rotados en los márgenes, bloques que se pisan. Nada de filas de tarjetas iguales.
-- **Afiches**: cada servicio es una hoja a pantalla completa que se fija (`sticky`) y la siguiente la tapa al scrollear.
-- **Ticket**: el cotizador es una registradora; el ticket queda fijo mientras se arma el presupuesto y un talón flotante lo recuerda al alejarse.
+## Superficies y profundidad
+- Tarjeta: `--bg2`, radio 20–26 px, borde `--line`, brillo superior `inset 0 1px 0 rgb(255 255 255 / .06)`.
+- Vidrio (iOS): fondo `--glass`, `backdrop-filter: blur(18px) saturate(160%)`, borde `--line`, brillo superior. Necesita color detrás (resplandores suaves rosa/verde), si no, no se nota. Nunca vidrio dentro de vidrio.
+- Separación entre secciones: filete `--line`, mucho aire.
 
 ## Movimiento
-- Firma: **desregistro riso**. Las capas rosa y azul se separan siguiendo el cursor (en celular, la velocidad del scroll) con física de resorte y vuelven a registrar.
-- Teclas y botones con resorte (rebote corto); botones magnéticos solo con mouse.
-- Contador del ticket con dígitos que giran (curva de resorte `linear()`), escalonados de derecha a izquierda.
-- Sin animaciones infinitas decorativas. Con «reducir movimiento»: capas quietas con un desregistro fijo de 3px, dígitos sin giro.
+- Curvas: `--ease-out cubic-bezier(.23,1,.32,1)`; resortes con `linear()` para lo táctil.
+- Micro: 120–250 ms. Entradas: ≤ 500 ms. Nada lineal ni `ease-in-out` genérico.
+- Toque: `:active { scale: .97 }` en botones, teclas y opciones.
+- Siempre respetar `prefers-reduced-motion`.
 
-## Prohibido en este mundo
-Degradados en texto, halos de color, glassmorphism, tarjetas iguales en fila, emojis como íconos, etiquetas sobre los títulos, sombras suaves genéricas. Sí se permite la sombra dura desplazada **solo** en teclas de la registradora (es la profundidad física de la tecla).
+## Reglas
+- Un solo acento (rosa). El verde solo para los mensajes de WhatsApp.
+- Texto sobre vidrio o foto: contraste AA verificado.
+- Sin librerías de animación: CSS + Web Animations API alcanzan (0 KB).

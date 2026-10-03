@@ -18,7 +18,7 @@
   })(window,document,'script','dataLayer','GTM-WKXQ88DT');</script>
   <!-- End Google Tag Manager -->
   <meta name="description" content="Webs a medida para negocios de Mendoza, con un asistente de IA que atiende tu WhatsApp. Elegí tu rubro, mirá cómo puede quedar la tuya y armá tu precio." />
-  <meta name="theme-color" content="#0e0e10" />
+  <meta name="theme-color" content="#09090b" />
   <link rel="canonical" href="https://tars.com.ar/" />
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -134,11 +134,16 @@
      de su negocio y ve solo lo suyo (nada de recorridos obligatorios). Lo
      que elige adapta el resto de la página: textos, precio y WhatsApp. */
   :root {
-    --bg: #0e0e10;
-    --bg2: #17171a;
+    /* Sistema 2026-10 (DESIGN.md): zinc profundo, bordes de un pelo, vidrio. */
+    --bg: #09090b;
+    --bg2: #141417;
     --fg: #f3efe7;
     --muted: #a7a29a;
-    --line: rgb(243 239 231 / 0.14);
+    --line: rgb(255 255 255 / 0.07);
+    --line-strong: rgb(255 255 255 / 0.14);
+    --glass: rgb(255 255 255 / 0.045);
+    --glass-edge: inset 0 0 0 1px rgb(255 255 255 / 0.08), inset 0 1px 0 rgb(255 255 255 / 0.10);
+    --glass-blur: blur(18px) saturate(160%);
     --pink: #ff48b0;
     --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
     --ease-io: cubic-bezier(0.77, 0, 0.175, 1);
@@ -457,6 +462,61 @@
   footer .legal .regret { color: var(--pink); font-weight: 700; }
   .total .note a { color: inherit; font-weight: 700; }
   footer { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding: 28px max(clamp(16px, 6vw, 96px), calc((100% - 1400px) / 2)); border-top: 1px solid var(--line); color: var(--muted); font: 500 13px 'LF', system-ui, 'Segoe UI', Roboto, sans-serif; }
+
+  /* ===== Sistema 2026-10: profundidad tipo Linear + vidrio tipo iOS =====
+     (ver DESIGN.md). Va antes de las reglas de celular para que estas manden. */
+  .bar { background: rgb(9 9 11 / 0.72); -webkit-backdrop-filter: saturate(180%) blur(16px); backdrop-filter: saturate(180%) blur(16px); }
+  .btn--ghost { box-shadow: inset 0 0 0 1.5px var(--line-strong); }
+
+  /* Títulos: tracking negativo sutil, interlineado apretado */
+  .sec > h2 { letter-spacing: -0.012em; line-height: 0.9; }
+  .inside h1, .inside h2 { letter-spacing: -0.012em; }
+
+  /* Secciones separadas por un filete de un pelo */
+  .sec + .sec { border-top: 1px solid var(--line); }
+
+  /* Mosaicos: borde finísimo y brillo arriba (profundidad sin sombra pesada) */
+  .tile { box-shadow: inset 0 0 0 1px var(--line), inset 0 1px 0 rgb(255 255 255 / 0.05); }
+  .t-me { box-shadow: none; }
+  .wd { background: rgb(255 255 255 / 0.05); box-shadow: inset 0 0 0 1px var(--line); }
+  .daycard { background: rgb(255 255 255 / 0.03); box-shadow: inset 0 0 0 1px var(--line); }
+
+  /* --- Vidrio 1: chat del asistente (burbujas tipo iOS) ---
+     El vidrio necesita color detrás: dos resplandores (verde WhatsApp y rosa). */
+  .t-chat {
+    background:
+      radial-gradient(55% 65% at 88% 22%, rgb(28 140 92 / 0.32), rgb(28 140 92 / 0) 70%),
+      radial-gradient(45% 55% at 58% 95%, rgb(255 72 176 / 0.20), rgb(255 72 176 / 0) 70%),
+      var(--bg2);
+  }
+  .msg.in { background: rgb(255 255 255 / 0.075); box-shadow: var(--glass-edge); }
+  .msg.out { background: rgb(22 110 76 / 0.55); color: #ecfff5; box-shadow: inset 0 0 0 1px rgb(159 230 196 / 0.18), inset 0 1px 0 rgb(255 255 255 / 0.12); }
+  .msg, .handoff { -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur); }
+  .handoff { background: rgb(255 72 176 / 0.08); }
+
+  /* --- Vidrio 2: calculadora «Armá tu precio» --- */
+  #precio {
+    background:
+      radial-gradient(38% 42% at 82% 28%, rgb(255 72 176 / 0.10), rgb(255 72 176 / 0) 70%),
+      radial-gradient(34% 40% at 12% 78%, rgb(243 239 231 / 0.05), rgb(243 239 231 / 0) 70%);
+  }
+  .web, .reach, .item {
+    background: var(--glass);
+    -webkit-backdrop-filter: var(--glass-blur);
+    backdrop-filter: var(--glass-blur);
+    box-shadow: var(--glass-edge);
+  }
+  .web:has(input:checked), .item:has(input:checked) {
+    background: rgb(255 72 176 / 0.09);
+    box-shadow: inset 0 0 0 1.5px var(--pink), inset 0 1px 0 rgb(255 255 255 / 0.10), 0 12px 32px rgb(255 72 176 / 0.12);
+  }
+  .item input { background: rgb(255 255 255 / 0.14); }
+  .total { box-shadow: 0 1px 0 rgb(255 255 255 / 0.6) inset, 0 30px 80px rgb(0 0 0 / 0.45); }
+
+  /* Sin backdrop-filter (navegadores viejos): superficie sólida, igual de legible */
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .web, .reach, .item, .msg.in { background: var(--bg2); }
+  }
 
   /* ===== Celular: los paneles se apilan; se abre uno por vez ===== */
   @media (max-width: 860px) {
