@@ -162,7 +162,7 @@ test.describe('acciones del ticket', () => {
   });
 
   test('sin la API de pagos, el botón «Pagar» no aparece', async ({ page }) => {
-    await page.goto('/index.html');
+    await page.goto('/servicios.html');
     await page.locator('#ticket-form input[data-service="landing"]').check({ force: true });
     await page.waitForTimeout(300);
     await expect(page.locator('#ticket-pay')).toBeHidden();
@@ -175,7 +175,7 @@ test.describe('acciones del ticket', () => {
       expect(body).toEqual({ services: ['landing'] }); // el navegador solo manda ids
       return route.fulfill({ json: { id: 'mock_1', checkout_url: '/gracias.html?pago=simulado', mock: true, mode: 'mock' } });
     });
-    await page.goto('/index.html');
+    await page.goto('/servicios.html');
     const pay = page.locator('#ticket-pay');
 
     await page.locator('#ticket-form input[data-service="mantenimiento"]').check({ force: true });
@@ -193,7 +193,7 @@ test.describe('acciones del ticket', () => {
     await page.route('**/api/payment-link', (route) => route.request().method() === 'GET'
       ? route.fulfill({ json: { enabled: true, mode: 'sandbox' } })
       : route.fulfill({ status: 502, json: { error: 'No se pudo generar el link de pago.' } }));
-    await page.goto('/index.html');
+    await page.goto('/servicios.html');
     await page.locator('#ticket-form input[data-service="landing"]').check({ force: true });
     const pay = page.locator('#ticket-pay');
     await pay.click();

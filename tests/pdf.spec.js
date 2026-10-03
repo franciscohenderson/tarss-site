@@ -28,7 +28,7 @@ test.describe('pdf.js (sin navegador)', () => {
 test.describe('acciones del ticket en el navegador', () => {
   test('aparecen cuando carga su módulo', async ({ page }) => {
     await page.route(/^https?:\/\/(?!localhost)/, (route) => route.abort());
-    await page.goto('/index.html');
+    await page.goto('/servicios.html');
     await expect(page.locator('#ticket-actions')).toBeVisible();
     await expect(page.locator('#ticket-pdf')).toBeDisabled(); // ticket vacío
   });
@@ -37,7 +37,7 @@ test.describe('acciones del ticket en el navegador', () => {
     const context = await browser.newContext({ javaScriptEnabled: false });
     const page = await context.newPage();
     await page.route(/^https?:\/\/(?!localhost)/, (route) => route.abort());
-    await page.goto('/index.html');
+    await page.goto('/servicios.html');
     await expect(page.locator('#ticket-actions')).toBeHidden();
     await context.close();
   });

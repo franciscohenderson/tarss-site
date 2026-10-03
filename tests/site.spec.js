@@ -2,7 +2,7 @@
 const { test, expect } = require('@playwright/test');
 
 const PAGES = [
-  { path: '/index.html', h1: /Ayudo a tu negocio/ },
+  { path: '/index.html', h1: /Webs para/ },
   { path: '/servicios.html' },
   { path: '/contacto.html', h1: 'Contacto' },
   { path: '/blog.html' },
@@ -69,7 +69,7 @@ test.describe('Navegación', () => {
 
   test('el menú hamburguesa abre y cierra en mobile', async ({ page, isMobile }) => {
     test.skip(!isMobile, 'el botón solo se muestra en pantallas chicas');
-    await page.goto('/index.html');
+    await page.goto('/servicios.html');
 
     const toggle = page.locator('.nav-toggle');
     const links = page.locator('#primary-navigation');
@@ -89,7 +89,7 @@ test.describe('Navegación', () => {
 
 test.describe('Modo oscuro', () => {
   test('el botón cambia el tema y se recuerda entre páginas', async ({ page }) => {
-    await page.goto('/index.html');
+    await page.goto('/servicios.html');
     const html = page.locator('html');
     const toggle = page.locator('.theme-toggle');
 
