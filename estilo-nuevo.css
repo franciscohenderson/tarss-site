@@ -229,7 +229,7 @@ input:not([type="checkbox"]):not([type="radio"]), textarea, select { border-radi
 /* --- Pantallas grandes: el contenido no pasa de 1400 px y queda centrado
        (riso.css usa --gutter también para separaciones, por eso no se toca). */
 @media (min-width: 1500px) {
-  main > section, main > header, .colophon { padding-inline: max(var(--gutter), calc((100% - 1400px) / 2)) !important; }
+  main > section, main > header:not(.page-hero--article), .colophon { padding-inline: max(var(--gutter), calc((100% - 1400px) / 2)) !important; }
 }
 
 /* --- Contacto: canales con filetes finos y etiqueta centrada al valor ----- */
@@ -237,3 +237,17 @@ input:not([type="checkbox"]):not([type="radio"]), textarea, select { border-radi
 .channels li { align-items: center; border-bottom: 1px solid var(--line); }
 .channels a { font-size: clamp(2rem, 4.2vw, 3.6rem); transition: color 160ms ease-out; }
 @media (hover: hover) { .channels a:hover { color: var(--accent); } }
+
+/* --- Menú: la página actual en rosa liso (sin la sombra azul de imprenta) - */
+.margin-links a[aria-current="page"] { text-shadow: none !important; }
+@media (max-width: 860px) { .margin-links a[aria-current="page"] { color: var(--accent); } }
+
+/* --- Artículos del blog: columna de lectura centrada (~70 caracteres) ---- */
+.page-hero--article,
+.legal.article-body { box-sizing: content-box; max-width: 44rem; margin-inline: auto; }
+.page-hero--article { border-bottom: 0 !important; padding-bottom: 1rem; }
+.page-hero--article .hero-text { max-width: none; }
+.legal.article-body { padding-top: 2.5rem; font-size: 1.15rem; line-height: 1.7; }
+.article-body h2 { margin-top: 3.2rem; }
+.article-body ul li::marker { color: var(--accent); }
+.riso-title.riso-title--article { max-width: none; font-size: clamp(2.4rem, 4.4vw, 4.2rem); line-height: 0.98; }
