@@ -2,7 +2,7 @@
    Se carga solo en páginas con #ticket-form (import dinámico desde main.js). */
 
 import { WHATSAPP_NUMBER, prefersReducedMotion } from '../lib/env.js';
-import { createQuote, priceLabel, buildWhatsAppUrl, quoteAnalytics } from '../lib/quote.js';
+import { createQuote, priceLabel, buildWhatsAppUrl, quoteAnalytics } from '../lib/quote.js?v=20261003b';
 import { trackEvent } from '../lib/track.js';
 
 /* --- 6. Registradora ------------------------------------------------------
