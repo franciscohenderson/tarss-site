@@ -231,3 +231,9 @@ input:not([type="checkbox"]):not([type="radio"]), textarea, select { border-radi
 @media (min-width: 1500px) {
   main > section, main > header, .colophon { padding-inline: max(var(--gutter), calc((100% - 1400px) / 2)) !important; }
 }
+
+/* --- Contacto: canales con filetes finos y etiqueta centrada al valor ----- */
+.channels { border-top: 1px solid var(--line); }
+.channels li { align-items: center; border-bottom: 1px solid var(--line); }
+.channels a { font-size: clamp(2rem, 4.2vw, 3.6rem); transition: color 160ms ease-out; }
+@media (hover: hover) { .channels a:hover { color: var(--accent); } }
