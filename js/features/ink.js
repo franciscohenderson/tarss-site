@@ -82,7 +82,8 @@ function compile(gl, type, source) {
 
 export function initInk() {
   const canvas = document.querySelector('.hero-ink');
-  const hero = canvas?.closest('.hero');
+  // El contenedor que recibe el mouse y da el tamaño: el que lo declare, o el hero.
+  const hero = canvas?.closest('[data-ink-host], .hero');
   if (!canvas || !hero) return;
   const gl = canvas.getContext('webgl', { antialias: false, alpha: false, powerPreference: 'low-power' });
   if (!gl) return;

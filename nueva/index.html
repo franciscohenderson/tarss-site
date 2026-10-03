@@ -84,6 +84,50 @@
   .muestra { position: absolute; z-index: 3; top: 18px; right: 20px; padding: 6px 10px; border-radius: 999px; background: rgb(8 8 10 / 0.6); color: #cfc9be; font: 700 10px 'LF'; letter-spacing: 0.14em; text-transform: uppercase; opacity: 0; transition: opacity 300ms var(--ease-out); }
   .panel.is-open .muestra { opacity: 1; }
 
+  /* Tinta viva (js/features/ink.js) dentro del panel de inicio. */
+  .hero-ink { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; mix-blend-mode: screen; opacity: 0; transition: opacity 700ms var(--ease-out); pointer-events: none; }
+  .hero-ink.is-on { opacity: 1; }
+
+  /* Entrada: los paneles suben uno tras otro (una sola vez por carga). */
+  @keyframes rise { from { opacity: 0; transform: translateY(26px); } }
+  @keyframes panel-in { from { opacity: 0; transform: translateY(60px) scale(0.98); } }
+  @media (prefers-reduced-motion: no-preference) {
+    .panel { animation: panel-in 900ms var(--ease-out) backwards; }
+    .panel:nth-child(2) { animation-delay: 70ms; }
+    .panel:nth-child(3) { animation-delay: 140ms; }
+    .panel:nth-child(4) { animation-delay: 210ms; }
+    .panel:nth-child(5) { animation-delay: 280ms; }
+    /* Al abrir: título, texto y botones suben escalonados. */
+    .panel.is-open .inside > div > * { animation: rise 700ms var(--ease-out) backwards; }
+    .panel.is-open .inside > div > :nth-child(1) { animation-delay: 260ms; }
+    .panel.is-open .inside > div > :nth-child(2) { animation-delay: 340ms; }
+    .panel.is-open .inside > div > :nth-child(3) { animation-delay: 420ms; }
+  }
+  /* El celular de muestra se inclina en 3D siguiendo al mouse. */
+  .inside { perspective: 1200px; }
+  .panel.is-open .inside .mock { transform: rotateY(var(--my, -10deg)) rotateX(var(--mx, 4deg)) rotate(3deg); }
+
+  /* Cursor propio: dice qué pasa si hacés clic. */
+  .cursor { position: fixed; z-index: 90; left: 0; top: 0; display: grid; place-items: center; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; background: var(--pink); pointer-events: none; translate: var(--cx, -100px) var(--cy, -100px); transition: width 280ms var(--ease-out), height 280ms var(--ease-out), margin 280ms var(--ease-out), background-color 200ms var(--ease-out); }
+  .cursor span { font: 900 13px 'BSD'; letter-spacing: 0.14em; color: #120a10; opacity: 0; transition: opacity 180ms var(--ease-out); }
+  .cursor[data-label]:not([data-label=""]) { width: 78px; height: 78px; margin: -39px 0 0 -39px; }
+  .cursor[data-label]:not([data-label=""]) span { opacity: 1; }
+  .cursor[data-mode="link"] { width: 38px; height: 38px; margin: -19px 0 0 -19px; background: rgb(255 72 176 / 0.35); }
+  @media (hover: none), (pointer: coarse) { .cursor { display: none; } }
+
+  /* Grano de papel, muy sutil, encima de todo. */
+  body::after { content: ""; position: fixed; inset: 0; z-index: 80; pointer-events: none; opacity: 0.07; mix-blend-mode: overlay; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+
+  /* Cinta de frases: corre con el scroll. */
+  .runs { overflow: hidden; padding: 4vh 0; border-block: 1px solid var(--line); }
+  .run { display: flex; align-items: center; gap: 0.4em; width: max-content; font: 900 clamp(56px, 9vw, 150px)/0.95 'BSD'; text-transform: uppercase; white-space: nowrap; transform: translateX(var(--x, 0px)); }
+  .run em { font-style: normal; color: transparent; -webkit-text-stroke: 1.5px var(--fg); }
+  .run i { flex: none; width: 0.3em; height: 0.3em; background: var(--pink); transform: rotate(45deg); }
+
+  /* «+ USD 80» que salta junto al total al prender un servicio. */
+  .total { position: relative; }
+  .bump { position: absolute; right: 30px; top: 40px; font: 900 34px 'BSD'; color: var(--pink); pointer-events: none; }
+
   /* ===== Secciones ===== */
   .sec { padding: clamp(80px, 13vh, 150px) clamp(16px, 6vw, 96px); }
   .sec > h2 { max-width: 16ch; font: 900 clamp(48px, 7vw, 116px)/0.88 'BSD'; text-transform: uppercase; text-wrap: balance; }
@@ -154,6 +198,7 @@
 
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { transition-duration: 0ms !important; }
+    .run { transform: none; }
   }
 </style>
 </head>
@@ -163,9 +208,14 @@
     <nav aria-label="Secciones"><a href="#que">Qué te llevás</a><a href="#precio">Precio</a><a href="#preguntas">Preguntas</a></nav>
     <a class="btn" id="bar-wa" href="https://wa.me/5492612408064" target="_blank" rel="noopener">WhatsApp</a>
   </header>
+  <div class="cursor" aria-hidden="true"><span></span></div>
 
   <main>
     <section class="hero" aria-label="Elegí tu negocio"></section>
+
+    <div class="runs" aria-hidden="true">
+      <div class="run" data-speed="-0.45"><span>Webs que venden</span><i></i><em>Hechas a mano</em><i></i><span>Mendoza</span><i></i><em>Desde USD 149</em><i></i><span>Propuesta en 24 h</span><i></i><em>Webs que venden</em></div>
+    </div>
 
     <section class="sec" id="que">
       <h2>Lo que <em>te llevás</em></h2>
@@ -237,7 +287,8 @@
     el.tabIndex = 0;
     el.setAttribute('aria-label', r.tab);
     if (r.kind === 'tars') {
-      el.innerHTML = `<p class="ghost" aria-hidden="true">TARS</p><p class="tab"><small>Inicio</small>Tars</p>
+      el.setAttribute('data-ink-host', '');
+      el.innerHTML = `<canvas class="hero-ink" aria-hidden="true"></canvas><p class="ghost" aria-hidden="true">TARS</p><p class="tab"><small>Inicio</small>Tars</p>
         <div class="inside"><div><h1>Webs para<br><em>tu negocio</em></h1><p>Diseño a medida en Mendoza. Elegí tu rubro y mirá cómo puede quedar la tuya.</p>
         <div class="chooser">${RUBROS.slice(1).map((x, j) => `<button type="button" data-go="${j + 1}">${x.tab}</button>`).join('')}</div></div></div>`;
     } else {
@@ -285,6 +336,58 @@
   });
   if (fine) hero.addEventListener('pointerleave', () => { const keep = state.rubro ? RUBROS.indexOf(state.rubro) : 0; open(keep, false); });
 
+  // Tinta viva en el panel de inicio (mismo módulo que el sitio publicado).
+  import('../js/features/ink.js').then((m) => m.initInk()).catch(() => {});
+
+  /* Celular de muestra que se inclina hacia el mouse. */
+  if (fine && !reduce) {
+    hero.addEventListener('pointermove', (e) => {
+      const panel = hero.querySelector('.panel.is-open');
+      const mock = panel?.querySelector('.mock');
+      if (!mock) return;
+      const r = panel.getBoundingClientRect();
+      mock.style.setProperty('--my', `${(((e.clientX - r.left) / r.width - 0.5) * -22).toFixed(2)}deg`);
+      mock.style.setProperty('--mx', `${(((e.clientY - r.top) / r.height - 0.5) * 14).toFixed(2)}deg`);
+    }, { passive: true });
+  }
+
+  /* Cursor propio: ABRIR sobre un panel cerrado, ELEGIR sobre el abierto. */
+  if (fine) {
+    const cursor = document.querySelector('.cursor');
+    const label = cursor.querySelector('span');
+    let cx = -100, cy = -100, x = -100, y = -100, raf = 0;
+    const loop = () => {
+      x += (cx - x) * 0.28; y += (cy - y) * 0.28;
+      cursor.style.setProperty('--cx', `${x.toFixed(1)}px`);
+      cursor.style.setProperty('--cy', `${y.toFixed(1)}px`);
+      raf = Math.abs(cx - x) + Math.abs(cy - y) > 0.3 ? requestAnimationFrame(loop) : 0;
+    };
+    addEventListener('pointermove', (e) => {
+      cx = e.clientX; cy = e.clientY;
+      const t = e.target;
+      const panel = t.closest?.('.panel');
+      let text = '';
+      if (t.closest?.('a, button, label, summary')) cursor.dataset.mode = 'link';
+      else {
+        cursor.dataset.mode = '';
+        if (panel && !panel.classList.contains('is-open')) text = 'ABRIR';
+        else if (panel && panel.dataset.kind !== 'tars') text = state.rubro?.kind === panel.dataset.kind ? 'ELEGIDO' : 'ELEGIR';
+      }
+      cursor.dataset.label = text;
+      label.textContent = text;
+      if (!raf) raf = requestAnimationFrame(loop);
+    }, { passive: true });
+  }
+
+  /* Cinta: el scroll la corre. */
+  const run = document.querySelector('.run');
+  if (!reduce) {
+    let frame = 0;
+    const move = () => { frame = 0; run.style.setProperty('--x', `${((innerHeight - run.getBoundingClientRect().top) * Number(run.dataset.speed) - 120).toFixed(1)}px`); };
+    addEventListener('scroll', () => { if (!frame) frame = requestAnimationFrame(move); }, { passive: true });
+    move();
+  }
+
   /* Lo que te llevás: el subrayado de tinta entra una vez. */
   const io = new IntersectionObserver((entries) => entries.forEach((entry) => {
     if (entry.isIntersecting) { entry.target.classList.add('is-in'); io.unobserve(entry.target); }
@@ -318,7 +421,20 @@
     const forWhat = state.rubro ? ` para mi ${state.rubro.label}` : '';
     pedido.href = WA + encodeURIComponent(`Hola Tars, quiero ${what}${forWhat}. Total: USD ${once}${month ? ` + USD ${month} por mes` : ''}.`);
   }
-  boxes.forEach((b) => b.addEventListener('change', updateTotal));
+  const totalBox = document.querySelector('.total');
+  boxes.forEach((b) => b.addEventListener('change', () => {
+    updateTotal();
+    if (!b.checked || reduce) return;
+    const bump = document.createElement('span');
+    bump.className = 'bump';
+    bump.textContent = b.dataset.month ? `+ USD ${b.dataset.month}/mes` : `+ USD ${b.dataset.price}`;
+    totalBox.append(bump);
+    bump.animate([
+      { opacity: 0, transform: 'translateY(10px) scale(0.9)' },
+      { opacity: 1, transform: 'translateY(-14px) scale(1)', offset: 0.35 },
+      { opacity: 0, transform: 'translateY(-46px) scale(1)' },
+    ], { duration: 900, easing: 'cubic-bezier(0.23, 1, 0.32, 1)' }).finished.then(() => bump.remove());
+  }));
   updateTotal();
   fit();
 </script>
