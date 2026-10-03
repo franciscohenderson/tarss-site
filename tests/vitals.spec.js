@@ -13,7 +13,7 @@ test.describe('Core Web Vitals', () => {
     // El módulo se carga solo después de load + momento ocioso.
     await expect.poll(() => page.evaluate(() =>
       performance.getEntriesByType('resource').some((r) => r.name.includes('web-vitals.attribution.js'))),
-    { timeout: 10000 }).toBe(true);
+    { timeout: 20000 }).toBe(true); // margen: la suite corre en paralelo con un test de celular lento
     await page.mouse.click(5, 300); // una interacción: cierra el LCP y da un INP
     await page.waitForTimeout(300);
     // Simula que la persona cambia de pestaña: ahí se reportan los valores finales.
@@ -57,5 +57,24 @@ test("el hero no salta aunque la fuente llegue tarde (CLS 0)", async ({ page, br
       setTimeout(() => resolve(total), 100);
     }));
     expect(cls).toBeLessThan(0.01);
+  });
+
+  test("en un celular lento, lo de abajo no salta cuando JS arma el hero (CLS < 0.05)", async ({ page, browserName }) => {
+    test.skip(browserName !== "chromium", "layout-shift y CDP son de Chromium");
+    // Con red lenta y el procesador 6 veces más lento, el primer pintado llega antes que
+    // los paneles (que arma JS). Sin el alto reservado del hero daba CLS 0,90.
+    await page.route(/^https?:\/\/(?!localhost)/, (route) => route.abort());
+    const cdp = await page.context().newCDPSession(page);
+    await cdp.send("Emulation.setCPUThrottlingRate", { rate: 6 });
+    await cdp.send("Network.enable");
+    await cdp.send("Network.emulateNetworkConditions", { offline: false, latency: 150, downloadThroughput: 200000, uploadThroughput: 100000 });
+    await page.addInitScript(() => {
+      window.__cls = 0;
+      new PerformanceObserver((list) => list.getEntries().forEach((e) => { if (!e.hadRecentInput) window.__cls += e.value; }))
+        .observe({ type: "layout-shift", buffered: true });
+    });
+    await page.goto("/index.html", { waitUntil: "load" });
+    await page.waitForTimeout(1500);
+    expect(await page.evaluate(() => window.__cls)).toBeLessThan(0.05);
   });
 });
