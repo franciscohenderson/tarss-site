@@ -229,6 +229,17 @@
   /* Entrada: los paneles suben uno tras otro (una sola vez por carga). */
   @keyframes rise { from { opacity: 0; transform: translateY(26px); } }
   @keyframes panel-in { from { opacity: 0; transform: translateY(60px) scale(0.98); } }
+  /* El panel de inicio viene en el HTML y es lo primero que se ve (LCP): se
+     pinta quieto, sin entrada. JS le saca .is-first cuando se abre otro. */
+  .panel.is-first, .panel.is-first .inside > div > * { animation: none !important; }
+  .panel.is-first .inside, .panel.is-first .ghost { transition: none; }
+  /* Escritorio, antes de que JS agregue los otros 4: el inicio ya ocupa el
+     ancho final (5,2 de 9,2 partes, descontando 4 huecos de 8 px), así no se
+     angosta cuando llegan (CLS 0). */
+  .panel.is-first { transition: none; }
+  @media (min-width: 861px) {
+    .panel.is-first:only-child { flex: 0 0 calc((100% - 32px) * 5.2 / 9.2); }
+  }
   @media (prefers-reduced-motion: no-preference) {
     .panel { animation: panel-in 640ms var(--ease-out) backwards; }
     .panel:nth-child(2) { animation-delay: 70ms; }
@@ -562,7 +573,7 @@
        así lo de abajo no salta cuando aparecen los paneles (CLS). */
     .hero { flex-direction: column; height: auto; min-height: calc(76px + min(78svh, 640px) + 4 * 76px + 4 * 8px + 8px); padding-top: 76px; }
     .panel { flex: none; height: 76px; transition: height 460ms var(--ease-io); }
-    .panel.is-open { height: min(78svh, 640px); }
+    .panel.is-open { height: min(78svh, 640px); flex-grow: 0; } /* sin crecer: el alto reservado del hero no lo estira */
     .tab { writing-mode: horizontal-tb; rotate: none; left: 20px; bottom: auto; top: 50%; translate: 0 -50%; font-size: 30px; }
     .tab small { display: inline; margin: 0 10px 0 0; }
     .inside { grid-template-columns: minmax(0, 1fr); }
@@ -668,7 +679,12 @@
   <div class="cursor" aria-hidden="true"><span></span></div>
 
   <main id="main-content" tabindex="-1">
-    <section class="hero" aria-label="Elegí tu negocio"></section>
+    <!-- El panel de inicio va escrito acá (no lo arma JS): el título se pinta de
+         entrada y es lo primero que ve la persona (LCP). Los otros 4 paneles los
+         agrega JS, porque usan las pantallas de muestra de proof.js. -->
+    <section class="hero" aria-label="Elegí tu negocio"><article class="panel is-open is-first" data-kind="tars" tabindex="0" aria-label="Tu negocio" data-ink-host><canvas class="hero-ink" aria-hidden="true"></canvas><p class="ghost" aria-hidden="true">TARS</p><p class="tab"><small>Inicio</small>Tars</p>
+        <div class="inside"><div><h1>Webs para<br><em>tu negocio</em></h1><p>Diseño a medida en Mendoza, con un asistente de IA que atiende tu WhatsApp. Elegí tu rubro y mirá cómo puede quedar la tuya.</p>
+        <div class="chooser"><button type="button" data-go="1">Gimnasio</button><button type="button" data-go="2">Barbería</button><button type="button" data-go="3">Restaurante</button><button type="button" data-go="4">Tienda</button></div></div></div></article></section>
 
     <div class="runs" aria-hidden="true">
       <div class="run" data-speed="-0.45"><span>Webs que venden</span><i></i><em>Hechas a mano</em><i></i><span>Mendoza</span><i></i><em>Desde USD 149</em><i></i><span>Propuesta en 24 h</span><i></i><em>Webs que venden</em></div>
@@ -769,19 +785,19 @@
   const state = { rubro: null }; // el que eligió la persona (null = todavía nada)
 
   const hero = document.querySelector('.hero');
+  // En celular las franjas cerradas usan la foto chica (-sm, 10-50 KB); al abrir
+  // un rubro se cambia por la grande (ver open()).
+  const small = matchMedia('(max-width: 860px)').matches;
   RUBROS.forEach((r, i) => {
+    if (r.kind === 'tars') return; // el panel de inicio ya viene en el HTML
     const el = document.createElement('article');
-    el.className = `panel${r.flip ? ' flip' : ''}${i === 0 ? ' is-open' : ''}`;
+    el.className = `panel${r.flip ? ' flip' : ''}`;
     el.dataset.kind = r.kind;
     el.tabIndex = 0;
     el.setAttribute('aria-label', r.tab);
-    if (r.kind === 'tars') {
-      el.setAttribute('data-ink-host', '');
-      el.innerHTML = `<canvas class="hero-ink" aria-hidden="true"></canvas><p class="ghost" aria-hidden="true">TARS</p><p class="tab"><small>Inicio</small>Tars</p>
-        <div class="inside"><div><h1>Webs para<br><em>tu negocio</em></h1><p>Diseño a medida en Mendoza, con un asistente de IA que atiende tu WhatsApp. Elegí tu rubro y mirá cómo puede quedar la tuya.</p>
-        <div class="chooser">${RUBROS.slice(1).map((x, j) => `<button type="button" data-go="${j + 1}">${x.tab}</button>`).join('')}</div></div></div>`;
-    } else {
-      el.innerHTML = `<img class="photo" src="prototipos/img/${r.img}.webp" alt="" loading="${i < 3 ? 'eager' : 'lazy'}" style="object-position:${r.pos}">
+    {
+      const full = `prototipos/img/${r.img}.webp`;
+      el.innerHTML = `<img class="photo" src="${small ? `prototipos/img/${r.img}-sm.webp` : full}" data-full="${full}" alt="" loading="${i < 3 ? 'eager' : 'lazy'}" decoding="async" style="object-position:${r.pos}">
         <p class="tab"><small>0${i}</small>${r.tab}</p>
         <span class="muestra">Muestra de diseño · negocio de ejemplo</span>
         <div class="inside"><div><h2>${r.title}</h2><p>${r.text}</p><div class="row"><a class="btn" href="${WA}${encodeURIComponent(`Hola Tars, quiero una web para mi ${r.label}.`)}" target="_blank" rel="noopener">Quiero esta web</a><a class="btn btn--ghost" href="#precio">Ver precio</a></div></div>
@@ -796,7 +812,17 @@
   new ResizeObserver(fit).observe(hero);
 
   function open(index, chosen) {
+    // Recién cuando se abre OTRO panel, el inicio pasa a animar como los demás
+    // (si se sacara al enfocarlo, sus botones saltarían bajo el dedo).
+    if (index !== 0) panels[0].classList.remove('is-first');
     panels.forEach((p, i) => p.classList.toggle('is-open', i === index));
+    // Foto grande al abrir (en celular venía la chica): se cambia ya decodificada.
+    const img = panels[index].querySelector('img.photo');
+    if (img && img.dataset.full && !img.src.endsWith(img.dataset.full)) {
+      const big = new Image();
+      big.src = img.dataset.full;
+      big.decode().then(() => { img.src = big.src; }).catch(() => {});
+    }
     requestAnimationFrame(fit);
     if (chosen && index > 0) choose(index);
   }
