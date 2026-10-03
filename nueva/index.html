@@ -179,20 +179,31 @@
   .t-chat { min-height: 480px; }
   .item span.p.ask { font: 800 15px 'LF'; color: var(--pink); }
 
-  /* Semana de trabajo: un número gigante cuenta los días y cada casillero se tilda. */
-  .tile .count { margin-top: auto; color: var(--fg); max-width: none; font: 900 clamp(84px, 8vw, 132px)/0.8 'BSD'; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
-  .tile .count.is-live { color: var(--pink); }
-  .week { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; margin-top: 14px; }
-  .wd { display: grid; justify-items: center; gap: 6px; padding: 10px 0 9px; border-radius: 12px; background: #222227; transition: background-color 300ms var(--ease-out), color 300ms var(--ease-out); }
-  .wd b { font: 800 11px 'LF'; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
-  .wd svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
-  .wd svg path { stroke-dasharray: 24; stroke-dashoffset: 24; }
-  .wd span { font: 600 10.5px 'LF'; color: var(--muted); }
-  .wd.is-done { background: #2c1a25; }
-  .wd.is-done svg path { stroke-dashoffset: 0; transition: stroke-dashoffset 420ms var(--ease-out); }
-  .wd.is-done svg { color: var(--pink); }
-  .wd.is-live { background: var(--pink); }
-  .wd.is-live b, .wd.is-live span, .wd.is-live svg { color: #120a10; }
+  /* Semana de trabajo: la persona toca un día y ve qué se hace y qué recibe. */
+  .week { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; margin-top: auto; }
+  .wd { display: grid; justify-items: center; gap: 4px; padding: 12px 0 10px; border: 0; border-radius: 14px; background: #222227; color: var(--fg); cursor: pointer; transition: background-color 200ms var(--ease-out), transform 120ms var(--ease-out); }
+  .wd:active { transform: scale(0.96); }
+  .wd b { font: 900 22px/1 'BSD'; letter-spacing: 0.02em; text-transform: uppercase; }
+  .wd span { font: 600 11px 'LF'; color: var(--muted); }
+  .wd.is-past { background: #2c1a25; }
+  .wd.is-past span { color: #e7a9c9; }
+  .wd[aria-selected="true"] { background: var(--pink); color: #120a10; }
+  .wd[aria-selected="true"] span { color: #3b0a26; }
+  @media (hover: hover) { .wd:not([aria-selected="true"]):hover { background: #2e2e35; } }
+  .wd:focus-visible { outline: 3px solid var(--pink); outline-offset: 3px; }
+  .daycard { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 20px; align-items: start; margin-top: 12px; padding: 18px 20px; border-radius: 16px; background: #1f1f24; }
+  .daycard h4 { font: 800 20px 'LF'; letter-spacing: -0.02em; }
+  .daycard p { grid-column: 1; max-width: 52ch; color: var(--muted); font: 500 15px/1.5 'LF'; }
+  .daycard .get { grid-column: 2; grid-row: 1 / span 2; align-self: center; display: grid; gap: 4px; padding: 12px 14px; border-radius: 12px; background: rgb(255 72 176 / 0.12); color: var(--fg); font: 700 14px 'LF'; text-align: left; }
+  .daycard .get small { font: 800 10px 'LF'; letter-spacing: 0.16em; text-transform: uppercase; color: var(--pink); }
+  .daycard .next { grid-column: 1 / -1; justify-self: start; margin-top: 4px; padding: 0; border: 0; background: none; color: var(--pink); font: 800 14px 'LF'; cursor: pointer; }
+  .daycard .next:hover { text-decoration: underline; text-underline-offset: 4px; }
+  .daycard.is-swap { animation: rise 420ms var(--ease-out); }
+  @media (max-width: 860px) {
+    .daycard { grid-template-columns: minmax(0, 1fr); }
+    .daycard .get { grid-column: 1; grid-row: auto; }
+    .wd b { font-size: 18px; }
+  }
 
   /* Una sola persona */
   .t-me h3 { font: 900 clamp(40px, 4vw, 64px)/0.9 'BSD'; text-transform: uppercase; letter-spacing: 0; max-width: none; }
@@ -260,6 +271,11 @@
   .close h2 { margin: 0 auto; max-width: none; font-size: clamp(80px, 17vw, 300px); line-height: 0.82; }
   .close .lead { margin-inline: auto; }
   .close .row { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; margin-top: 36px; }
+  footer .legal { display: flex; flex-wrap: wrap; gap: 18px; }
+  footer .legal a { color: var(--muted); text-decoration: none; }
+  footer .legal a:hover { color: var(--fg); text-decoration: underline; text-underline-offset: 4px; }
+  footer .legal .regret { color: var(--pink); font-weight: 700; }
+  .total .note a { color: inherit; font-weight: 700; }
   footer { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding: 28px clamp(16px, 6vw, 96px); border-top: 1px solid var(--line); color: var(--muted); font: 500 13px 'LF'; }
 
   /* ===== Celular: los paneles se apilan; se abre uno por vez ===== */
@@ -321,8 +337,8 @@
             <span class="handoff">Charla pasada a tu WhatsApp empresarial</span>
           </div></article>
         <article class="tile t-days"><h3>Lista en 3 a 5 días</h3><p>Una landing en menos de una semana; un sitio de 4 o 5 páginas, en 7 a 10 días.</p>
-          <p class="count" aria-hidden="true"><span>Día 1</span></p>
-          <div class="week" aria-hidden="true"><div class="wd"><b>Lun</b><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Propuesta</span></div><div class="wd"><b>Mar</b><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Diseño</span></div><div class="wd"><b>Mié</b><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Armado</span></div><div class="wd"><b>Jue</b><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Ajustes</span></div><div class="wd"><b>Vie</b><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Online</span></div></div>
+          <div class="week" role="tablist" aria-label="Qué se hace cada día"><button type="button" class="wd" role="tab" aria-selected="true" aria-controls="daycard" data-day="0"><b>Lun</b><span>Propuesta</span></button><button type="button" class="wd" role="tab" aria-selected="false" aria-controls="daycard" data-day="1"><b>Mar</b><span>Diseño</span></button><button type="button" class="wd" role="tab" aria-selected="false" aria-controls="daycard" data-day="2"><b>Mié</b><span>Armado</span></button><button type="button" class="wd" role="tab" aria-selected="false" aria-controls="daycard" data-day="3"><b>Jue</b><span>Ajustes</span></button><button type="button" class="wd" role="tab" aria-selected="false" aria-controls="daycard" data-day="4"><b>Vie</b><span>Online</span></button></div>
+          <div class="daycard" id="daycard" role="tabpanel" aria-live="polite"></div>
           </article>
       </div>
     </section>
@@ -355,7 +371,7 @@
           <p class="once-label">pago único</p>
           <div class="monthly" id="monthly"></div>
           <a class="btn" id="pedido" href="#" target="_blank" rel="noopener">Pedir por WhatsApp</a>
-          <p class="note">El primer número se paga una vez; lo mensual, cada mes. Te respondo con la propuesta en menos de 24 horas.</p>
+          <p class="note">El primer número se paga una vez; lo mensual, cada mes. Te respondo con la propuesta en menos de 24 horas. Al pedirla aceptás los <a href="terminos.html">Términos y condiciones</a>.</p>
         </aside>
       </div>
     </section>
@@ -378,7 +394,7 @@
       <div class="row"><a class="btn" id="close-wa" href="https://wa.me/5492612408064" target="_blank" rel="noopener">Escribime por WhatsApp</a><a class="btn btn--ghost" href="mailto:contacto@tars.com.ar">contacto@tars.com.ar</a></div>
     </section>
   </main>
-  <footer><span>Tars · Webs para negocios de Mendoza</span><span>WhatsApp +54 9 261 240-8064</span></footer>
+  <footer><span>Tars · Webs para negocios de Mendoza · WhatsApp +54 9 261 240-8064</span><nav class="legal" aria-label="Legales"><a href="terminos.html">Términos y condiciones</a><a href="contrato.html">Contrato modelo</a><a href="../privacidad.html">Privacidad</a><a class="regret" href="terminos.html#arrepentimiento">Botón de arrepentimiento</a></nav></footer>
 
 <script type="module">
   import { KINDS } from '../js/features/proof.js';
@@ -503,18 +519,31 @@
     move();
   }
 
-  /* Semana de trabajo: cuenta de Día 1 a Día 5 y termina en ONLINE. */
+  /* Semana de trabajo: cada día muestra qué se hace y qué recibís. */
+  const WORK = [
+    { title: 'Día 1 · Propuesta', text: 'Charlamos por WhatsApp: me contás tu negocio, qué vendés y a quién. Te mando la propuesta con precio cerrado y fecha de entrega.', get: 'La propuesta por escrito' },
+    { title: 'Día 2 · Diseño', text: 'Armo el diseño con tus colores, tus fotos y tus textos. Lo ves y me decís qué cambiarías antes de seguir.', get: 'Una vista previa para aprobar' },
+    { title: 'Día 3 · Armado', text: 'Construyo la web: rápida, pensada primero para el celular y con los botones de WhatsApp, reservas o pedidos donde hacen falta.', get: 'Un link privado de prueba' },
+    { title: 'Día 4 · Ajustes', text: 'La revisás tranquilo desde tu celular. Corrijo textos, fotos y detalles hasta que quede como la querés.', get: 'La versión final para aprobar' },
+    { title: 'Día 5 · Online', text: 'La publico con tu dominio, la conecto con Google y te muestro cómo pedirme cambios cuando los necesites.', get: 'Tu web online' },
+  ];
   const daysTile = document.querySelector('.t-days');
-  const count = daysTile.querySelector('.count span');
   const wds = [...daysTile.querySelectorAll('.wd')];
-  const runWeek = () => {
-    wds.forEach((wd, i) => setTimeout(() => {
-      wd.classList.add('is-done');
-      count.textContent = i < wds.length - 1 ? `Día ${i + 1}` : 'ONLINE';
-      if (i === wds.length - 1) { wd.classList.add('is-live'); count.parentElement.classList.add('is-live'); }
-    }, reduce ? 0 : 300 + i * 520));
-  };
-  new IntersectionObserver((entries, obs) => { if (entries[0].isIntersecting) { obs.disconnect(); runWeek(); } }, { threshold: 0.5 }).observe(daysTile);
+  const card = daysTile.querySelector('.daycard');
+  function showDay(i, animate) {
+    wds.forEach((wd, n) => { wd.setAttribute('aria-selected', String(n === i)); wd.classList.toggle('is-past', n < i); wd.tabIndex = n === i ? 0 : -1; });
+    const w = WORK[i];
+    card.innerHTML = `<h4>${w.title}</h4><div class="get"><small>Recibís</small>${w.get}</div><p>${w.text}</p>${i < WORK.length - 1 ? '<button type="button" class="next">Siguiente día →</button>' : ''}`;
+    if (animate && !reduce) { card.classList.remove('is-swap'); void card.offsetWidth; card.classList.add('is-swap'); }
+    card.querySelector('.next')?.addEventListener('click', () => { showDay(i + 1, true); wds[i + 1].focus(); });
+  }
+  wds.forEach((wd, i) => wd.addEventListener('click', () => showDay(i, true)));
+  daysTile.querySelector('.week').addEventListener('keydown', (e) => {
+    const i = wds.findIndex((w) => w.getAttribute('aria-selected') === 'true');
+    const n = e.key === 'ArrowRight' ? Math.min(i + 1, 4) : e.key === 'ArrowLeft' ? Math.max(i - 1, 0) : i;
+    if (n !== i) { e.preventDefault(); showDay(n, true); wds[n].focus(); }
+  });
+  showDay(0, false);
 
   /* Lo que te llevás: el subrayado de tinta entra una vez. */
   const io = new IntersectionObserver((entries) => entries.forEach((entry) => {
