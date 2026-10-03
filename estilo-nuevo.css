@@ -271,3 +271,6 @@ input:not([type="checkbox"]):not([type="radio"]), textarea, select { border-radi
 /* --- 404: sin alto de pantalla completa, para que se vean los atajos ------ */
 .page-hero--error { min-height: 0 !important; }
 .page-hero--error .big-number { font-size: clamp(6rem, 16vw, 13rem); line-height: 0.85; }
+
+/* --- Cotizador de servicios: separación entre grupos de teclas ------------- */
+.register-keys fieldset + fieldset { margin-top: 1.6rem; }

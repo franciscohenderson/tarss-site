@@ -175,16 +175,37 @@
       <div class="register-intro">
         <h2 id="cotizador-title" class="display">Armá tu<br>presupuesto</h2>
         <p>Marcá lo que necesitás y mirá el total al instante. Después mandame el presupuesto por WhatsApp con un clic.</p>
-        <p class="register-more">¿Querés un sitio completo o el asistente de IA? <a href="index.html#precio">Armá el pedido completo en la portada</a>.</p>
       </div>
 
       <form class="register-keys" id="ticket-form" aria-describedby="ticket-hint">
         <fieldset>
-          <legend>Servicios</legend>
+          <legend>Tu web (elegí una)</legend>
           <label class="key">
-            <input type="checkbox" name="service" value="Landing Page" data-service="landing" />
+            <input type="checkbox" name="service" value="Landing Page" data-service="landing" data-group="web" />
             <span class="key-cap"><span class="key-name">Landing Page</span><span class="key-price">USD 149</span></span>
           </label>
+          <label class="key">
+            <input type="checkbox" name="service" value="Sitio completo" data-service="sitio-completo" data-group="web" />
+            <span class="key-cap"><span class="key-name">Sitio completo</span><span class="key-price">USD 349</span></span>
+          </label>
+        </fieldset>
+        <fieldset>
+          <legend>Asistente de IA (elegí un plan)</legend>
+          <label class="key">
+            <input type="checkbox" name="service" value="Asistente 200" data-service="asistente-200" data-group="ia" />
+            <span class="key-cap"><span class="key-name">Hasta 200 personas</span><span class="key-price">USD 39/mes</span></span>
+          </label>
+          <label class="key">
+            <input type="checkbox" name="service" value="Asistente 800" data-service="asistente-800" data-group="ia" />
+            <span class="key-cap"><span class="key-name">Hasta 800 personas</span><span class="key-price">USD 79/mes</span></span>
+          </label>
+          <label class="key">
+            <input type="checkbox" name="service" value="Asistente 2.500" data-service="asistente-2500" data-group="ia" />
+            <span class="key-cap"><span class="key-name">Hasta 2.500 personas</span><span class="key-price">USD 149/mes</span></span>
+          </label>
+        </fieldset>
+        <fieldset>
+          <legend>Extras</legend>
           <label class="key">
             <input type="checkbox" name="service" value="Mantenimiento" data-service="mantenimiento" />
             <span class="key-cap"><span class="key-name">Mantenimiento</span><span class="key-price">USD 50/mes</span></span>

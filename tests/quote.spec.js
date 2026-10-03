@@ -73,13 +73,27 @@ test.describe('registradora en el navegador', () => {
   test('desmarcar una tecla saca su renglón y recalcula', async ({ page }) => {
     await page.route(/^https?:\/\/(?!localhost)/, (route) => route.abort());
     await page.goto('/servicios.html');
-    const keys = page.locator('#ticket-form input[name="service"]');
-    await keys.nth(0).check({ force: true });
-    await keys.nth(2).check({ force: true });
+    const key = (id) => page.locator(`#ticket-form input[data-service="${id}"]`);
+    await key('landing').check({ force: true });
+    await key('seo-local').check({ force: true });
     await expect(page.locator('#ticket-live')).toHaveText('Total: USD 229');
-    await keys.nth(0).uncheck({ force: true });
+    await key('landing').uncheck({ force: true });
     await expect(page.locator('#ticket-live')).toHaveText('Total: USD 80');
     await expect(page.locator('#ticket-lines li[data-id]')).toHaveCount(1);
     await expect(page.locator('#ticket-lines li[data-id="seo-local"]')).toBeVisible();
+  });
+
+  test('tipo de web y plan del asistente: uno por grupo', async ({ page }) => {
+    await page.route(/^https?:\/\/(?!localhost)/, (route) => route.abort());
+    await page.goto('/servicios.html');
+    const key = (id) => page.locator(`#ticket-form input[data-service="${id}"]`);
+    await key('landing').check({ force: true });
+    await key('sitio-completo').check({ force: true });
+    await expect(key('landing')).not.toBeChecked();
+    await key('asistente-200').check({ force: true });
+    await key('asistente-800').check({ force: true });
+    await expect(key('asistente-200')).not.toBeChecked();
+    await expect(page.locator('#ticket-live')).toHaveText('Total: USD 349 + USD 79/mes');
+    await expect(page.locator('#ticket-lines li[data-id]')).toHaveCount(2);
   });
 });
