@@ -214,3 +214,14 @@ input:not([type="checkbox"]):not([type="radio"]), textarea, select { border-radi
   .ticket .btn-ink:not([aria-disabled="true"]):hover { background: var(--accent); color: #120a10; }
   .ticket .btn-line:not(:disabled):hover { background: #120a10; color: var(--paper); }
 }
+
+/* --- Títulos de página: un poco más de interlineado, para que los signos
+       (¡, ¿) y los acentos de mayúsculas (Á, É) no se pisen entre líneas. -- */
+.riso-title { line-height: 1; padding-top: 0.04em; font-size: clamp(3.2rem, 8.5vw, 8.5rem); text-wrap: balance; }
+
+/* --- Tarjetas de consejos / próximos pasos: columnas parejas, sin huecos --- */
+.tips { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.tips:not(:has(.note:nth-of-type(3))) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (max-width: 860px) { .tips, .tips:not(:has(.note:nth-of-type(3))) { grid-template-columns: minmax(0, 1fr); } }
+.tips .note { grid-column: auto; display: flex; flex-direction: column; gap: 0.4rem; }
+.tips .note p:last-child:has(a) { margin-top: auto; padding-top: 0.6rem; }
