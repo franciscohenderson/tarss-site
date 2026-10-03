@@ -125,7 +125,10 @@
     "image": "https://tars.com.ar/og/inicio.jpg"
   }
   </script>
-<link rel="stylesheet" href="prototipos/telefono.css">
+<!-- Estilos del celular de muestra: no bloquean el primer pintado (el celular
+     está más abajo o lo arma JS después). -->
+<link rel="stylesheet" href="prototipos/telefono.css" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="prototipos/telefono.css"></noscript>
 <style>
   @font-face { font-family: 'BSD'; src: url('fonts/big-shoulders-display-var.woff2') format('woff2'); font-weight: 100 900; font-display: optional; }
   @font-face { font-family: 'LF'; src: url('fonts/libre-franklin-var.woff2') format('woff2'); font-weight: 100 900; font-display: optional; }
@@ -554,7 +557,10 @@
     .bar nav { gap: 0; margin-right: 6px; }
     .bar nav a:not([href="#precio"]) { display: none; }
     .bar nav a { padding: 12px 10px; font-size: 15px; color: var(--fg); }
-    .hero { flex-direction: column; height: auto; min-height: 0; padding-top: 76px; }
+    /* El hero lo arma JS: se reserva su alto exacto desde el primer pintado
+       (76 arriba + panel abierto + 4 cerrados de 76 + 4 huecos de 8 + 8 abajo),
+       así lo de abajo no salta cuando aparecen los paneles (CLS). */
+    .hero { flex-direction: column; height: auto; min-height: calc(76px + min(78svh, 640px) + 4 * 76px + 4 * 8px + 8px); padding-top: 76px; }
     .panel { flex: none; height: 76px; transition: height 600ms var(--ease-io); }
     .panel.is-open { height: min(78svh, 640px); }
     .tab { writing-mode: horizontal-tb; rotate: none; left: 20px; bottom: auto; top: 50%; translate: 0 -50%; font-size: 30px; }
