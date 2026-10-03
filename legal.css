@@ -3,7 +3,7 @@
 @font-face { font-family: 'BSD'; src: url('fonts/big-shoulders-display-var.woff2') format('woff2'); font-weight: 100 900; font-display: optional; }
 @font-face { font-family: 'LF'; src: url('fonts/libre-franklin-var.woff2') format('woff2'); font-weight: 100 900; font-display: optional; }
 
-:root { --bg: #0e0e10; --bg2: #17171a; --fg: #f3efe7; --muted: #a7a29a; --line: rgb(243 239 231 / 0.14); --pink: #ff48b0; }
+:root { --bg: #09090b; --bg2: #141417; --fg: #f3efe7; --muted: #a7a29a; --line: rgb(255 255 255 / 0.07); --pink: #ff48b0; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html { background: var(--bg); color: var(--fg); scroll-behavior: smooth; }
 body { font-family: 'LF', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
@@ -11,7 +11,7 @@ body { font-family: 'LF', system-ui, sans-serif; -webkit-font-smoothing: antiali
 :focus-visible { outline: 3px solid var(--pink); outline-offset: 4px; }
 a { color: var(--pink); text-underline-offset: 3px; }
 
-.bar { position: sticky; top: 0; z-index: 10; display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 64px; padding: 0 clamp(16px, 3vw, 40px); background: rgb(14 14 16 / 0.92); backdrop-filter: blur(10px); box-shadow: 0 1px 0 var(--line); }
+.bar { position: sticky; top: 0; z-index: 10; display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 64px; padding: 0 clamp(16px, 3vw, 40px); background: rgb(9 9 11 / 0.72); -webkit-backdrop-filter: saturate(180%) blur(16px); backdrop-filter: saturate(180%) blur(16px); box-shadow: 0 1px 0 var(--line); }
 .brand { font: 900 26px/1 'BSD', 'Arial Narrow', Impact, sans-serif; letter-spacing: 0.03em; color: var(--fg); text-decoration: none; }
 .brand i { font-style: normal; color: var(--pink); }
 .back { color: var(--muted); font: 600 14px 'LF', system-ui, sans-serif; text-decoration: none; }
