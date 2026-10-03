@@ -200,7 +200,7 @@
   .panel.is-open .inside { opacity: 1; transform: none; pointer-events: auto; transition: opacity 500ms var(--ease-out) 260ms, transform 600ms var(--ease-out) 260ms; }
   .inside h1, .inside h2 { font: 900 clamp(52px, 7vw, 124px)/0.86 'BSD', 'Arial Narrow', sans-serif-condensed, Impact, sans-serif; text-transform: uppercase; letter-spacing: -0.005em; text-wrap: balance; }
   .inside h1 em, .inside h2 em { font-style: normal; color: var(--pink); }
-  .inside p { max-width: 36ch; margin-top: 16px; color: #d9d4cb; font: 500 clamp(16px, 1.3vw, 19px)/1.5 'LF', system-ui, 'Segoe UI', Roboto, sans-serif; }
+  .inside p { text-wrap: pretty; max-width: 36ch; margin-top: 16px; color: #d9d4cb; font: 500 clamp(16px, 1.3vw, 19px)/1.5 'LF', system-ui, 'Segoe UI', Roboto, sans-serif; }
   .inside .row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
   .inside .mock { width: clamp(170px, 14vw, 230px); transform: translateY(40px) rotate(4deg); opacity: 0; transition: transform 700ms var(--ease-out) 380ms, opacity 400ms var(--ease-out) 380ms; }
   .panel.is-open .inside .mock { transform: rotate(4deg); opacity: 1; }
@@ -470,6 +470,8 @@
     .tab { writing-mode: horizontal-tb; rotate: none; left: 20px; bottom: auto; top: 50%; translate: 0 -50%; font-size: 30px; }
     .tab small { display: inline; margin: 0 10px 0 0; }
     .inside { grid-template-columns: minmax(0, 1fr); }
+    /* Rubros en 2 × 2 (antes quedaba «Tienda» sola en la segunda fila) */
+    .chooser { display: grid; grid-template-columns: 1fr 1fr; max-width: 360px; }
     .inside .mock { display: none; }
     .inside h1, .inside h2 { font-size: clamp(46px, 13vw, 72px); }
     .builder { grid-template-columns: minmax(0, 1fr); }
