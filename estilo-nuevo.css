@@ -251,3 +251,16 @@ input:not([type="checkbox"]):not([type="radio"]), textarea, select { border-radi
 .article-body h2 { margin-top: 3.2rem; }
 .article-body ul li::marker { color: var(--accent); }
 .riso-title.riso-title--article { max-width: none; font-size: clamp(2.4rem, 4.4vw, 4.2rem); line-height: 0.98; }
+
+/* --- Servicios: resumen a la derecha del encabezado (abajo en celular) ---- */
+.hero-facts { list-style: none; display: grid; gap: 10px; margin-top: 2.5rem; }
+.hero-facts li { display: grid; gap: 2px; padding: 18px 22px; border-radius: 20px; background: var(--bg2); }
+.hero-facts li:first-child { background: var(--accent); color: #120a10; }
+.hero-facts b { font: 900 clamp(2rem, 3vw, 2.6rem)/1 var(--display); text-transform: uppercase; }
+.hero-facts span { color: var(--muted); font-weight: 600; }
+.hero-facts li:first-child span { color: #3b0a26; }
+@media (min-width: 1100px) {
+  .page-hero:has(.hero-facts) { display: grid; grid-template-columns: minmax(0, 1fr) minmax(260px, 340px); column-gap: 4rem; align-items: end; }
+  .page-hero:has(.hero-facts) > :not(.hero-facts) { grid-column: 1; }
+  .hero-facts { grid-column: 2; grid-row: 1 / span 3; margin-top: 0; }
+}
