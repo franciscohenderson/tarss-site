@@ -153,7 +153,8 @@
   .panel.is-open img.photo { filter: none; transform: scale(1); }
   .panel::after { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, rgb(8 8 10 / 0.92), rgb(8 8 10 / 0.25) 46%, rgb(8 8 10 / 0) 70%); pointer-events: none; }
   .panel[data-kind="tars"] { background: radial-gradient(90% 70% at 70% 30%, #4a1238, #1a0d16 55%, var(--bg2)); }
-  .panel[data-kind="tars"]::after { display: none; }
+  /* Velo bajo el texto: la tinta sigue viva arriba y el texto chico se lee. */
+  .panel[data-kind="tars"]::after { z-index: 2; background: linear-gradient(0deg, rgb(14 9 13 / 0.9), rgb(14 9 13 / 0.6) 38%, rgb(14 9 13 / 0) 66%); }
   /* Marca calada gigante: llena el panel de inicio sin competir con el título. */
   .ghost { position: absolute; z-index: 1; left: clamp(14px, 2.4vw, 36px); top: 10px; font: 900 clamp(120px, 19vw, 330px)/0.82 'BSD'; letter-spacing: 0.02em; color: transparent; -webkit-text-stroke: 1.5px rgb(255 72 176 / 0.55); pointer-events: none; user-select: none; opacity: 0; transition: opacity 500ms var(--ease-out) 200ms; }
   .panel.is-open .ghost { opacity: 1; }
@@ -244,7 +245,8 @@
   .t-me p { color: #3b0a26; }
 
   /* Celular que sube */
-  .t-phone .mini { margin: auto; width: min(270px, 74%); transform: translateY(60px); opacity: 0; transition: transform 900ms var(--ease-out), opacity 500ms var(--ease-out); }
+  /* El celular sale desde el borde de abajo: más grande y sin aire muerto. */
+  .t-phone .mini { margin: auto auto calc(-1 * clamp(22px, 2.4vw, 34px) - 70px); width: min(300px, 86%); transform: translateY(60px); opacity: 0; transition: transform 900ms var(--ease-out), opacity 500ms var(--ease-out); }
   .t-phone.is-in .mini { transform: none; opacity: 1; }
   .t-phone .proof-phone { width: 100%; margin: 0; outline-width: 7px; box-shadow: 0 30px 60px rgb(0 0 0 / 0.45); }
 
@@ -261,7 +263,9 @@
   .typing i { width: 6px; height: 6px; border-radius: 50%; background: #9fe6c4; animation: dot 1s infinite; }
   .typing i:nth-child(2) { animation-delay: 150ms; } .typing i:nth-child(3) { animation-delay: 300ms; }
   @keyframes dot { 0%, 60%, 100% { opacity: 0.3; transform: none; } 30% { opacity: 1; transform: translateY(-3px); } }
-  .t-chat.is-in .typing { animation: blink 900ms linear 500ms both; }
+  /* Los puntitos aparecen, se van y después no dejan hueco en la charla. */
+  .t-chat.is-in .typing { animation: blink 900ms linear 500ms both, gone 1ms linear 1400ms forwards; }
+  @keyframes gone { to { height: 0; padding-block: 0; margin-top: -8px; } }
   @keyframes blink { 0% { opacity: 0; } 15%, 85% { opacity: 1; } 100% { opacity: 0; } }
 
   /* Asistente de IA: etiqueta, respuesta rápida y botón de asesor dentro del chat. */
@@ -274,6 +278,13 @@
   .t-chat.is-in .msg:nth-child(4) { transition-delay: 2300ms; }
   .t-chat.is-in .msg:nth-child(5) { transition-delay: 3100ms; }
   .t-chat { min-height: 480px; }
+  /* Escritorio: el texto a la izquierda y la charla a la derecha, sin huecos. */
+  @media (min-width: 861px) {
+    .t-chat { display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); grid-template-rows: auto auto 1fr; gap: 12px clamp(24px, 3vw, 44px); align-items: start; }
+    .t-chat > .ai, .t-chat > h3, .t-chat > p { grid-column: 1; }
+    .t-chat > .ai { justify-self: start; }
+    .t-chat .chat { grid-column: 2; grid-row: 1 / span 3; align-self: center; max-width: none; margin: 0; }
+  }
   .item span.p.ask { font: 800 15px 'LF'; color: var(--pink); }
 
   /* Semana de trabajo: la persona toca un día y ve qué se hace y qué recibe. */
@@ -300,6 +311,11 @@
     .daycard { grid-template-columns: minmax(0, 1fr); }
     .daycard .get { grid-column: 1; grid-row: auto; }
     .wd b { font-size: 18px; }
+    .wd { padding-inline: 2px; }
+    .wd span { font-size: 11.5px; letter-spacing: -0.01em; }
+    .week { gap: 4px; }
+    .daycard .get { grid-row: 3; }
+    .ticks i { display: none; }
   }
 
   /* Una sola persona */
@@ -347,9 +363,14 @@
   .reach-head b { font: 800 19px 'LF'; }
   .reach-head output { font: 900 34px/1 'BSD'; color: var(--pink); white-space: nowrap; }
   .reach input[type="range"] { width: 100%; accent-color: var(--pink); height: 28px; cursor: pointer; }
-  .ticks { display: grid; grid-template-columns: repeat(4, 1fr); font: 700 12px 'LF'; color: var(--muted); }
-  .ticks span:nth-child(2), .ticks span:nth-child(3) { text-align: center; }
-  .ticks span:last-child { text-align: right; }
+  /* Marcas alineadas con las cuatro posiciones del pulgar (0, 1/3, 2/3 y 1). */
+  .ticks { position: relative; height: 1.4em; margin: -6px 11px 0; font: 700 13px 'LF'; color: var(--muted); white-space: nowrap; }
+  .ticks span { position: absolute; top: 0; translate: -50% 0; }
+  .ticks span:nth-child(1) { left: 0; translate: -11px 0; }
+  .ticks span:nth-child(2) { left: 33.333%; }
+  .ticks span:nth-child(3) { left: 66.667%; }
+  .ticks span:nth-child(4) { left: 100%; translate: calc(-100% + 11px) 0; }
+  .ticks i { font-style: normal; }
   .reach p { color: var(--muted); font: 500 15px/1.5 'LF'; }
   .reach p strong { color: var(--fg); }
   .fine { margin-top: 10px; color: var(--muted); font: 500 13px/1.5 'LF'; }
@@ -361,6 +382,15 @@
   .faq summary::-webkit-details-marker { display: none; }
   .faq summary::after { content: ""; flex: none; width: 14px; height: 14px; border-right: 2.5px solid var(--pink); border-bottom: 2.5px solid var(--pink); rotate: 45deg; translate: 0 -4px; transition: rotate 300ms var(--ease-out), translate 300ms var(--ease-out); }
   .faq details[open] summary::after { rotate: -135deg; translate: 0 4px; }
+  .lead a { color: var(--fg); font-weight: 700; text-decoration: underline; text-decoration-color: var(--pink); text-underline-offset: 4px; }
+  /* Escritorio: título a la izquierda (queda fijo), preguntas a la derecha. */
+  @media (min-width: 861px) {
+    #preguntas { position: relative; display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.4fr); grid-template-rows: auto 1fr; column-gap: clamp(40px, 6vw, 110px); align-items: start; }
+    #preguntas .alias { position: absolute; top: 0; }
+    #preguntas > h2 { grid-column: 1; }
+    #preguntas > .lead { grid-column: 1; max-width: 30ch; }
+    #preguntas .faq { grid-column: 2; grid-row: 1 / span 2; margin-top: 0; max-width: none; }
+  }
   .faq details p { padding: 0 0 26px; max-width: 64ch; color: var(--muted); font: 500 18px/1.6 'LF'; }
 
   /* Cierre */
@@ -459,7 +489,7 @@
           <div class="reach">
             <div class="reach-head"><b>¿Cuántas personas te escriben por mes?</b><output id="reach-out">Sin asistente</output></div>
             <input id="reach" type="range" min="0" max="3" step="1" value="0" aria-label="Personas que te escriben por mes">
-            <div class="ticks" aria-hidden="true"><span>Sin asistente</span><span>Hasta 200</span><span>Hasta 800</span><span>Hasta 2.500</span></div>
+            <div class="ticks" aria-hidden="true"><span>Ninguno</span><span><i>Hasta </i>200</span><span><i>Hasta </i>800</span><span><i>Hasta </i>2.500</span></div>
             <p id="reach-note">Movés la barra y ves el plan que te conviene. La instalación del asistente va incluida.</p>
           </div>
           <p class="step-title">3 · Extras</p>
@@ -480,6 +510,7 @@
 
     <section class="sec" id="preguntas"><span id="faq" class="alias"></span>
       <h2>Preguntas</h2>
+      <p class="lead">Lo que más me consultan. ¿Te queda otra duda? <a href="https://wa.me/5492612408064" target="_blank" rel="noopener">Escribime</a> y te respondo yo.</p>
       <div class="faq">
         <details><summary>¿Cuánto tarda?</summary><p>Una landing page queda lista en 3 a 5 días. Un sitio de 4 o 5 páginas, en 7 a 10 días. La propuesta te llega en menos de 24 horas.</p></details>
         <details><summary>¿Qué necesito tener?</summary><p>Tus fotos, tus precios y ganas. Si no tenés fotos o textos, te ayudo a armarlos.</p></details>
