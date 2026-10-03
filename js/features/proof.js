@@ -25,11 +25,20 @@ const ICON = {
   ticket: svg('<path d="M4 9a2 2 0 0 0 0 6v3h16v-3a2 2 0 0 0 0-6V6H4zM10 6v12"/>'),
   chat: svg('<path d="M5 5h14v10H10l-5 4z"/>'),
 };
+// QR de muestra: tres marcas de esquina y módulos con un patrón fijo (no aleatorio, sale siempre igual).
+const QR = (() => {
+  const finder = (x, y) => `<rect x="${x}" y="${y}" width="7" height="7"/><rect x="${x + 1}" y="${y + 1}" width="5" height="5" fill="#f2f2f2"/><rect x="${x + 2}" y="${y + 2}" width="3" height="3"/>`;
+  const reserved = (x, y) => (x < 8 && y < 8) || (x > 12 && y < 8) || (x < 8 && y > 12);
+  let seed = 11, cells = '';
+  const next = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  for (let y = 0; y < 21; y++) for (let x = 0; x < 21; x++) if (!reserved(x, y) && next() < 0.5) cells += `<rect x="${x}" y="${y}" width="1" height="1"/>`;
+  return `<svg class="pf-qr" viewBox="-1 -1 23 23" aria-hidden="true"><rect x="-1" y="-1" width="23" height="23" fill="#f2f2f2" stroke="none"/><g fill="#090909" stroke="none">${finder(0, 0)}${finder(14, 0)}${finder(0, 14)}${cells}</g></svg>`;
+})();
 const top = (right) => `<div class="pf-top"><span class="pf-rb">${ICON.back}</span><div>${right.map((icon) => `<span class="pf-rb">${icon}</span>`).join('')}</div></div>`;
 
 /* Cada rubro: nombre de ejemplo, frase de la hoja y la pantalla del celular
    (formato de las apps que la gente ya usa en ese rubro). */
-const KINDS = {
+export const KINDS = {
   restaurante: {
     sample: 'Brasa & Vid',
     line: 'Tu carta siempre al día',
@@ -88,7 +97,7 @@ const KINDS = {
     screen: (name) => `<div class="pf-pad">
         <div class="pf-row"><b class="pf-name">${name}</b><span class="pf-rb">${ICON.chat}</span></div>
         <div class="pf-hi"><small>Buen día,</small>Hola, Mateo</div>
-        <div class="pf-card"><div><small>CARNET DIGITAL</small><b>Mateo<br>Ríos</b><span>PLAN FULL · ACTIVO</span></div><i class="pf-qr"></i></div>
+        <div class="pf-card"><div><small>CARNET DIGITAL</small><b>Mateo<br>Ríos</b><span>PLAN FULL · ACTIVO</span></div>${QR}</div>
         <div class="pf-acts"><div>${ICON.calendar}Clases</div><div>${ICON.pin}Sedes</div><div>${ICON.ticket}Beneficios</div></div>
         <div class="pf-cap">TU PRÓXIMA CLASE</div>
         <div class="pf-next"><b>19:00</b><div>Funcional<small>Hoy · Sede Centro</small></div><span>Reservada</span></div>

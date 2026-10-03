@@ -1,4 +1,6 @@
 User-agent: *
+Disallow: /nueva/
+Disallow: /prototipos/
 Disallow: /404
 Disallow: /404.html
 Disallow: /gracias

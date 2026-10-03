@@ -1,0 +1,597 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tars · Prototipo F · Fusión</title>
+<link rel="preload" as="image" href="img/gimnasio.webp">
+<link rel="stylesheet" href="telefono.css">
+<style>
+  @font-face { font-family: 'BSD'; src: url('../fonts/big-shoulders-display-var.woff2') format('woff2'); font-weight: 100 900; font-display: swap; }
+  @font-face { font-family: 'LF'; src: url('../fonts/libre-franklin-var.woff2') format('woff2'); font-weight: 100 900; font-display: swap; }
+
+  /* Prototipo F — «Fusión»: zoom infinito entre negocios (E) que arranca en
+     el TARS vivo (D), escenas de campaña (A), el celular 3D en abanico (B),
+     cintas y rubros que muestran su foto (D), precios en lista limpia (C) y
+     el ESCRIBIME que se aparta (D). Lo nuevo: escribís tu negocio y todas
+     las webs pasan a llamarse como vos; destello rosa en cada cambio de
+     escena; cursor que invita a entrar; grano de papel en toda la página. */
+  :root {
+    --ink: #141414;
+    --paper: #f1ece2;
+    --pink: #ff48b0;
+    --muted: #4a453d;
+    --F: 3;
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { background: var(--ink); color: var(--paper); scrollbar-color: var(--pink) var(--ink); }
+  body { font-family: 'LF', system-ui, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: clip; }
+  ::selection { background: var(--pink); color: var(--ink); }
+  :focus-visible { outline: 3px solid var(--pink); outline-offset: 4px; }
+  a { color: inherit; }
+
+  /* Grano de papel encima de todo (quieto: no cuesta). */
+  body::after { content: ""; position: fixed; inset: 0; z-index: 60; pointer-events: none; opacity: 0.09; mix-blend-mode: overlay; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+
+  /* Barra: en «difference» se lee sobre cualquier fondo. */
+  .hud { position: fixed; z-index: 40; inset: 0 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 20px clamp(18px, 4vw, 56px); color: #fff; mix-blend-mode: difference; }
+  .hud .brand { font: 900 30px/1 'BSD'; text-decoration: none; letter-spacing: 0.02em; }
+  .hud nav { display: flex; gap: 26px; }
+  .hud nav a { font: 800 12px 'LF'; letter-spacing: 0.18em; text-transform: uppercase; text-decoration: none; }
+  .hud nav a:hover { text-decoration: underline; text-underline-offset: 6px; }
+  .hud .talk { display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border: 2px solid currentColor; font: 800 13px 'LF'; text-decoration: none; transition: transform 120ms var(--ease-out); }
+  .hud .talk:active { transform: scale(0.96); }
+
+  /* Cursor: un aro que sigue al mouse; sobre la ventana del zoom dice ENTRÁ. */
+  .cursor { position: fixed; z-index: 70; left: 0; top: 0; width: 18px; height: 18px; margin: -9px 0 0 -9px; border-radius: 50%; background: var(--pink); box-shadow: 0 0 0 2px var(--ink); pointer-events: none; translate: var(--cx, -100px) var(--cy, -100px); transition: width 260ms var(--ease-out), height 260ms var(--ease-out), margin 260ms var(--ease-out); display: grid; place-items: center; }
+  .cursor span { font: 900 13px 'BSD'; letter-spacing: 0.12em; color: var(--ink); opacity: 0; transition: opacity 200ms var(--ease-out); }
+  .cursor[data-mode="link"] { width: 46px; height: 46px; margin: -23px 0 0 -23px; }
+  .cursor[data-mode="enter"] { width: 86px; height: 86px; margin: -43px 0 0 -43px; }
+  .cursor[data-mode="enter"] span { opacity: 1; }
+  @media (hover: none), (pointer: coarse) { .cursor { display: none; } }
+
+  /* ============ 1 · ZOOM INFINITO ============ */
+  .zoom { position: relative; height: 640vh; }
+  .zoom-stage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
+  .scene { position: absolute; left: 0; top: 0; width: var(--W); height: var(--H); overflow: hidden; color: var(--fg); }
+  .scene[data-theme="light"] { --fg: var(--ink); --veil: 241 236 226; }
+  .scene[data-theme="dark"] { --fg: var(--paper); --veil: 10 8 6; }
+  .scene[data-kind="tars"] { background: radial-gradient(70% 90% at 76% 58%, #3a0f2c, var(--ink) 68%); }
+  .photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .photo.flip { scale: -1 1; }
+  .veil { position: absolute; inset: 0; background: linear-gradient(90deg, rgb(var(--veil) / 0.9), rgb(var(--veil) / 0.55) 34%, rgb(var(--veil) / 0) 54%); }
+  .copy { position: absolute; left: 6%; top: 52%; width: 44%; translate: 0 -50%; opacity: var(--copy, 1); }
+  .hl { position: relative; z-index: 0; isolation: isolate; font: 900 calc(var(--W) * 0.072)/0.86 'BSD'; text-transform: uppercase; }
+  .hl::before { content: attr(data-text); content: attr(data-text) / ""; position: absolute; inset: 0; z-index: -1; white-space: pre-line; color: var(--pink); translate: 0.06em 0.045em; }
+  .scene[data-theme="light"] > .art .hl::before { mix-blend-mode: multiply; }
+  .sub { max-width: 32ch; margin-top: calc(var(--W) * 0.016); font: 600 calc(var(--W) * 0.0135)/1.45 'LF'; }
+  .cta { display: inline-flex; align-items: center; min-height: calc(var(--W) * 0.032); margin-top: calc(var(--W) * 0.02); padding: 0 calc(var(--W) * 0.015); background: var(--pink); color: var(--ink); font: 800 calc(var(--W) * 0.0105) 'LF'; text-decoration: none; transition: background-color 160ms var(--ease-out), transform 120ms var(--ease-out); }
+  .cta:active { transform: scale(0.97); }
+  @media (hover: hover) { .cta:hover { background: var(--paper); } }
+
+  /* TARS vivo: cada letra engorda cerca del cursor (solo en la escena de afuera). */
+  .mega { display: flex; gap: 0.02em; font: 400 calc(var(--W) * 0.2)/0.8 'BSD'; text-transform: uppercase; color: var(--paper); }
+  .mega span { display: block; font-variation-settings: 'wght' var(--w, 700); }
+  .mega span:nth-child(2) { color: var(--pink); }
+  .namebox { display: flex; flex-wrap: wrap; align-items: center; gap: calc(var(--W) * 0.008); margin-top: calc(var(--W) * 0.018); }
+  .namebox label { width: 100%; font: 800 calc(var(--W) * 0.0085) 'LF'; letter-spacing: 0.18em; text-transform: uppercase; opacity: 0.8; }
+  .namebox input { width: calc(var(--W) * 0.2); min-height: calc(var(--W) * 0.032); padding: 0 calc(var(--W) * 0.008); border: 2px solid var(--paper); border-radius: 0; background: transparent; color: var(--paper); font: 900 calc(var(--W) * 0.016) 'BSD'; text-transform: uppercase; }
+  .namebox input::placeholder { color: rgb(241 236 226 / 0.45); }
+  .namebox input:focus-visible { outline: none; border-color: var(--pink); }
+  .namebox .cta { margin-top: 0; }
+
+  .win { position: absolute; left: calc(var(--wx) * 100%); top: calc(var(--wy) * 100%); width: calc(100% / var(--F)); height: calc(100% / var(--F)); overflow: hidden; border-radius: var(--r, 10px); background: #1d1d22; }
+  .win > .scene { --chrome: 1; --r: 10px; --copy: 1; transform: scale(calc(1 / var(--F))); transform-origin: 0 0; pointer-events: none; }
+  .chrome { position: absolute; left: calc(var(--wx) * 100% - 1px); top: calc(var(--wy) * 100% - var(--W) * 0.022); width: calc(100% / var(--F) + 2px); height: calc(100% / var(--F) + var(--W) * 0.022 + 1px); border-radius: 12px; background: #f4f2ee; box-shadow: 0 calc(var(--W) * 0.02) calc(var(--W) * 0.04) rgb(0 0 0 / 0.4); opacity: var(--chrome, 1); display: flex; align-items: flex-start; gap: calc(var(--W) * 0.004); padding: calc(var(--W) * 0.0072) calc(var(--W) * 0.008); }
+  .chrome i { width: calc(var(--W) * 0.0055); aspect-ratio: 1; border-radius: 50%; background: #c9c5be; }
+  .chrome i:first-child { background: var(--pink); }
+  .chrome span { margin-left: calc(var(--W) * 0.008); padding: 0 calc(var(--W) * 0.008); border-radius: 99px; background: #e5e1da; color: #57534c; font: 600 calc(var(--W) * 0.0068)/calc(var(--W) * 0.0115) 'LF'; }
+  .deep { position: absolute; inset: 0; background: var(--deep, #222); }
+  .flash { position: absolute; inset: 0; z-index: 5; pointer-events: none; background: radial-gradient(60% 60% at 70% 55%, rgb(255 72 176 / 0.9), rgb(255 72 176 / 0.25) 60%, transparent); opacity: 0; mix-blend-mode: screen; }
+  .zoom-ui { position: absolute; z-index: 6; inset: auto 0 0; display: flex; justify-content: space-between; align-items: end; padding: 0 clamp(18px, 4vw, 56px) 24px; color: var(--zfg, var(--paper)); transition: color 400ms var(--ease-out); pointer-events: none; }
+  .zoom-ui ul { display: flex; gap: 18px; list-style: none; pointer-events: auto; }
+  .zoom-ui button { all: unset; cursor: pointer; padding: 6px 0; font: 800 12px 'LF'; letter-spacing: 0.16em; text-transform: uppercase; opacity: 0.55; box-shadow: inset 0 -2px 0 transparent; transition: opacity 200ms var(--ease-out), box-shadow 300ms var(--ease-out); }
+  .zoom-ui button[aria-current="true"] { opacity: 1; box-shadow: inset 0 -2px 0 var(--pink); }
+  .zoom-ui button:focus-visible { outline: 3px solid var(--pink); outline-offset: 4px; }
+  .zoom-ui p { font: 700 10px 'LF'; letter-spacing: 0.22em; text-transform: uppercase; opacity: 0.75; }
+  .zoom-bar { position: absolute; z-index: 6; left: 0; bottom: 0; height: 3px; width: 100%; background: var(--pink); transform-origin: 0 50%; transform: scaleX(var(--zp, 0)); }
+
+  /* ============ 2 · CELULAR 3D EN ABANICO ============ */
+  .phones { position: relative; height: 420vh; background: #05060a; }
+  .phones-stage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; perspective: 1700px; perspective-origin: 50% 42%; }
+  .im-glow { position: absolute; left: 50%; top: 52%; width: 90vmax; height: 90vmax; translate: -50% -50%; background: radial-gradient(closest-side, rgb(255 72 176 / 0.34), rgb(255 72 176 / 0.08) 45%, transparent 70%); opacity: var(--glow, 0.6); pointer-events: none; }
+  .im-intro { position: absolute; z-index: 10; left: 0; right: 0; top: 14vh; padding: 0 20px; text-align: center; opacity: var(--intro, 1); }
+  .im-intro h2 { font: 900 clamp(48px, 7vw, 120px)/0.88 'BSD'; text-transform: uppercase; }
+  .im-intro h2 em { font-style: normal; color: var(--pink); }
+  .im-intro p { margin: 18px auto 0; max-width: 44ch; color: #b3aea6; font: 500 clamp(16px, 1.4vw, 20px)/1.5 'LF'; }
+  .rig { position: absolute; left: 50%; top: 56%; width: 0; height: 0; transform-style: preserve-3d; }
+  .ph { --w: clamp(200px, 18vw, 290px); position: absolute; left: calc(var(--w) / -2); top: calc(var(--w) * -1.026); width: var(--w); height: calc(var(--w) * 2.052); transform-style: preserve-3d; }
+  .face { position: absolute; inset: 0; border-radius: calc(var(--w) * 0.135); backface-visibility: hidden; }
+  .front { transform: translateZ(7px); }
+  .front .proof-phone { width: 100%; height: 100%; margin: 0; outline-width: calc(var(--w) * 0.028); }
+  .back { transform: rotateY(180deg) translateZ(7px); background: radial-gradient(120% 70% at 30% 20%, #2b2b33, #121217 60%, #0b0b0f); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.08); display: grid; place-items: center; }
+  .back b { font: 900 calc(var(--w) * 0.2)/1 'BSD'; letter-spacing: 0.06em; color: rgb(244 241 234 / 0.85); }
+  .back b i { font-style: normal; color: var(--pink); }
+  .edge { position: absolute; top: 9%; bottom: 9%; width: 14px; left: calc(50% - 7px); background: linear-gradient(#3a3a44, #1a1a20); }
+  .edge.r { transform: translateX(calc(var(--w) / 2)) rotateY(90deg); }
+  .edge.l { transform: translateX(calc(var(--w) / -2)) rotateY(-90deg); }
+  .im-note { position: absolute; z-index: 9; top: 50%; width: min(28vw, 360px); opacity: 0; translate: 0 -50%; }
+  .im-note.l { left: clamp(20px, 7vw, 120px); }
+  .im-note.r { right: clamp(20px, 7vw, 120px); text-align: right; }
+  .im-note strong { display: block; font: 900 clamp(34px, 3.6vw, 60px)/0.9 'BSD'; text-transform: uppercase; }
+  .im-note span { display: block; margin-top: 12px; color: #b3aea6; font: 500 17px/1.5 'LF'; }
+  .im-outro { position: absolute; z-index: 10; left: 0; right: 0; bottom: 7vh; text-align: center; opacity: var(--outro, 0); }
+  .im-outro h2 { font: 900 clamp(46px, 6vw, 100px)/0.9 'BSD'; text-transform: uppercase; text-shadow: 0.05em 0.04em 0 var(--pink); }
+  .im-outro p { margin-top: 10px; color: #b3aea6; font: 600 17px 'LF'; }
+
+  /* ============ 3 · CINTAS ============ */
+  .runs { padding: 9vh 0; overflow: hidden; background: var(--paper); color: var(--ink); }
+  .run { display: flex; align-items: center; gap: 0.4em; width: max-content; font: 900 clamp(64px, 11vw, 190px)/0.92 'BSD'; text-transform: uppercase; white-space: nowrap; transform: translateX(var(--x, 0px)); }
+  .run em { font-style: normal; color: transparent; -webkit-text-stroke: 2px var(--ink); }
+  .run i { flex: none; width: 0.32em; height: 0.32em; background: var(--pink); transform: rotate(45deg); }
+
+  /* ============ 4 · RUBROS ============ */
+  .rubros { padding: 12vh clamp(18px, 3vw, 40px) 14vh; background: var(--paper); color: var(--ink); }
+  .rubros > p { max-width: 42ch; margin-bottom: 5vh; font: 600 clamp(17px, 1.5vw, 21px)/1.45 'LF'; color: var(--muted); }
+  .rubro { display: flex; justify-content: space-between; align-items: baseline; gap: 20px; padding: 1.2vh 0; border-top: 2px solid var(--ink); text-decoration: none; }
+  .rubro:last-of-type { border-bottom: 2px solid var(--ink); }
+  .rubro strong { font: 900 clamp(54px, 10vw, 170px)/0.9 'BSD'; font-variation-settings: 'wght' 900; text-transform: uppercase; transition: font-variation-settings 260ms var(--ease-out), color 200ms var(--ease-out), transform 260ms var(--ease-out); }
+  .rubro span { font: 700 clamp(14px, 1.2vw, 17px) 'LF'; color: var(--muted); text-align: right; }
+  .rubro img { display: none; }
+  @media (hover: hover) { .rubro:hover strong { font-variation-settings: 'wght' 200; color: #c8006a; transform: translateX(1.5vw); } }
+  .peek { position: fixed; z-index: 30; left: 0; top: 0; width: clamp(220px, 22vw, 340px); aspect-ratio: 4 / 5; pointer-events: none; opacity: 0; scale: 0.85; overflow: hidden; transition: opacity 200ms var(--ease-out), scale 260ms var(--ease-out); translate: var(--px, 0px) var(--py, 0px); rotate: var(--pr, 0deg); }
+  .peek.is-on { opacity: 1; scale: 1; }
+  .peek img { width: 100%; height: 100%; object-fit: cover; }
+  .peek.flip img { scale: -1 1; }
+  @media (hover: none) {
+    .rubro { align-items: center; }
+    .rubro img { display: block; width: 22vw; aspect-ratio: 1; object-fit: cover; flex: none; }
+    .rubro.flip img { scale: -1 1; }
+    .rubro span { display: none; }
+  }
+
+  /* ============ 5 · PRECIOS ============ */
+  .prices { padding: 14vh clamp(18px, 6vw, 96px); background: var(--paper); color: var(--ink); border-top: 2px solid var(--ink); }
+  .prices h2 { font: 900 clamp(64px, 10vw, 170px)/0.85 'BSD'; text-transform: uppercase; }
+  .price { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr) auto; align-items: baseline; gap: 24px; padding: 28px 0; border-bottom: 1px solid rgb(20 20 20 / 0.22); }
+  .price:first-of-type { margin-top: 6vh; border-top: 1px solid rgb(20 20 20 / 0.22); }
+  .price h3 { font: 800 clamp(22px, 2vw, 30px) 'LF'; letter-spacing: -0.02em; }
+  .price p { color: var(--muted); font: 400 17px/1.5 'LF'; }
+  .price strong { font: 900 clamp(44px, 4.4vw, 76px)/1 'BSD'; white-space: nowrap; }
+  .price strong small { font: 700 14px 'LF'; color: var(--muted); }
+
+  /* ============ 6 · ESCRIBIME ============ */
+  .end { min-height: 100svh; display: grid; align-content: center; gap: 4vh; padding: 12vh clamp(18px, 3vw, 40px); background: var(--ink); color: var(--paper); }
+  .end p { max-width: 42ch; font: 600 clamp(17px, 1.5vw, 22px)/1.45 'LF'; color: #cfc9be; }
+  .shout { display: flex; justify-content: space-between; font: 900 15.5vw/0.8 'BSD'; text-transform: uppercase; text-decoration: none; transition: color 200ms var(--ease-out); }
+  .shout span { display: block; transform: translate(var(--dx, 0px), var(--dy, 0px)) rotate(var(--dr, 0deg)); }
+  .shout:hover { color: var(--pink); }
+  .end small { font: 700 11px 'LF'; letter-spacing: 0.22em; text-transform: uppercase; color: #8d877d; }
+
+  @media (max-width: 760px), (orientation: portrait) {
+    .hud nav { display: none; }
+    .veil { background: linear-gradient(180deg, rgb(var(--veil) / 0.9), rgb(var(--veil) / 0.55) 36%, rgb(var(--veil) / 0) 52%); }
+    .copy { top: 11%; left: 6%; width: 88%; translate: none; }
+    .hl { font-size: calc(var(--W) * 0.14); }
+    .mega { font-size: calc(var(--W) * 0.36); }
+    .sub { font-size: calc(var(--W) * 0.04); }
+    .cta { min-height: calc(var(--W) * 0.11); padding: 0 calc(var(--W) * 0.05); font-size: calc(var(--W) * 0.036); margin-top: calc(var(--W) * 0.04); }
+    .namebox label { font-size: calc(var(--W) * 0.028); }
+    .namebox input { width: calc(var(--W) * 0.5); min-height: calc(var(--W) * 0.11); font-size: calc(var(--W) * 0.05); padding: 0 calc(var(--W) * 0.025); }
+    .chrome { top: calc(var(--wy) * 100% - var(--W) * 0.06); height: calc(100% / var(--F) + var(--W) * 0.06 + 1px); padding: calc(var(--W) * 0.02); gap: calc(var(--W) * 0.012); }
+    .chrome i { width: calc(var(--W) * 0.016); }
+    .chrome span { font-size: calc(var(--W) * 0.022); line-height: calc(var(--W) * 0.034); }
+    .zoom-ui ul { display: none; }
+    .ph { --w: 40vw; }
+    .rig { top: 44%; }
+    .im-note { width: auto; left: 20px; right: 20px; top: auto; bottom: 4vh; translate: none; text-align: left; }
+    .im-note strong { font-size: 30px; }
+    .im-note.r { text-align: left; }
+    .price { grid-template-columns: 1fr auto; }
+    .price p { grid-column: 1 / -1; grid-row: 2; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .run { transform: none; }
+    .flash { display: none; }
+  }
+</style>
+</head>
+<body>
+  <header class="hud">
+    <a class="brand" href="#">TARS</a>
+    <nav aria-label="Secciones"><a href="#rubros">Rubros</a><a href="#precios">Precios</a><a href="#contacto">Contacto</a></nav>
+    <a class="talk" href="https://wa.me/5492612408064" target="_blank" rel="noopener">Hablemos</a>
+  </header>
+  <div class="cursor" aria-hidden="true"><span>ENTRÁ</span></div>
+
+  <main>
+    <section class="zoom" aria-label="Zoom por negocios de ejemplo: bajá para entrar">
+      <div class="zoom-stage">
+        <div class="zoom-chain"></div>
+        <div class="flash"></div>
+        <div class="zoom-ui"><ul></ul><p>Muestras de diseño · negocios de ejemplo</p></div>
+        <div class="zoom-bar"></div>
+      </div>
+    </section>
+
+    <section class="phones" aria-label="Una web para cada negocio">
+      <div class="phones-stage">
+        <div class="im-glow"></div>
+        <div class="im-intro"><h2>Tu web <em>en el bolsillo</em><br>de tus clientes</h2><p>Pensada primero para el celular, que es desde donde te van a encontrar.</p></div>
+        <div class="rig" aria-hidden="true"></div>
+        <div class="im-note l" data-in="0.3" data-out="0.43"><strong>Rápida en cualquier celular</strong><span>Liviana para que cargue aunque la señal no ayude.</span></div>
+        <div class="im-note r" data-in="0.43" data-out="0.56"><strong>Hecha para que te escriban</strong><span>Cada pantalla termina en un botón de WhatsApp o de reserva.</span></div>
+        <div class="im-note l" data-in="0.56" data-out="0.66"><strong>Con tu nombre y tu estilo</strong><span>Tus fotos, tus precios, tu forma de hablar. Nada de plantillas.</span></div>
+        <div class="im-outro"><h2>Una para cada negocio</h2><p>Pantallas de muestra · negocios de ejemplo</p></div>
+      </div>
+    </section>
+
+    <section class="runs" aria-label="Lo que hago">
+      <div class="run" data-speed="-0.5"><span>Webs con personalidad</span><i></i><em>Mendoza</em><i></i><span>Webs con personalidad</span><i></i><em>Mendoza</em></div>
+      <div class="run" data-speed="0.42"><em>Desde USD 149</em><i></i><span>Propuesta en 24 h</span><i></i><em>Desde USD 149</em><i></i><span>Propuesta en 24 h</span></div>
+      <div class="run" data-speed="-0.34"><span>Hechas a mano</span><i></i><em>Sin plantillas</em><i></i><span>Hechas a mano</span><i></i><em>Sin plantillas</em></div>
+    </section>
+
+    <section class="rubros" id="rubros" aria-label="Rubros">
+      <p>Elegí tu rubro y escribime: te mando una propuesta para tu negocio en menos de 24 horas.</p>
+      <a class="rubro" data-img="gimnasio" href="https://wa.me/5492612408064?text=Hola%20Tars%2C%20quiero%20una%20web%20para%20mi%20gimnasio." target="_blank" rel="noopener"><strong>Gimnasios</strong><span>Carnet con QR · clases · beneficios</span><img src="img/gimnasio.webp" alt="" loading="lazy"></a>
+      <a class="rubro flip" data-img="barberia" data-flip href="https://wa.me/5492612408064?text=Hola%20Tars%2C%20quiero%20una%20web%20para%20mi%20barber%C3%ADa." target="_blank" rel="noopener"><strong>Barberías</strong><span>Turnos online · elección de barbero</span><img src="img/barberia.webp" alt="" loading="lazy"></a>
+      <a class="rubro" data-img="restaurante" href="https://wa.me/5492612408064?text=Hola%20Tars%2C%20quiero%20una%20web%20para%20mi%20restaurante." target="_blank" rel="noopener"><strong>Restaurantes</strong><span>Carta · reservas · pedidos</span><img src="img/restaurante.webp" alt="" loading="lazy"></a>
+      <a class="rubro" data-img="ropa" href="https://wa.me/5492612408064?text=Hola%20Tars%2C%20quiero%20una%20web%20para%20mi%20tienda." target="_blank" rel="noopener"><strong>Tiendas</strong><span>Catálogo · talles · cuotas</span><img src="img/ropa.webp" alt="" loading="lazy"></a>
+    </section>
+
+    <section class="prices" id="precios" aria-labelledby="precios-title">
+      <h2 id="precios-title">Precios claros</h2>
+      <div class="price"><h3>Landing page</h3><p>Una página que presenta tu negocio y lleva a WhatsApp. Lista en 3 a 5 días.</p><strong>USD 149 <small>pago único</small></strong></div>
+      <div class="price"><h3>Mantenimiento</h3><p>Cambios, copias de seguridad y que todo siga andando rápido.</p><strong>USD 50 <small>por mes</small></strong></div>
+      <div class="price"><h3>SEO local</h3><p>Para que te encuentren en Google cuando buscan lo tuyo en Mendoza.</p><strong>USD 80</strong></div>
+    </section>
+
+    <section class="end" id="contacto">
+      <p>Contame qué hacés y te mando la propuesta en menos de 24 horas. WhatsApp +54 9 261 240-8064 · contacto@tars.com.ar</p>
+      <a class="shout" href="https://wa.me/5492612408064" target="_blank" rel="noopener" aria-label="Escribime por WhatsApp"><span aria-hidden="true">E</span><span aria-hidden="true">S</span><span aria-hidden="true">C</span><span aria-hidden="true">R</span><span aria-hidden="true">I</span><span aria-hidden="true">B</span><span aria-hidden="true">I</span><span aria-hidden="true">M</span><span aria-hidden="true">E</span></a>
+      <small>Prototipo F · no publicado</small>
+    </section>
+  </main>
+
+  <div class="peek" aria-hidden="true"><img alt=""></div>
+
+<script type="module">
+  import { KINDS } from '../js/features/proof.js';
+
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+  const smooth = (a, b, x) => { const t = clamp((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); };
+  const seg = (p, a, b) => clamp((p - a) / (b - a), 0, 1);
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const ESC = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+  const esc = (t) => t.replace(/[&<>"']/g, (c) => ESC[c]);
+  const slug = (t) => t.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 24);
+
+  /* Estado compartido: el nombre que escribe la persona. */
+  const state = { name: '' };
+  const listeners = [];
+  const setName = (name) => { state.name = name; listeners.forEach((fn) => fn()); };
+
+  /* ================= 1 · ZOOM INFINITO ================= */
+  const SCENES = [
+    { kind: 'tars', theme: 'dark', label: 'Tars', win: [0.76, 0.58], winM: [0.5, 0.74], deep: '#1a0d16', url: 'tars.com.ar' },
+    { kind: 'gimnasio', theme: 'light', label: 'Gimnasios', img: 'gimnasio', pos: '42% 30%', lines: ['Tu gym', 'en el', 'bolsillo'], sub: 'Carnet digital con QR, reserva de clases y beneficios para cada socio.', cta: 'Quiero la web de mi gym', win: [0.82, 0.56], winM: [0.5, 0.72], deep: '#9aa3ab', url: 'pulsogym' },
+    { kind: 'barberia', theme: 'dark', label: 'Barberías', img: 'barberia', pos: '30% 35%', flip: true, lines: ['Turnos', 'sin hacer', 'fila'], sub: 'Reserva online, elección de barbero y recordatorio por WhatsApp.', cta: 'Quiero la web de mi barbería', win: [0.82, 0.52], winM: [0.5, 0.72], deep: '#2b2118', url: 'filonorte' },
+    { kind: 'restaurante', theme: 'light', label: 'Restaurantes', img: 'restaurante', pos: '48% 30%', lines: ['Tu carta', 'siempre', 'al día'], sub: 'Carta digital, reservas online y pedidos por WhatsApp.', cta: 'Quiero la web de mi restaurante', win: [0.82, 0.5], winM: [0.5, 0.72], deep: '#cdb89c', url: 'brasayvid' },
+    { kind: 'ropa', theme: 'light', label: 'Tiendas', img: 'ropa', pos: '40% 18%', lines: ['Tu tienda', 'abierta', '24 horas'], sub: 'Catálogo con talles, cuotas y envíos a todo el país.', cta: 'Quiero la web de mi tienda', win: [0.82, 0.52], winM: [0.5, 0.72], deep: '#cbb7a3', url: 'lanacruda' },
+  ];
+  const N = SCENES.length;
+  const DEPTH = 4;
+  const mod = (n) => ((n % N) + N) % N;
+  const zoom = document.querySelector('.zoom');
+  const zStage = zoom.querySelector('.zoom-stage');
+  const chain = zStage.querySelector('.zoom-chain');
+  const flash = zStage.querySelector('.flash');
+  const zList = zStage.querySelector('.zoom-ui ul');
+  let F = 3, VW = innerWidth, VH = innerHeight;
+
+  const levels = [];
+  let parent = chain;
+  for (let j = 0; j < DEPTH; j++) {
+    const scene = document.createElement('div');
+    scene.className = 'scene';
+    scene.innerHTML = '<div class="art"></div><div class="win"></div>';
+    if (j) scene.setAttribute('aria-hidden', 'true');
+    parent.append(scene);
+    levels.push({ el: scene, art: scene.firstChild, win: scene.lastChild });
+    parent = scene.lastChild;
+  }
+  levels[DEPTH - 1].win.innerHTML = '<div class="deep"></div>';
+  SCENES.forEach((s, i) => zList.insertAdjacentHTML('beforeend', `<li><button type="button" data-i="${i}">${s.label}</button></li>`));
+  const zButtons = [...zList.querySelectorAll('button')];
+
+  const portrait = () => matchMedia('(max-width: 760px), (orientation: portrait)').matches;
+  const winOf = (s) => (portrait() ? s.winM : s.win);
+  // La web que se ve en la ventana: con el nombre escrito, todas se llaman como el negocio.
+  const urlOf = (s) => (s.kind === 'tars' ? 'tars.com.ar' : `${slug(state.name) || s.url}.com.ar`);
+
+  function art(s, outer) {
+    const next = SCENES[mod(SCENES.indexOf(s) + 1)];
+    const chrome = `<div class="chrome"><i></i><i></i><i></i><span>${esc(urlOf(next))}</span></div>`;
+    if (s.kind === 'tars') {
+      const letters = ['T', 'A', 'R', 'S'].map((l) => `<span>${l}</span>`).join('');
+      const head = outer ? `<h1 class="mega" aria-label="Tars">${letters}</h1>` : `<p class="mega">${letters}</p>`;
+      const box = outer
+        ? `<form class="namebox" onsubmit="return false"><label for="biz">Escribí tu negocio y mirá lo que pasa</label><input id="biz" maxlength="24" autocomplete="organization" placeholder="Panadería Lola" value="${esc(state.name)}"><a class="cta" href="https://wa.me/5492612408064" target="_blank" rel="noopener">Quiero la mía</a></form>`
+        : `<div class="namebox"><span class="cta">Quiero la mía</span></div>`;
+      return `<div class="copy">${head}<p class="sub">Webs con personalidad, hechas una por una en Mendoza. Bajá: adentro de cada web hay otro negocio.</p>${box}</div>${chrome}`;
+    }
+    const tag = outer ? 'h2' : 'p';
+    const who = state.name ? ` de ${state.name}` : '';
+    return `<img class="photo ${s.flip ? 'flip' : ''}" src="img/${s.img}.webp" alt="" style="object-position:${s.pos}" decoding="async"><div class="veil"></div>
+      <div class="copy"><${tag} class="hl" data-text="${s.lines.join('\n')}">${s.lines.join('<br>')}</${tag}><p class="sub">${s.sub}</p><a class="cta" href="https://wa.me/5492612408064?text=${encodeURIComponent(`Hola Tars, quiero la web${who} (${s.label.toLowerCase()}).`)}" target="_blank" rel="noopener" ${outer ? '' : 'tabindex="-1"'}>${s.cta}</a></div>${chrome}`;
+  }
+
+  function paint(level, index, outer) {
+    const s = SCENES[index];
+    const [cx, cy] = winOf(s);
+    level.el.dataset.kind = s.kind;
+    level.el.dataset.theme = s.theme;
+    level.el.style.setProperty('--wx', (cx - 1 / (2 * F)).toFixed(4));
+    level.el.style.setProperty('--wy', (cy - 1 / (2 * F)).toFixed(4));
+    level.el.style.setProperty('--deep', SCENES[mod(index + 1)].deep);
+    level.art.innerHTML = art(s, outer);
+  }
+
+  let currentK = null, lastFlash = 0;
+  function assign(k) {
+    const typing = document.activeElement?.id === 'biz';
+    levels.forEach((level, j) => paint(level, mod(k + j), j === 0));
+    if (currentK !== null && !reduce && performance.now() - lastFlash > 260) {
+      lastFlash = performance.now();
+      flash.animate([{ opacity: 0 }, { opacity: 0.55 }, { opacity: 0 }], { duration: 460, easing: 'cubic-bezier(0.23, 1, 0.32, 1)' });
+    }
+    currentK = k;
+    bindName(typing);
+  }
+
+  // El campo del nombre vive en la escena TARS de afuera; se vuelve a enganchar al repintar.
+  function bindName(refocus) {
+    const input = document.getElementById('biz');
+    if (!input) return;
+    input.addEventListener('input', () => setName(input.value.trim()));
+    if (refocus) { input.focus(); input.setSelectionRange(input.value.length, input.value.length); }
+  }
+  listeners.push(() => {
+    levels.forEach((level) => {
+      const s = SCENES[mod(SCENES.findIndex((x) => x.kind === level.el.dataset.kind) + 1)];
+      const span = level.art.querySelector('.chrome span');
+      if (span) span.textContent = urlOf(s);
+    });
+  });
+
+  // TARS vivo: peso de cada letra según la distancia al cursor.
+  let pointerX = innerWidth / 2;
+  function weigh() {
+    const mega = levels[0].el.dataset.kind === 'tars' ? levels[0].art.querySelector('.mega') : null;
+    if (!mega) return;
+    [...mega.children].forEach((l) => {
+      const r = l.getBoundingClientRect();
+      const k = clamp(1 - Math.abs(pointerX - (r.left + r.width / 2)) / (innerWidth * 0.3), 0, 1);
+      l.style.setProperty('--w', (reduce ? 700 : 180 + k * 720).toFixed(0));
+    });
+  }
+
+  function sizeZoom() {
+    F = portrait() ? 2.6 : 3;
+    document.documentElement.style.setProperty('--F', F);
+    VW = zStage.clientWidth; VH = zStage.clientHeight;
+    document.documentElement.style.setProperty('--W', `${VW}px`);
+    document.documentElement.style.setProperty('--H', `${VH}px`);
+    if (currentK !== null) { const k = currentK; currentK = null; assign(k); }
+  }
+
+  let zTarget = 0, zNow = 0;
+  function renderZoom(z) {
+    const k = Math.floor(z);
+    const f = z - k;
+    if (k !== currentK) assign(k);
+    const s = SCENES[mod(k)];
+    const [cx, cy] = winOf(s);
+    const left = cx - 1 / (2 * F), top = cy - 1 / (2 * F);
+    const outer = levels[0].el;
+    outer.style.transformOrigin = `${((left / (1 - 1 / F)) * VW).toFixed(1)}px ${((top / (1 - 1 / F)) * VH).toFixed(1)}px`;
+    outer.style.transform = `scale(${Math.pow(F, f).toFixed(5)})`;
+    outer.style.setProperty('--chrome', (1 - smooth(0.55, 0.97, f)).toFixed(3));
+    outer.style.setProperty('--r', `${(10 * (1 - f)).toFixed(2)}px`);
+    outer.style.setProperty('--copy', (1 - smooth(0.12, 0.42, f)).toFixed(3));
+    const shown = f < 0.5 ? mod(k) : mod(k + 1);
+    zStage.style.setProperty('--zfg', SCENES[shown].theme === 'dark' ? 'var(--paper)' : 'var(--ink)');
+    zButtons.forEach((b, i) => b.setAttribute('aria-current', String(i === shown)));
+    weigh();
+  }
+
+  zButtons.forEach((b) => b.addEventListener('click', () => {
+    const total = zoom.offsetHeight - innerHeight;
+    scrollTo({ top: zoom.offsetTop + total * (Number(b.dataset.i) / N) + 2, behavior: reduce ? 'auto' : 'smooth' });
+  }));
+
+  /* ================= 2 · CELULAR 3D ================= */
+  const SAMPLE = { gimnasio: 'Pulso', barberia: 'Filo Norte', restaurante: 'Brasa &amp; Vid', ropa: 'Lana Cruda' };
+  const phonesSec = document.querySelector('.phones');
+  const pStage = phonesSec.querySelector('.phones-stage');
+  const rig = pStage.querySelector('.rig');
+  const notes = [...pStage.querySelectorAll('.im-note')];
+  const phones = ['gimnasio', 'gimnasio', 'restaurante', 'ropa'].map((kind) => {
+    const ph = document.createElement('div');
+    ph.className = 'ph';
+    ph.innerHTML = `<div class="face back"><b>TA<i>RS</i></b></div><div class="edge l"></div><div class="edge r"></div><div class="face front"><div class="proof-phone"><div class="proof-screen"></div></div></div>`;
+    rig.append(ph);
+    return { el: ph, kind: null, screen: ph.querySelector('.proof-screen'), frame: ph.querySelector('.proof-phone'), start: kind };
+  });
+  const nameFor = (kind) => (state.name ? esc(state.name) : SAMPLE[kind]);
+  function setKind(phone, kind, force) {
+    if (phone.kind === kind && !force) return;
+    const changed = phone.kind !== kind;
+    phone.kind = kind;
+    phone.screen.dataset.kind = kind;
+    phone.screen.innerHTML = KINDS[kind].screen(nameFor(kind));
+    if (changed && !force && !reduce) phone.screen.animate([{ opacity: 0, filter: 'blur(6px)' }, { opacity: 1, filter: 'blur(0)' }], { duration: 320, easing: 'cubic-bezier(0.23, 1, 0.32, 1)' });
+  }
+  phones.forEach((p) => setKind(p, p.start, true));
+  listeners.push(() => phones.forEach((p) => setKind(p, p.kind, true)));
+  const fitPhones = () => phones.forEach((p) => p.frame.style.setProperty('--s', (p.frame.clientWidth / 312).toFixed(4)));
+  new ResizeObserver(fitPhones).observe(phones[0].frame);
+  fitPhones();
+
+  const SLOTS = [[-1.62, 26, -140], [-0.54, 9, -20], [0.54, -9, -20], [1.62, -26, -140]];
+  const ORDER = [1, 0, 2, 3];
+  const out = (t) => 1 - Math.pow(1 - t, 3);
+  const io = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+  function renderPhones(p) {
+    const w = phones[0].el.offsetWidth;
+    const t1 = out(seg(p, 0.02, 0.28));
+    const t3 = io(seg(p, 0.66, 0.9));
+    const sway = Math.sin(seg(p, 0.28, 0.66) * Math.PI * 2) * 12 * (1 - t3);
+    pStage.style.setProperty('--intro', (1 - seg(p, 0.08, 0.2)).toFixed(3));
+    pStage.style.setProperty('--glow', (0.45 + t1 * 0.4 - t3 * 0.15).toFixed(3));
+    pStage.style.setProperty('--outro', out(seg(p, 0.82, 0.96)).toFixed(3));
+    setKind(phones[0], p < 0.42 ? 'gimnasio' : p < 0.54 ? 'barberia' : p < 0.66 ? 'restaurante' : 'barberia');
+    phones.forEach((phone, i) => {
+      const [sx, sr, sz] = SLOTS[ORDER[i]];
+      let x = lerp(0, sx * w * 1.02, t3), ry = lerp(0, sr, t3), z = lerp(0, sz, t3);
+      let rx = 0, y = 0, scale = lerp(1, 0.78, t3), alpha = 1;
+      if (i === 0) {
+        ry += lerp(180, 0, t1) + sway;
+        rx = lerp(20, 4, t1) * (1 - t3);
+        y = lerp(innerHeight * 0.24, innerHeight * 0.06, t1) * (1 - t3) - innerHeight * 0.13 * t3;
+        scale *= lerp(0.7, 1, t1);
+      } else {
+        alpha = clamp(t3 * 2.4, 0, 1);
+        z -= (1 - t3) * 220;
+        y = -innerHeight * 0.13 * t3;
+      }
+      phone.el.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, ${z.toFixed(1)}px) rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg) scale(${scale.toFixed(3)})`;
+      phone.el.style.opacity = alpha.toFixed(3);
+    });
+    notes.forEach((note) => {
+      const a = Number(note.dataset.in), b = Number(note.dataset.out);
+      const v = Math.min(seg(p, a, a + 0.04), 1 - seg(p, b - 0.04, b));
+      note.style.opacity = v.toFixed(3);
+      note.style.filter = `blur(${((1 - v) * 14).toFixed(1)}px)`;
+    });
+  }
+
+  /* ================= 3 · CINTAS ================= */
+  const runsSec = document.querySelector('.runs');
+  const runs = [...runsSec.querySelectorAll('.run')];
+  function renderRuns() {
+    if (reduce) return;
+    runs.forEach((run) => run.style.setProperty('--x', `${((innerHeight - run.getBoundingClientRect().top) * Number(run.dataset.speed) - 200).toFixed(1)}px`));
+  }
+
+  /* ================= bucle único ================= */
+  const progress = (el) => clamp(-el.getBoundingClientRect().top / (el.offsetHeight - innerHeight), 0, 1);
+  const near = (el) => { const r = el.getBoundingClientRect(); return r.bottom > -innerHeight && r.top < innerHeight * 2; };
+  let last = performance.now();
+  function frame(now) {
+    const dt = Math.min(0.05, (now - last) / 1000);
+    last = now;
+    if (near(zoom)) {
+      const p = progress(zoom);
+      zTarget = p * N;
+      zNow = reduce ? zTarget : zNow + (zTarget - zNow) * (1 - Math.exp(-dt * 7));
+      if (Math.abs(zTarget - zNow) < 0.0005) zNow = zTarget;
+      zStage.style.setProperty('--zp', p.toFixed(4));
+      renderZoom(Math.min(zNow, N - 0.0001) + 0.0001);
+    }
+    if (near(phonesSec)) renderPhones(progress(phonesSec));
+    if (near(runsSec)) renderRuns();
+    requestAnimationFrame(frame);
+  }
+
+  // Solo para pruebas con Playwright: lleva el zoom a un punto exacto.
+  window.__zoomAt = (value) => { zNow = value; zTarget = value; renderZoom(value); };
+
+  addEventListener('resize', fitPhones);
+  new ResizeObserver(() => { sizeZoom(); renderZoom(Math.min(zNow, N - 0.0001) + 0.0001); }).observe(zStage);
+  sizeZoom();
+  renderZoom(0.0001);
+  requestAnimationFrame(frame);
+
+  /* ================= 4 · RUBROS (foto que sigue al cursor) ================= */
+  const peek = document.querySelector('.peek');
+  const peekImg = peek.querySelector('img');
+  if (fine) {
+    let tx = 0, ty = 0, x = 0, y = 0, raf = 0;
+    const loop = () => {
+      const vx = tx - x;
+      x += vx * 0.16; y += (ty - y) * 0.16;
+      peek.style.setProperty('--px', `${x.toFixed(1)}px`);
+      peek.style.setProperty('--py', `${y.toFixed(1)}px`);
+      peek.style.setProperty('--pr', `${reduce ? 0 : clamp(vx * 0.06, -10, 10).toFixed(2)}deg`);
+      raf = Math.abs(tx - x) + Math.abs(ty - y) > 0.5 ? requestAnimationFrame(loop) : 0;
+    };
+    addEventListener('pointermove', (e) => { tx = e.clientX + 24; ty = e.clientY - peek.offsetHeight / 2; if (!raf) raf = requestAnimationFrame(loop); }, { passive: true });
+    document.querySelectorAll('.rubro').forEach((rubro) => {
+      rubro.addEventListener('pointerenter', () => { peekImg.src = `img/${rubro.dataset.img}.webp`; peek.classList.toggle('flip', rubro.hasAttribute('data-flip')); peek.classList.add('is-on'); });
+      rubro.addEventListener('pointerleave', () => peek.classList.remove('is-on'));
+    });
+  }
+
+  /* ================= 6 · ESCRIBIME ================= */
+  const shout = document.querySelector('.shout');
+  const parts = [...shout.children].map((el) => ({ el, x: 0, y: 0, vx: 0, vy: 0, tx: 0, ty: 0 }));
+  if (fine && !reduce) {
+    let raf = 0;
+    const step = () => {
+      let moving = false;
+      parts.forEach((p) => {
+        p.vx += (p.tx - p.x) * 0.12; p.vy += (p.ty - p.y) * 0.12; p.vx *= 0.78; p.vy *= 0.78; p.x += p.vx; p.y += p.vy;
+        if (Math.abs(p.vx) + Math.abs(p.vy) + Math.abs(p.tx - p.x) + Math.abs(p.ty - p.y) > 0.1) moving = true;
+        p.el.style.setProperty('--dx', `${p.x.toFixed(1)}px`); p.el.style.setProperty('--dy', `${p.y.toFixed(1)}px`); p.el.style.setProperty('--dr', `${(p.x * 0.12).toFixed(2)}deg`);
+      });
+      raf = moving ? requestAnimationFrame(step) : 0;
+    };
+    shout.addEventListener('pointermove', (e) => {
+      parts.forEach((p) => {
+        const r = p.el.getBoundingClientRect();
+        const dx = r.left + r.width / 2 - p.x - e.clientX, dy = r.top + r.height / 2 - p.y - e.clientY;
+        const d = Math.hypot(dx, dy) || 1, force = clamp(1 - d / 260, 0, 1) * 70;
+        p.tx = (dx / d) * force; p.ty = (dy / d) * force;
+      });
+      if (!raf) raf = requestAnimationFrame(step);
+    });
+    shout.addEventListener('pointerleave', () => { parts.forEach((p) => { p.tx = 0; p.ty = 0; }); if (!raf) raf = requestAnimationFrame(step); });
+  }
+
+  /* ================= cursor ================= */
+  if (fine) {
+    const cursor = document.querySelector('.cursor');
+    let cx = -100, cy = -100, x = -100, y = -100, raf = 0;
+    const loop = () => {
+      x += (cx - x) * 0.25; y += (cy - y) * 0.25;
+      cursor.style.setProperty('--cx', `${x.toFixed(1)}px`); cursor.style.setProperty('--cy', `${y.toFixed(1)}px`);
+      raf = Math.abs(cx - x) + Math.abs(cy - y) > 0.3 ? requestAnimationFrame(loop) : 0;
+    };
+    addEventListener('pointermove', (e) => {
+      cx = e.clientX; cy = e.clientY; pointerX = e.clientX;
+      const t = e.target;
+      cursor.dataset.mode = t.closest?.('a, button, input, label') ? 'link' : t.closest?.('.zoom-chain > .scene > .win') ? 'enter' : '';
+      if (!raf) raf = requestAnimationFrame(loop);
+    }, { passive: true });
+    // Tocar la ventana del zoom te lleva adentro (a la escena siguiente).
+    chain.addEventListener('click', (e) => {
+      if (!e.target.closest('.zoom-chain > .scene > .win')) return;
+      const total = zoom.offsetHeight - innerHeight;
+      const next = Math.min(N, Math.floor(zTarget) + 1);
+      scrollTo({ top: zoom.offsetTop + total * (next / N) + 2, behavior: reduce ? 'auto' : 'smooth' });
+    });
+  } else if (!reduce) {
+    // En táctiles, TARS respira con una ola lenta.
+    const wave = (t) => { pointerX = innerWidth / 2 + Math.sin(t / 900) * innerWidth * 0.4; requestAnimationFrame(wave); };
+    requestAnimationFrame(wave);
+  }
+</script>
+</body>
+</html>

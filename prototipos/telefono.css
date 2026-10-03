@@ -1,0 +1,158 @@
+/* Celular de muestra: copiado de riso.css (prueba de imprenta) para los prototipos. */
+:root { --ink: #141414; --text: 'Libre Franklin', system-ui, sans-serif; }
+/* El celular: la pantalla está dibujada a 312 x 640 y se escala con --s (lo
+   calcula proof.js con el ancho real). El marco es un contorno, así la caja
+   conserva la proporción exacta de la pantalla. */
+.proof-phone {
+  --s: 1;
+  position: relative;
+  width: clamp(13.5rem, 22vw, 19.5rem);
+  aspect-ratio: 312 / 640;
+  margin: 9px;
+  border-radius: calc(42px * var(--s));
+  outline: 9px solid var(--ink);
+  background: var(--ink);
+  overflow: hidden;
+}
+
+.proof-phone::after {
+  content: "";
+  position: absolute;
+  top: 1.6%;
+  left: 37%;
+  width: 26%;
+  height: 3.2%;
+  border-radius: 999px;
+  background: #0b0b0b;
+}
+
+.proof-screen {
+  --pb: #110b08;
+  --pt: #f3e9d8;
+  --pa: #e8743f;
+  --pm: #a8998a;
+  --ps: #1f1510;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 312px;
+  height: 640px;
+  overflow: hidden;
+  transform-origin: 0 0;
+  transform: scale(var(--s));
+  background: var(--pb);
+  color: var(--pt);
+  font-family: var(--text);
+  font-size: 13px;
+  line-height: 1.3;
+}
+
+.proof-screen[data-kind="ropa"] { --pb: #ffffff; --pt: #1b1b1b; --pa: #b5532f; --pm: #6a645c; --ps: #f0ede7; }
+.proof-screen[data-kind="barberia"] { --pb: #0a0f15; --pt: #efe6d5; --pa: #c9a35b; --pm: #98a0aa; --ps: #18212c; }
+.proof-screen[data-kind="gimnasio"] { --pb: #090909; --pt: #f2f2f2; --pa: #c6f432; --pm: #a0a0a0; --ps: #191919; }
+.proof-screen[data-kind="otro"] { --pb: #f1ece2; --pt: #141414; --pa: #ff48b0; --pm: #4a453d; --ps: #e2dbcd; }
+
+/* Pantallas de muestra del celular. Cada rubro define su paleta con --pb
+   (fondo), --pt (texto), --pa (acento), --pm (texto suave) y --ps (superficie);
+   las piezas son compartidas. Medidas en px: la pantalla entera se escala. */
+.proof-screen i,
+.proof-screen em { font-style: normal; }
+.proof-screen b { font-weight: 800; }
+.proof-screen small { display: block; margin-top: 3px; font-size: 11px; font-weight: 500; color: var(--pm); }
+.proof-screen svg { fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+.proof-screen img { display: block; }
+
+.pf-hero { position: relative; overflow: hidden; }
+.pf-hero img { width: 100%; height: auto; }
+.pf-top { position: absolute; top: 40px; left: 14px; right: 14px; display: flex; justify-content: space-between; }
+.pf-top div { display: flex; gap: 8px; }
+.pf-rb { display: grid; place-items: center; flex: none; width: 32px; height: 32px; border-radius: 50%; background: color-mix(in srgb, var(--pb) 78%, transparent); color: var(--pt); }
+.pf-rb svg { width: 16px; height: 16px; }
+.pf-sheet { position: relative; margin-top: -18px; padding: 16px 16px 0; border-radius: 20px 20px 0 0; background: var(--pb); }
+.pf-pad { padding: 50px 16px 0; }
+.pf-pad .pf-rb { background: var(--ps); }
+.pf-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.pf-name { display: block; font-size: 21px; line-height: 1.05; letter-spacing: -0.01em; overflow-wrap: anywhere; }
+.pf-logo { display: grid; place-items: center; flex: none; width: 44px; height: 44px; border-radius: 50%; background: var(--pa); color: var(--pb); font-weight: 800; font-size: 14px; }
+.pf-meta { display: flex; gap: 6px; margin-top: 12px; font-weight: 700; font-size: 11px; }
+.pf-meta span { padding: 6px 8px; border-radius: 8px; background: var(--ps); white-space: nowrap; }
+.pf-meta i { color: #f4b740; }
+.pf-seg { display: grid; grid-template-columns: 1fr 1fr 1.300fr; margin-top: 12px; padding: 3px; border-radius: 12px; background: var(--ps); color: var(--pm); font-weight: 700; font-size: 11.5px; text-align: center; }
+.pf-seg span { padding: 8px 0; border-radius: 9px; }
+.pf-seg .on { background: var(--pt); color: var(--pb); }
+.pf-tabs { display: flex; gap: 16px; margin-top: 14px; border-bottom: 1px solid var(--ps); color: var(--pm); font-weight: 700; font-size: 12px; white-space: nowrap; }
+.pf-tabs span { padding-bottom: 9px; }
+.pf-tabs .on { color: var(--pt); box-shadow: inset 0 -2px 0 var(--pa); }
+.pf-item { display: grid; grid-template-columns: 1fr 66px; align-items: center; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--ps); }
+.pf-item b { display: block; font-weight: 700; font-size: 13.5px; }
+.pf-item em { display: block; margin-top: 4px; font-weight: 800; }
+.pf-ph { position: relative; width: 66px; height: 66px; }
+.pf-ph img { width: 66px; height: 66px; border-radius: 12px; }
+.pf-ph i { position: absolute; right: -5px; bottom: -5px; width: 24px; height: 24px; border: 2px solid var(--pb); border-radius: 50%; background: var(--pa); color: var(--pb); font-weight: 800; font-size: 17px; line-height: 19px; text-align: center; }
+.pf-bar { position: absolute; left: 14px; right: 14px; bottom: 16px; display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 14px; background: var(--pa); color: var(--pb); font-weight: 800; font-size: 13.5px; }
+.pf-bar > b { margin-left: auto; }
+.pf-bar small { margin-top: 2px; color: inherit; font-weight: 600; font-size: 10.5px; }
+.pf-bar em { margin-left: auto; padding: 9px 12px; border-radius: 10px; background: var(--pb); color: var(--pa); font-size: 12.5px; }
+.pf-n { width: 22px; height: 22px; border-radius: 6px; background: var(--pb); color: var(--pa); font-size: 12px; line-height: 22px; text-align: center; }
+
+.pf-off { position: absolute; left: 14px; bottom: 14px; padding: 5px 8px; border-radius: 6px; background: var(--pa); color: #fff; font-weight: 800; font-size: 11px; }
+.pf-info { padding: 13px 16px 0; }
+.pf-brand { color: var(--pm); font-weight: 800; font-size: 9.5px; letter-spacing: 0.24em; text-transform: uppercase; }
+.pf-title { margin-top: 5px; font-family: Georgia, serif; font-size: 22px; line-height: 1.1; }
+.pf-rate { margin-top: 6px; color: var(--pm); font-weight: 600; font-size: 11px; }
+.pf-rate i { color: #b57f00; }
+.pf-price { display: flex; align-items: baseline; gap: 8px; margin-top: 9px; }
+.pf-price b { font-size: 23px; }
+.pf-price s { color: var(--pm); }
+.pf-price em,
+.pf-fee { color: #14773f; font-weight: 800; font-size: 11.5px; }
+.pf-fee { margin-top: 3px; font-weight: 600; }
+.pf-label { margin-top: 12px; font-weight: 700; font-size: 11px; }
+.pf-label span { color: var(--pm); font-weight: 500; }
+.pf-colors { display: flex; gap: 11px; margin-top: 8px; padding-left: 4px; }
+.pf-colors i { width: 22px; height: 22px; border: 1px solid rgba(0, 0, 0, 0.16); border-radius: 50%; }
+.pf-colors .on { outline: 2px solid var(--pt); outline-offset: 2px; }
+.pf-colors .c1 { background: #c08a4e; }
+.pf-colors .c2 { background: #2a2623; }
+.pf-colors .c3 { background: #e9e1d2; }
+.pf-colors .c4 { background: #6b7355; }
+.pf-sizes { display: flex; gap: 7px; margin-top: 7px; }
+.pf-sizes span { flex: 1; padding: 9px 0; border: 1px solid color-mix(in srgb, var(--pt) 24%, transparent); border-radius: 9px; font-weight: 700; font-size: 12px; text-align: center; }
+.pf-sizes .on { border-color: var(--pt); background: var(--pt); color: var(--pb); }
+.pf-sizes .no { color: #8d877e; text-decoration: line-through; }
+.pf-ship { display: flex; align-items: center; gap: 8px; margin-top: 12px; padding: 8px 10px; border-radius: 10px; background: var(--ps); font-weight: 600; font-size: 11.5px; }
+.pf-ship svg { width: 17px; height: 17px; color: #14773f; }
+.pf-ship b { color: #14773f; }
+.pf-buy { position: absolute; left: 0; right: 0; bottom: 0; display: grid; grid-template-columns: 46px 1fr; gap: 9px; padding: 10px 14px 16px; border-top: 1px solid var(--ps); background: var(--pb); }
+.pf-buy span { display: grid; place-items: center; border: 1px solid color-mix(in srgb, var(--pt) 24%, transparent); border-radius: 12px; }
+.pf-buy svg { width: 19px; height: 19px; }
+.pf-buy b { padding: 14px; border-radius: 12px; background: var(--pt); color: var(--pb); font-size: 13.5px; text-align: center; }
+
+.pf-stars { margin-top: 8px; color: var(--pm); font-weight: 600; font-size: 11.5px; }
+.pf-stars b { color: var(--pt); }
+.pf-stars i { color: var(--pa); }
+.pf-open { margin-top: 6px; color: #7fd08a; font-weight: 700; font-size: 11px; }
+.pf-open span { color: var(--pm); font-weight: 500; }
+.pf-serv { display: grid; grid-template-columns: 1fr auto; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--ps); }
+.pf-serv b { display: block; font-weight: 700; font-size: 13.5px; }
+.pf-serv small em { color: var(--pt); font-weight: 700; }
+.pf-serv > span { padding: 8px 12px; border: 1px solid var(--pa); border-radius: 999px; color: var(--pa); font-weight: 800; font-size: 11.5px; }
+.pf-serv > .on { background: var(--pa); color: var(--pb); }
+
+.pf-hi { margin-top: 14px; font-weight: 800; font-size: 26px; line-height: 1; text-transform: uppercase; }
+.pf-hi small { margin: 0 0 5px; font-size: 12px; text-transform: none; }
+.pf-card { display: grid; grid-template-columns: 1fr 84px; align-items: center; gap: 10px; margin-top: 12px; padding: 15px; border-radius: 18px; background: var(--pa); color: var(--pb); }
+.pf-card small { margin: 0; color: inherit; font-weight: 800; font-size: 9.5px; letter-spacing: 0.2em; }
+.pf-card b { display: block; margin: 6px 0 8px; font-size: 24px; line-height: 0.95; text-transform: uppercase; }
+.pf-card span { display: inline-block; padding: 5px 9px; border-radius: 999px; background: var(--pb); color: var(--pa); font-weight: 800; font-size: 10.5px; }
+.pf-qr { display: block; width: 84px; height: 84px; border-radius: 10px; }
+.pf-acts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; }
+.pf-acts div { padding: 11px 0 9px; border-radius: 14px; background: var(--ps); font-weight: 600; font-size: 10.5px; text-align: center; }
+.pf-acts svg { display: block; width: 22px; height: 22px; margin: 0 auto 6px; color: var(--pa); }
+.pf-cap { margin: 16px 0 8px; color: var(--pm); font-weight: 800; font-size: 10px; letter-spacing: 0.2em; }
+.pf-next { display: grid; grid-template-columns: 58px 1fr auto; align-items: center; gap: 8px; margin-top: 8px; padding: 12px 13px; border-radius: 14px; background: var(--ps); font-weight: 700; font-size: 14px; }
+.pf-next > b { font-size: 21px; }
+.pf-next > span { padding: 6px 9px; border: 1px solid var(--pa); border-radius: 999px; color: var(--pa); font-weight: 800; font-size: 10.5px; }
+.pf-claim { margin-top: 18px; font-weight: 800; font-size: 24px; line-height: 1.08; }
+.pf-cta { margin-top: 14px; padding: 13px; border-radius: 12px; background: var(--pa); color: #141414; font-weight: 800; text-align: center; }
+.pf-pad > .pf-stars { margin-top: 14px; }

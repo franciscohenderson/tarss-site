@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tars · Prototipo C · Minimal</title>
+<link rel="stylesheet" href="telefono.css">
+<style>
+  @font-face { font-family: 'LF'; src: url('../fonts/libre-franklin-var.woff2') format('woff2'); font-weight: 100 900; font-display: swap; }
+
+  /* Prototipo C — «Minimal»: blanco cálido, mucho aire, una sola tipografía y
+     un solo momento de movimiento: el celular que sube, se fija y recorre los
+     rubros mientras el texto de al lado cambia. */
+  :root {
+    --bg: #fbfbfa;
+    --ink: #1d1d1f;
+    --muted: #6b6b70;
+    --line: #e4e3df;
+    --soft: #f1f0ec;
+    --accent: #c8006a;
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { background: var(--bg); color: var(--ink); scrollbar-color: #c9c8c3 var(--bg); }
+  body { font-family: 'LF', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  ::selection { background: var(--ink); color: var(--bg); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 6px; }
+  a { color: inherit; }
+
+  .nav { position: sticky; top: 0; z-index: 30; display: flex; align-items: center; gap: 32px; height: 60px; padding: 0 clamp(20px, 5vw, 64px); background: var(--bg); box-shadow: 0 1px 0 var(--line); }
+  .brand { font: 800 20px 'LF'; letter-spacing: -0.03em; text-decoration: none; margin-right: auto; }
+  .nav a:not(.brand):not(.pill) { font: 500 14px 'LF'; color: var(--muted); text-decoration: none; transition: color 160ms var(--ease-out); }
+  @media (hover: hover) { .nav a:not(.brand):not(.pill):hover { color: var(--ink); } }
+  .pill { display: inline-flex; align-items: center; min-height: 44px; padding: 0 22px; border-radius: 999px; background: var(--ink); color: var(--bg); font: 700 15px 'LF'; text-decoration: none; transition: transform 120ms var(--ease-out), background-color 200ms var(--ease-out); }
+  .pill:active { transform: scale(0.97); }
+  .pill--small { min-height: 36px; padding: 0 16px; font-size: 14px; }
+  @media (hover: hover) { .pill:hover { background: #3a3a3e; } }
+  .link { font: 600 17px 'LF'; color: var(--accent); text-decoration: none; text-underline-offset: 4px; }
+  @media (hover: hover) { .link:hover { text-decoration: underline; } }
+
+  .hero { padding: clamp(72px, 12vh, 140px) 20px 0; text-align: center; overflow: clip; }
+  .hero h1 { font: 800 clamp(52px, 8vw, 96px)/1.0 'LF'; letter-spacing: -0.04em; text-wrap: balance; }
+  .hero p { max-width: 36ch; margin: 24px auto 0; font: 400 clamp(19px, 1.6vw, 23px)/1.45 'LF'; color: var(--muted); text-wrap: balance; }
+  .hero .row { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 26px; margin-top: 34px; }
+
+  /* El momento: el celular sube desde abajo, se fija y recorre los rubros. */
+  .tour { position: relative; height: 520vh; margin-top: 56px; }
+  .tour-stage { position: sticky; top: 60px; height: calc(100svh - 60px); display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: clamp(24px, 5vw, 80px); padding: 0 clamp(20px, 6vw, 96px); }
+  .tour-phone { grid-column: 2; width: clamp(240px, 22vw, 320px); transform: translateY(var(--rise, 0px)) scale(var(--grow, 1)); transform-origin: 50% 0; }
+  .tour-phone .proof-phone { width: 100%; margin: 0; box-shadow: 0 40px 80px rgb(29 29 31 / 0.16), 0 10px 20px rgb(29 29 31 / 0.08); }
+  .tour-phone .proof-screen { transition: opacity 400ms var(--ease-out); }
+  .tour-phone .proof-screen.is-out { opacity: 0; }
+  .steps { grid-column: 1; position: relative; min-height: 15em; }
+  .step { position: absolute; inset: 0 0 auto; opacity: 0; transform: translateY(16px); transition: opacity 500ms var(--ease-out), transform 500ms var(--ease-out); }
+  .step.is-on { opacity: 1; transform: none; }
+  .step h2 { font: 800 clamp(36px, 3.6vw, 56px)/1.04 'LF'; letter-spacing: -0.035em; }
+  .step p { margin-top: 16px; max-width: 32ch; font: 400 19px/1.5 'LF'; color: var(--muted); }
+  .dots { grid-column: 3; justify-self: start; display: grid; gap: 12px; list-style: none; }
+  .dots li { display: flex; align-items: center; gap: 12px; font: 600 14px 'LF'; color: var(--muted); transition: color 300ms var(--ease-out); }
+  .dots li::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--line); transition: background-color 300ms var(--ease-out), transform 300ms var(--ease-out); }
+  .dots li.is-on { color: var(--ink); }
+  .dots li.is-on::before { background: var(--accent); transform: scale(1.4); }
+  .muestra { font: 500 12px 'LF'; color: var(--muted); text-align: center; margin-top: 18px; }
+
+  .section { padding: clamp(96px, 16vh, 180px) clamp(20px, 6vw, 96px); }
+  .section > h2 { max-width: 18ch; font: 800 clamp(40px, 5vw, 72px)/1.02 'LF'; letter-spacing: -0.04em; text-wrap: balance; }
+  .section > p.lead { max-width: 48ch; margin-top: 18px; font: 400 20px/1.5 'LF'; color: var(--muted); }
+
+  .gallery { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(280px, 34vw); gap: 18px; margin: 48px calc(clamp(20px, 6vw, 96px) * -1) 0; padding: 0 clamp(20px, 6vw, 96px) 12px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+  .gallery figure { scroll-snap-align: start; }
+  .gallery .frame { aspect-ratio: 4 / 5; border-radius: 24px; overflow: hidden; background: var(--soft); clip-path: inset(12% 0 0 0 round 24px); transition: clip-path 1000ms var(--ease-out); }
+  .gallery figure.is-in .frame { clip-path: inset(0 0 0 0 round 24px); }
+  .gallery img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.06); transition: transform 1400ms var(--ease-out); }
+  .gallery figure.is-in img { transform: scale(1); }
+  .gallery .flip img { scale: -1 1; }
+  .gallery figcaption { margin-top: 14px; font: 600 17px 'LF'; }
+  .gallery figcaption span { display: block; font-weight: 400; color: var(--muted); font-size: 15px; margin-top: 2px; }
+
+  .prices { margin-top: 48px; border-top: 1px solid var(--line); }
+  .price { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 2fr) auto; align-items: baseline; gap: 24px; padding: 28px 0; border-bottom: 1px solid var(--line); }
+  .price h3 { font: 700 24px 'LF'; letter-spacing: -0.02em; }
+  .price p { color: var(--muted); font: 400 17px/1.5 'LF'; }
+  .price strong { font: 700 24px 'LF'; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .price strong small { font-size: 15px; font-weight: 500; color: var(--muted); }
+
+  .close { text-align: center; padding-bottom: 140px; }
+  .close h2 { margin: 0 auto; }
+  .close .lead { margin-inline: auto; }
+  .close .row { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 26px; margin-top: 34px; }
+  footer { padding: 28px clamp(20px, 6vw, 96px); border-top: 1px solid var(--line); font: 400 13px 'LF'; color: var(--muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+
+  @media (max-width: 860px) {
+    .nav a:not(.brand):not(.pill) { display: none; }
+    .tour-stage { grid-template-columns: minmax(0, 1fr); align-content: start; justify-items: center; gap: 22px; padding-top: 24px; }
+    .tour-phone { grid-column: 1; grid-row: 2; width: min(58vw, 260px); }
+    .steps { grid-column: 1; grid-row: 1; width: 100%; min-height: 9.5em; text-align: center; }
+    .step p { margin-inline: auto; font-size: 17px; }
+    .step h2 { font-size: 32px; }
+    .dots { display: none; }
+    .price { grid-template-columns: 1fr auto; }
+    .price p { grid-column: 1 / -1; grid-row: 2; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before { transition-duration: 0ms !important; }
+    .gallery .frame { clip-path: inset(0 round 24px); }
+  }
+</style>
+</head>
+<body>
+  <nav class="nav" aria-label="Principal">
+    <a class="brand" href="#">Tars</a>
+    <a href="#ejemplos">Ejemplos</a>
+    <a href="#precios">Precios</a>
+    <a href="#contacto">Contacto</a>
+    <a class="pill pill--small" href="https://wa.me/5492612408064" target="_blank" rel="noopener">Hablemos</a>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <h1>Webs que venden.</h1>
+      <p>Diseño a medida para negocios de Mendoza. Rápidas, claras y pensadas para que te escriban.</p>
+      <div class="row"><a class="pill" href="https://wa.me/5492612408064" target="_blank" rel="noopener">Armá tu presupuesto</a><a class="link" href="#ejemplos">Ver ejemplos ›</a></div>
+    </header>
+
+    <section class="tour" aria-label="Una web para cada rubro">
+      <div class="tour-stage">
+        <div class="steps"></div>
+        <div class="tour-phone" aria-hidden="true"><div class="proof-phone"></div><p class="muestra">Pantalla de muestra · negocio de ejemplo</p></div>
+        <ol class="dots"></ol>
+      </div>
+    </section>
+
+    <section class="section" id="ejemplos">
+      <h2>Para negocios de verdad.</h2>
+      <p class="lead">Cada web arranca por la persona que entra al local. Estas son muestras de diseño con negocios de ejemplo.</p>
+      <div class="gallery">
+        <figure><div class="frame"><img src="img/gimnasio.webp" alt="Hombre con gorra y remera negra apoyado en una pared" loading="lazy" style="object-position:58% 40%"></div><figcaption>Gimnasios<span>Carnet con QR y reserva de clases</span></figcaption></figure>
+        <figure class="flip"><div class="frame"><img src="img/barberia.webp" alt="Barbero secando la barba de un cliente" loading="lazy" style="object-position:62% 40%"></div><figcaption>Barberías<span>Turnos online sin hacer fila</span></figcaption></figure>
+        <figure><div class="frame"><img src="img/restaurante.webp" alt="Cocinero rubio cortando en una cocina luminosa" loading="lazy" style="object-position:50% 30%"></div><figcaption>Restaurantes<span>Carta, reservas y pedidos</span></figcaption></figure>
+        <figure><div class="frame"><img src="img/ropa.webp" alt="Hombre con tapado color camel" loading="lazy" style="object-position:50% 20%"></div><figcaption>Tiendas<span>Catálogo con talles y cuotas</span></figcaption></figure>
+      </div>
+    </section>
+
+    <section class="section" id="precios">
+      <h2>Precios claros.</h2>
+      <div class="prices">
+        <div class="price"><h3>Landing page</h3><p>Una página que presenta tu negocio y lleva a WhatsApp. Lista en 3 a 5 días.</p><strong>USD 149 <small>pago único</small></strong></div>
+        <div class="price"><h3>Mantenimiento</h3><p>Cambios, copias de seguridad y que todo siga andando rápido.</p><strong>USD 50 <small>por mes</small></strong></div>
+        <div class="price"><h3>SEO local</h3><p>Para que te encuentren en Google cuando buscan lo tuyo en Mendoza.</p><strong>USD 80</strong></div>
+      </div>
+    </section>
+
+    <section class="section close" id="contacto">
+      <h2>¿Empezamos?</h2>
+      <p class="lead">Escribime y en menos de 24 horas tenés la propuesta.</p>
+      <div class="row"><a class="pill" href="https://wa.me/5492612408064" target="_blank" rel="noopener">Escribir por WhatsApp</a><a class="link" href="mailto:contacto@tars.com.ar">contacto@tars.com.ar ›</a></div>
+    </section>
+  </main>
+  <footer><span>Tars · Diseño web en Mendoza</span><span>Prototipo C · no publicado</span></footer>
+
+<script type="module">
+  import { KINDS } from '../js/features/proof.js';
+
+  const STEPS = [
+    { kind: 'restaurante', sample: 'Brasa &amp; Vid', label: 'Restaurantes', title: 'Tu carta, siempre al día.', text: 'Platos con foto, reservas y pedidos que te llegan directo, sin comisiones.' },
+    { kind: 'barberia', sample: 'Filo Norte', label: 'Barberías', title: 'Turnos sin hacer fila.', text: 'Tus clientes eligen barbero y horario. Vos recibís el turno confirmado.' },
+    { kind: 'gimnasio', sample: 'Pulso', label: 'Gimnasios', title: 'El gym en el bolsillo.', text: 'Carnet digital con QR, clases para reservar y beneficios para socios.' },
+    { kind: 'ropa', sample: 'Lana Cruda', label: 'Tiendas', title: 'Tu local, abierto siempre.', text: 'Catálogo con talles, cuotas y envíos. Vendés mientras dormís.' },
+  ];
+
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const tour = document.querySelector('.tour');
+  const stage = tour.querySelector('.tour-stage');
+  const steps = stage.querySelector('.steps');
+  const dots = stage.querySelector('.dots');
+  const phone = stage.querySelector('.proof-phone');
+  const holder = stage.querySelector('.tour-phone');
+
+  STEPS.forEach((step) => {
+    steps.insertAdjacentHTML('beforeend', `<div class="step"><h2>${step.title}</h2><p>${step.text}</p></div>`);
+    dots.insertAdjacentHTML('beforeend', `<li>${step.label}</li>`);
+  });
+  const stepEls = [...steps.children];
+  const dotEls = [...dots.children];
+
+  let current = -1;
+  function show(i) {
+    if (i === current) return;
+    current = i;
+    stepEls.forEach((el, n) => el.classList.toggle('is-on', n === i));
+    dotEls.forEach((el, n) => el.classList.toggle('is-on', n === i));
+    const next = document.createElement('div');
+    next.className = 'proof-screen is-out';
+    next.dataset.kind = STEPS[i].kind;
+    next.innerHTML = KINDS[STEPS[i].kind].screen(STEPS[i].sample);
+    const old = [...phone.querySelectorAll('.proof-screen')];
+    phone.append(next);
+    requestAnimationFrame(() => next.classList.remove('is-out'));
+    setTimeout(() => old.forEach((el) => el.remove()), reduce ? 0 : 420);
+  }
+
+  const fit = () => phone.style.setProperty('--s', (phone.clientWidth / 312).toFixed(4));
+  new ResizeObserver(fit).observe(phone);
+  fit();
+
+  const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+  let frame = 0;
+  function onScroll() {
+    frame = 0;
+    const rect = tour.getBoundingClientRect();
+    const total = tour.offsetHeight - stage.offsetHeight;
+    const p = clamp(-(rect.top - 60) / total, 0, 1);
+    // Antes de fijarse, el celular viene subiendo y creciendo desde abajo.
+    const before = clamp(rect.top / innerHeight, 0, 1);
+    if (!reduce) {
+      holder.style.setProperty('--rise', `${(before * 120).toFixed(1)}px`);
+      holder.style.setProperty('--grow', (1 - before * 0.08).toFixed(3));
+    }
+    show(Math.min(STEPS.length - 1, Math.floor(p * STEPS.length * 0.999)));
+  }
+  addEventListener('scroll', () => { if (!frame) frame = requestAnimationFrame(onScroll); }, { passive: true });
+  onScroll();
+
+  // La galería se descubre una sola vez al entrar.
+  const io = new IntersectionObserver((entries) => entries.forEach((entry) => {
+    if (entry.isIntersecting) { entry.target.classList.add('is-in'); io.unobserve(entry.target); }
+  }), { threshold: 0.3 });
+  document.querySelectorAll('.gallery figure').forEach((figure) => io.observe(figure));
+</script>
+</body>
+</html>

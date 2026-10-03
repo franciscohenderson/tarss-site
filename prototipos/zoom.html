@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tars · Prototipo E · Zoom infinito</title>
+<link rel="preload" as="image" href="img/gimnasio.webp">
+<style>
+  @font-face { font-family: 'BSD'; src: url('../fonts/big-shoulders-display-var.woff2') format('woff2'); font-weight: 100 900; font-display: swap; }
+  @font-face { font-family: 'LF'; src: url('../fonts/libre-franklin-var.woff2') format('woff2'); font-weight: 100 900; font-display: swap; }
+
+  /* Prototipo E — «Zoom infinito» (a lo Zoomquilt). Cada escena tiene una
+     ventana de navegador; adentro está la escena siguiente, que tiene otra
+     ventana, y así sin fin. El zoom entra a la ventana: cuando la ventana
+     llena la pantalla, esa escena pasa a ser la de afuera y nadie nota el
+     corte. Cada escena elige dónde va su ventana (el punto fijo del zoom se
+     calcula para que el encastre sea exacto). */
+  :root {
+    --ink: #141414;
+    --paper: #f1ece2;
+    --pink: #ff48b0;
+    --F: 3;                 /* la ventana mide 1/F de la pantalla */
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; overflow: hidden; background: var(--ink); overscroll-behavior: none; }
+  body { font-family: 'LF', system-ui, sans-serif; -webkit-font-smoothing: antialiased; touch-action: none; }
+  ::selection { background: var(--pink); color: var(--ink); }
+  :focus-visible { outline: 3px solid var(--pink); outline-offset: 4px; }
+
+  .stage { position: fixed; inset: 0; overflow: hidden; }
+
+  /* Una escena se dibuja siempre al tamaño real de la pantalla (--W x --H);
+     las de adentro se achican con scale(1/F). */
+  .scene { position: absolute; left: 0; top: 0; width: var(--W); height: var(--H); overflow: hidden; color: var(--fg); }
+  .scene[data-theme="light"] { --fg: var(--ink); --veil: 241 236 226; }
+  .scene[data-theme="dark"] { --fg: var(--paper); --veil: 10 8 6; }
+  /* Sin will-change: así el navegador redibuja la escena nítida a cada escala
+     (con will-change la agranda como una foto y al cambiar de escena «enfoca»). */
+
+  .photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .photo.flip { scale: -1 1; }
+  .veil { position: absolute; inset: 0; background: linear-gradient(90deg, rgb(var(--veil) / 0.9), rgb(var(--veil) / 0.55) 34%, rgb(var(--veil) / 0) 54%); }
+  .scene[data-kind="tars"] { background: radial-gradient(70% 90% at 72% 56%, #2a1022, var(--ink) 70%); }
+
+  .copy { position: absolute; left: 6%; top: 50%; width: 42%; translate: 0 -50%; opacity: var(--copy, 1); }
+  .hl { position: relative; z-index: 0; isolation: isolate; font: 900 calc(var(--W) * 0.072)/0.86 'BSD'; text-transform: uppercase; }
+  .hl::before { content: attr(data-text); content: attr(data-text) / ""; position: absolute; inset: 0; z-index: -1; white-space: pre-line; color: var(--pink); translate: 0.06em 0.045em; }
+  .scene[data-theme="light"] > .art .hl::before { mix-blend-mode: multiply; }
+  .scene[data-kind="tars"] > .art .hl { font-size: calc(var(--W) * 0.17); line-height: 0.8; }
+  .sub { max-width: 30ch; margin-top: calc(var(--W) * 0.016); font: 600 calc(var(--W) * 0.0135)/1.45 'LF'; }
+  .cta { display: inline-flex; align-items: center; min-height: calc(var(--W) * 0.032); margin-top: calc(var(--W) * 0.02); padding: 0 calc(var(--W) * 0.015); background: var(--pink); color: var(--ink); font: 800 calc(var(--W) * 0.0105) 'LF'; text-decoration: none; transition: background-color 160ms var(--ease-out), transform 120ms var(--ease-out); }
+  .cta:active { transform: scale(0.97); }
+  @media (hover: hover) { .cta:hover { background: var(--paper); } }
+
+  /* La ventana: barra de navegador arriba (afuera del recuadro, así al llenar
+     la pantalla queda fuera de cuadro) y el recuadro con la escena siguiente. */
+  .win { position: absolute; left: calc(var(--wx) * 100%); top: calc(var(--wy) * 100%); width: calc(100% / var(--F)); height: calc(100% / var(--F)); overflow: hidden; border-radius: var(--r, 10px); background: #1d1d22; }
+  /* Las escenas de adentro no heredan el desvanecido de la de afuera. */
+  .win > .scene { --chrome: 1; --r: 10px; --copy: 1; transform: scale(calc(1 / var(--F))); transform-origin: 0 0; pointer-events: none; }
+  .chrome { position: absolute; left: calc(var(--wx) * 100% - 1px); top: calc(var(--wy) * 100% - var(--W) * 0.022); width: calc(100% / var(--F) + 2px); height: calc(100% / var(--F) + var(--W) * 0.022 + 1px); border-radius: 12px; background: #f4f2ee; box-shadow: 0 calc(var(--W) * 0.02) calc(var(--W) * 0.04) rgb(0 0 0 / 0.38); opacity: var(--chrome, 1); display: flex; align-items: flex-start; gap: calc(var(--W) * 0.004); padding: calc(var(--W) * 0.0072) calc(var(--W) * 0.008); }
+  .chrome i { width: calc(var(--W) * 0.0055); aspect-ratio: 1; border-radius: 50%; background: #c9c5be; }
+  .chrome span { margin-left: calc(var(--W) * 0.008); padding: 0 calc(var(--W) * 0.008); border-radius: 99px; background: #e5e1da; color: #57534c; font: 600 calc(var(--W) * 0.0068)/calc(var(--W) * 0.0115) 'LF'; }
+  .deep { position: absolute; inset: 0; background: var(--deep, #222); }
+
+  /* Interfaz fija encima del zoom */
+  .hud { position: fixed; z-index: 10; inset: 0; pointer-events: none; color: var(--hud, var(--paper)); transition: color 400ms var(--ease-out); }
+  .hud a, .hud button { pointer-events: auto; }
+  .top { position: absolute; inset: 0 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 22px clamp(20px, 4vw, 56px); }
+  .brand { font: 900 30px/1 'BSD'; color: inherit; text-decoration: none; text-shadow: 3px 3px 0 var(--pink); }
+  .talk { display: inline-flex; align-items: center; min-height: 46px; padding: 0 20px; border: 2px solid currentColor; color: inherit; font: 800 14px 'LF'; text-decoration: none; transition: background-color 160ms var(--ease-out), color 160ms var(--ease-out); }
+  @media (hover: hover) { .talk:hover { background: var(--pink); border-color: var(--pink); color: var(--ink); } }
+  .where { position: absolute; left: clamp(20px, 4vw, 56px); bottom: 26px; display: flex; gap: 18px; list-style: none; }
+  .where button { all: unset; cursor: pointer; font: 800 12px 'LF'; letter-spacing: 0.16em; text-transform: uppercase; opacity: 0.55; padding: 6px 0; box-shadow: inset 0 -2px 0 transparent; transition: opacity 200ms var(--ease-out), box-shadow 300ms var(--ease-out); }
+  .where button[aria-current="true"] { opacity: 1; box-shadow: inset 0 -2px 0 var(--pink); }
+  .where button:focus-visible { outline: 3px solid var(--pink); outline-offset: 4px; }
+  .hint { position: absolute; left: 50%; bottom: 24px; translate: -50% 0; display: flex; align-items: center; gap: 10px; font: 700 12px 'LF'; letter-spacing: 0.16em; text-transform: uppercase; transition: opacity 600ms var(--ease-out); }
+  .hint b { display: block; width: 16px; height: 26px; border: 2px solid currentColor; border-radius: 10px; position: relative; }
+  .hint b::after { content: ""; position: absolute; left: 50%; top: 5px; width: 2px; height: 5px; margin-left: -1px; background: currentColor; border-radius: 2px; animation: wheel 1.6s var(--ease-out) infinite; }
+  @keyframes wheel { from { transform: translateY(0); opacity: 1; } to { transform: translateY(8px); opacity: 0; } }
+  .hint.is-gone { opacity: 0; }
+  .muestra { position: absolute; right: clamp(20px, 4vw, 56px); bottom: 28px; font: 700 10px 'LF'; letter-spacing: 0.22em; text-transform: uppercase; opacity: 0.7; }
+
+  @media (max-width: 760px), (orientation: portrait) {
+    .veil { background: linear-gradient(180deg, rgb(var(--veil) / 0.9), rgb(var(--veil) / 0.55) 36%, rgb(var(--veil) / 0) 52%); }
+    .copy { top: 11%; left: 6%; width: 88%; translate: none; }
+    .hl { font-size: calc(var(--W) * 0.14); }
+    .scene[data-kind="tars"] > .art .hl { font-size: calc(var(--W) * 0.3); }
+    .sub { font-size: calc(var(--W) * 0.04); }
+    .cta { min-height: calc(var(--W) * 0.11); padding: 0 calc(var(--W) * 0.05); font-size: calc(var(--W) * 0.036); margin-top: calc(var(--W) * 0.04); }
+    .chrome { top: calc(var(--wy) * 100% - var(--W) * 0.06); height: calc(100% / var(--F) + var(--W) * 0.06 + 1px); padding: calc(var(--W) * 0.02); gap: calc(var(--W) * 0.012); }
+    .chrome i { width: calc(var(--W) * 0.016); }
+    .chrome span { font-size: calc(var(--W) * 0.022); line-height: calc(var(--W) * 0.034); }
+    .where, .muestra { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hint b::after { animation: none; }
+  }
+</style>
+</head>
+<body>
+  <main class="stage" aria-label="Recorrido por negocios de ejemplo: bajá para entrar"></main>
+
+  <div class="hud">
+    <div class="top"><a class="brand" href="#">TARS</a><a class="talk" href="https://wa.me/5492612408064" target="_blank" rel="noopener">Hablemos</a></div>
+    <ul class="where"></ul>
+    <p class="hint"><b></b>Bajá para entrar · subí para salir</p>
+    <p class="muestra">Muestras de diseño · negocios de ejemplo</p>
+  </div>
+
+<script type="module">
+  /* Escenas del loop. win: centro de la ventana (fracción de pantalla) en
+     escritorio y en celular. url: la web que se ve adentro de la ventana
+     (la de la escena siguiente). deep: color de relleno para la ventana
+     más profunda, que mide unos pocos píxeles. */
+  const SCENES = [
+    { kind: 'tars', theme: 'dark', label: 'Tars', lines: ['TARS'], sub: 'Webs que venden, hechas una por una en Mendoza. Entrá: adentro de cada web hay otro negocio.', cta: 'Quiero la mía', win: [0.74, 0.56], winM: [0.5, 0.7], deep: '#1a0d16', url: 'tars.com.ar' },
+    { kind: 'gimnasio', theme: 'light', label: 'Gimnasios', img: 'gimnasio', pos: '42% 30%', lines: ['Tu gym', 'en el', 'bolsillo'], sub: 'Carnet digital con QR, reserva de clases y beneficios para cada socio.', cta: 'Quiero la web de mi gym', win: [0.82, 0.56], winM: [0.5, 0.72], deep: '#9aa3ab', url: 'pulsogym.com.ar' },
+    { kind: 'barberia', theme: 'dark', label: 'Barberías', img: 'barberia', pos: '30% 35%', flip: true, lines: ['Turnos', 'sin hacer', 'fila'], sub: 'Reserva online, elección de barbero y recordatorio por WhatsApp.', cta: 'Quiero la web de mi barbería', win: [0.82, 0.52], winM: [0.5, 0.72], deep: '#2b2118', url: 'filonorte.com.ar' },
+    { kind: 'restaurante', theme: 'light', label: 'Restaurantes', img: 'restaurante', pos: '48% 30%', lines: ['Tu carta', 'siempre', 'al día'], sub: 'Carta digital, reservas online y pedidos por WhatsApp.', cta: 'Quiero la web de mi restaurante', win: [0.82, 0.5], winM: [0.5, 0.72], deep: '#cdb89c', url: 'brasayvid.com.ar' },
+    { kind: 'ropa', theme: 'light', label: 'Tiendas', img: 'ropa', pos: '40% 18%', lines: ['Tu tienda', 'abierta', '24 horas'], sub: 'Catálogo con talles, cuotas y envíos a todo el país.', cta: 'Quiero la web de mi tienda', win: [0.82, 0.52], winM: [0.5, 0.72], deep: '#cbb7a3', url: 'lanacruda.com.ar' },
+  ];
+  const N = SCENES.length;
+  const DEPTH = 4; // escenas anidadas que se dibujan (la cuarta mide ~1/27 de pantalla)
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const mod = (n) => ((n % N) + N) % N;
+  const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+  const smooth = (a, b, x) => { const t = clamp((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); };
+
+  const stage = document.querySelector('.stage');
+  const hud = document.querySelector('.hud');
+  const hint = hud.querySelector('.hint');
+  const where = hud.querySelector('.where');
+  let F = 3;
+
+  // Cadena de escenas: cada una tiene su arte y su ventana con la siguiente adentro.
+  const levels = [];
+  let parent = stage;
+  for (let j = 0; j < DEPTH; j++) {
+    const scene = document.createElement('div');
+    scene.className = 'scene';
+    scene.innerHTML = '<div class="art"></div><div class="win"></div>';
+    if (j) scene.setAttribute('aria-hidden', 'true');
+    parent.append(scene);
+    levels.push({ el: scene, art: scene.firstChild, win: scene.lastChild, index: null });
+    parent = scene.lastChild;
+  }
+  levels[0].el.classList.add('is-outer');
+  levels[DEPTH - 1].win.innerHTML = '<div class="deep"></div>';
+
+  SCENES.forEach((s, i) => where.insertAdjacentHTML('beforeend', `<li><button type="button" data-i="${i}">${s.label}</button></li>`));
+  const whereButtons = [...where.querySelectorAll('button')];
+
+  const portrait = () => matchMedia('(max-width: 760px), (orientation: portrait)').matches;
+  const winOf = (s) => (portrait() ? s.winM : s.win);
+
+  function paint(level, index, outer) {
+    const s = SCENES[index];
+    const next = SCENES[mod(index + 1)];
+    const [cx, cy] = winOf(s);
+    level.index = index;
+    level.el.dataset.kind = s.kind;
+    level.el.dataset.theme = s.theme;
+    level.el.style.setProperty('--wx', (cx - 1 / (2 * F)).toFixed(4));
+    level.el.style.setProperty('--wy', (cy - 1 / (2 * F)).toFixed(4));
+    level.el.style.setProperty('--deep', next.deep);
+    const tag = outer ? 'h1' : 'p';
+    level.art.innerHTML = `${s.img ? `<img class="photo ${s.flip ? 'flip' : ''}" src="img/${s.img}.webp" alt="" style="object-position:${s.pos}" decoding="async">` : ''}${s.img ? '<div class="veil"></div>' : ''}
+      <div class="copy"><${tag} class="hl" data-text="${s.lines.join('\n')}">${s.lines.join('<br>')}</${tag}><p class="sub">${s.sub}</p><a class="cta" href="https://wa.me/5492612408064?text=${encodeURIComponent(`Hola Tars, vi el zoom y quiero una web (${s.label.toLowerCase()}).`)}" target="_blank" rel="noopener" ${outer ? '' : 'tabindex="-1"'}>${s.cta}</a></div>
+      <div class="chrome"><i></i><i></i><i></i><span>${next.url}</span></div>`;
+  }
+
+  let currentK = null;
+  function assign(k) {
+    levels.forEach((level, j) => paint(level, mod(k + j), j === 0));
+    currentK = k;
+  }
+
+  function size() {
+    F = portrait() ? 2.6 : 3;
+    document.documentElement.style.setProperty('--F', F);
+    document.documentElement.style.setProperty('--W', `${innerWidth}px`);
+    document.documentElement.style.setProperty('--H', `${innerHeight}px`);
+    if (currentK !== null) assign(currentK);
+  }
+
+  function render(z) {
+    const k = Math.floor(z);
+    const f = z - k;
+    if (k !== currentK) assign(k);
+    const s = SCENES[mod(k)];
+    const [cx, cy] = winOf(s);
+    // Punto fijo del zoom: el único punto que no se mueve al agrandar la escena
+    // y hace que la ventana termine llenando la pantalla exacta.
+    const left = cx - 1 / (2 * F), top = cy - 1 / (2 * F);
+    const px = (left / (1 - 1 / F)) * innerWidth;
+    const py = (top / (1 - 1 / F)) * innerHeight;
+    const outer = levels[0].el;
+    outer.style.transformOrigin = `${px.toFixed(1)}px ${py.toFixed(1)}px`;
+    outer.style.transform = `scale(${Math.pow(F, f).toFixed(5)})`;
+    outer.style.setProperty('--chrome', (1 - smooth(0.55, 0.97, f)).toFixed(3));
+    outer.style.setProperty('--r', `${(10 * (1 - f)).toFixed(2)}px`);
+    outer.style.setProperty('--copy', (1 - smooth(0.15, 0.45, f)).toFixed(3));
+    const shown = f < 0.5 ? mod(k) : mod(k + 1);
+    hud.style.setProperty('--hud', SCENES[shown].theme === 'dark' ? 'var(--paper)' : 'var(--ink)');
+    whereButtons.forEach((b, i) => b.setAttribute('aria-current', String(i === shown)));
+  }
+
+  /* Velocidad: el zoom avanza solo, despacio; la rueda, el dedo y las
+     flechas lo aceleran o lo hacen retroceder, y vuelve solo a la deriva. */
+  const DRIFT = reduce ? 0 : 0.055;
+  let z = 0.0001, v = DRIFT, last = performance.now(), touched = false, goal = null;
+  const nudge = (dv) => {
+    v = clamp(v + dv, -2.4, 2.4);
+    if (!touched) { touched = true; hint.classList.add('is-gone'); }
+  };
+  addEventListener('wheel', (e) => { e.preventDefault(); goal = null; nudge(e.deltaY * (e.deltaMode ? 0.03 : 0.0011)); }, { passive: false });
+  let ty = null;
+  addEventListener('touchstart', (e) => { ty = e.touches[0].clientY; }, { passive: true });
+  addEventListener('touchmove', (e) => { if (ty === null) return; const y = e.touches[0].clientY; goal = null; nudge((ty - y) * 0.006); ty = y; }, { passive: true });
+  addEventListener('touchend', () => { ty = null; });
+  addEventListener('keydown', (e) => {
+    if (['ArrowDown', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); goal = null; nudge(0.7); }
+    if (['ArrowUp', 'PageUp'].includes(e.key)) { e.preventDefault(); goal = null; nudge(-0.7); }
+  });
+  whereButtons.forEach((b) => b.addEventListener('click', () => {
+    // Viaja hacia adelante hasta la escena elegida.
+    const ahead = mod(Number(b.dataset.i) - mod(Math.floor(z))) || N;
+    goal = Math.floor(z) + ahead;
+    nudge(0);
+  }));
+
+  function tick(now) {
+    const dt = Math.min(0.05, (now - last) / 1000);
+    last = now;
+    if (goal !== null) {
+      const d = goal - z;
+      v = clamp(d * 2.2, -3, 3);
+      if (Math.abs(d) < 0.002) { z = goal + 0.0001; goal = null; v = DRIFT; }
+    } else {
+      v += (DRIFT - v) * (1 - Math.exp(-dt * 1.4));
+    }
+    z += v * dt;
+    render(z);
+    requestAnimationFrame(tick);
+  }
+
+  // Solo para pruebas con Playwright: fija el zoom en un punto y lo congela.
+  window.__zoomAt = (value) => { z = value; goal = null; v = 0; render(z); };
+
+  addEventListener('resize', () => { size(); render(z); });
+  size();
+  render(z);
+  requestAnimationFrame(tick);
+</script>
+</body>
+</html>

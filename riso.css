@@ -3160,7 +3160,7 @@ h3 {
 .pf-card small { margin: 0; color: inherit; font-weight: 800; font-size: 9.5px; letter-spacing: 0.2em; }
 .pf-card b { display: block; margin: 6px 0 8px; font-size: 24px; line-height: 0.95; text-transform: uppercase; }
 .pf-card span { display: inline-block; padding: 5px 9px; border-radius: 999px; background: var(--pb); color: var(--pa); font-weight: 800; font-size: 10.5px; }
-.pf-qr { width: 84px; height: 84px; border: 8px solid #f2f2f2; border-radius: 10px; background: conic-gradient(#090909 25%, #f2f2f2 0 50%, #090909 0 75%, #f2f2f2 0) 0 0 / 17px 17px; }
+.pf-qr { display: block; width: 84px; height: 84px; border-radius: 10px; }
 .pf-acts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; }
 .pf-acts div { padding: 11px 0 9px; border-radius: 14px; background: var(--ps); font-weight: 600; font-size: 10.5px; text-align: center; }
 .pf-acts svg { display: block; width: 22px; height: 22px; margin: 0 auto 6px; color: var(--pa); }
