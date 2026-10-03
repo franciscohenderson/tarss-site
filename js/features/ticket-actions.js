@@ -9,7 +9,7 @@
    ========================================================================== */
 import { showToast, setBusy } from '../lib/toast.js';
 import { trackEvent } from '../lib/track.js';
-import { quoteAnalytics } from '../lib/quote.js';
+import { quoteAnalytics } from '../lib/quote.js?v=20261003b';
 
 export function initTicketActions(register) {
   const pdfButton = document.querySelector('#ticket-pdf');
