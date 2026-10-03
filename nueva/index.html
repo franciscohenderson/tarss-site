@@ -217,10 +217,34 @@
   .total { position: sticky; top: 96px; padding: 30px; border-radius: 24px; background: var(--fg); color: var(--bg); }
   .total p { font: 700 13px 'LF'; letter-spacing: 0.16em; text-transform: uppercase; color: #5b5750; }
   .total output { display: block; margin: 10px 0 4px; font: 900 clamp(64px, 7vw, 104px)/0.9 'BSD'; font-variant-numeric: tabular-nums; }
-  .total .monthly { font: 700 16px 'LF'; color: #5b5750; min-height: 1.4em; }
+  .total .monthly { font: 800 22px 'LF'; color: var(--bg); min-height: 1.4em; margin-top: 8px; }
+  .total .once-label { margin-top: -2px; letter-spacing: 0.1em; }
   .total .btn { width: 100%; margin-top: 22px; background: var(--bg); color: var(--fg); }
   @media (hover: hover) { .total .btn:hover { background: var(--pink); color: #120a10; } }
   .total .note { margin-top: 14px; font: 500 14px/1.45 'LF'; color: #5b5750; letter-spacing: 0; text-transform: none; }
+
+  /* Pasos del armado: web (opciones), asistente (barra por alcance), extras. */
+  .step-title { margin: 6px 0 2px; font: 800 12px 'LF'; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+  .step-title:first-child { margin-top: 0; }
+  .webs { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .web { position: relative; display: grid; gap: 6px; padding: 22px 24px; border-radius: 20px; background: var(--bg2); box-shadow: inset 0 0 0 1.5px transparent; cursor: pointer; transition: box-shadow 200ms var(--ease-out), background-color 200ms var(--ease-out); }
+  .web input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
+  .web:has(input:checked) { box-shadow: inset 0 0 0 1.5px var(--pink); background: #1d1219; }
+  .web:has(input:focus-visible) { outline: 3px solid var(--pink); outline-offset: 3px; }
+  .web b { font: 800 19px 'LF'; }
+  .web small { color: var(--muted); font: 500 15px/1.45 'LF'; }
+  .web span.p { font: 900 34px/1 'BSD'; margin-top: 4px; }
+  .reach { display: grid; gap: 14px; padding: 24px; border-radius: 20px; background: var(--bg2); }
+  .reach-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; }
+  .reach-head b { font: 800 19px 'LF'; }
+  .reach-head output { font: 900 34px/1 'BSD'; color: var(--pink); white-space: nowrap; }
+  .reach input[type="range"] { width: 100%; accent-color: var(--pink); height: 28px; cursor: pointer; }
+  .ticks { display: grid; grid-template-columns: repeat(4, 1fr); font: 700 12px 'LF'; color: var(--muted); }
+  .ticks span:nth-child(2), .ticks span:nth-child(3) { text-align: center; }
+  .ticks span:last-child { text-align: right; }
+  .reach p { color: var(--muted); font: 500 15px/1.5 'LF'; }
+  .reach p strong { color: var(--fg); }
+  .fine { margin-top: 10px; color: var(--muted); font: 500 13px/1.5 'LF'; }
 
   /* Preguntas */
   .faq { margin-top: 48px; border-top: 1px solid var(--line); max-width: 920px; }
@@ -252,6 +276,7 @@
     .builder { grid-template-columns: minmax(0, 1fr); }
     .item { grid-template-columns: auto minmax(0, 1fr); row-gap: 10px; }
     .item span.p { grid-column: 2; }
+    .webs { grid-template-columns: minmax(0, 1fr); }
     .bento { grid-template-columns: minmax(0, 1fr); }
     .t-phone, .t-chat, .t-days, .t-me { grid-column: auto; grid-row: auto; }
     .tile { min-height: 0; }
@@ -307,17 +332,30 @@
       <p class="lead">Prendé lo que necesitás y mandame el pedido por WhatsApp. Sin letra chica.</p>
       <div class="builder">
         <div class="items">
-          <label class="item"><input type="checkbox" data-price="149" data-name="Landing page" checked disabled><span><b>Landing page</b><small>Una página que presenta tu negocio y lleva a WhatsApp.</small></span><span class="p">USD 149</span></label>
+          <p class="step-title">1 · Tu web</p>
+          <div class="webs" role="radiogroup" aria-label="Tipo de web">
+            <label class="web"><input type="radio" name="web" value="149" data-name="Landing page" checked><b>Landing page</b><small>Una página que presenta tu negocio y lleva a WhatsApp. Lista en 3 a 5 días.</small><span class="p">USD 149</span></label>
+            <label class="web"><input type="radio" name="web" value="349" data-name="Sitio completo (4 o 5 páginas)"><b>Sitio completo</b><small>4 o 5 páginas: servicios, carta o catálogo, nosotros y contacto. 7 a 10 días.</small><span class="p">USD 349</span></label>
+          </div>
+          <p class="step-title">2 · Asistente de IA para WhatsApp</p>
+          <div class="reach">
+            <div class="reach-head"><b>¿Cuántas personas te escriben por mes?</b><output id="reach-out">Sin asistente</output></div>
+            <input id="reach" type="range" min="0" max="3" step="1" value="0" aria-label="Personas que te escriben por mes">
+            <div class="ticks" aria-hidden="true"><span>Sin asistente</span><span>Hasta 200</span><span>Hasta 800</span><span>Hasta 2.500</span></div>
+            <p id="reach-note">Movés la barra y ves el plan que te conviene. La instalación del asistente va incluida.</p>
+          </div>
+          <p class="step-title">3 · Extras</p>
           <label class="item"><input type="checkbox" data-month="50" data-name="Mantenimiento"><span><b>Mantenimiento</b><small>Cambios, copias de seguridad y que todo siga andando rápido.</small></span><span class="p">USD 50 <small>/mes</small></span></label>
-          <label class="item"><input type="checkbox" data-ask="1" data-name="Asistente de IA para WhatsApp"><span><b>Asistente de IA para WhatsApp</b><small>Atiende tu WhatsApp las 24 horas como una persona de tu negocio, y le pasa la charla a tu equipo cuando hace falta.</small></span><span class="p ask">A consultar</span></label>
           <label class="item"><input type="checkbox" data-price="80" data-name="SEO local"><span><b>SEO local</b><small>Para que te encuentren en Google cuando buscan lo tuyo en Mendoza.</small></span><span class="p">USD 80</span></label>
+          <p class="fine">Precios en dólares. Si WhatsApp (Meta) cobra algún tipo de mensaje del asistente, ese costo va aparte y te lo explico antes.</p>
         </div>
         <aside class="total" aria-live="polite">
           <p>Total</p>
           <output id="total">USD 149</output>
+          <p class="once-label">pago único</p>
           <div class="monthly" id="monthly"></div>
           <a class="btn" id="pedido" href="#" target="_blank" rel="noopener">Pedir por WhatsApp</a>
-          <p class="note">Pago único por la web. Te respondo con la propuesta en menos de 24 horas.</p>
+          <p class="note">El primer número se paga una vez; lo mensual, cada mes. Te respondo con la propuesta en menos de 24 horas.</p>
         </aside>
       </div>
     </section>
@@ -489,8 +527,18 @@
   const miniPhone = mini.parentElement;
   new ResizeObserver(() => miniPhone.style.setProperty('--s', (miniPhone.clientWidth / 312).toFixed(4))).observe(miniPhone);
 
-  /* Armá tu precio */
+  /* Armá tu precio: web (única) + asistente por alcance (mensual) + extras. */
+  const PLANS = [
+    null,
+    { name: 'Asistente de IA · Arranque (hasta 200 personas por mes)', short: 'Arranque', month: 39, note: 'Para negocios que reciben pocas consultas pero no quieren perder ninguna, ni de noche.' },
+    { name: 'Asistente de IA · Negocio (hasta 800 personas por mes)', short: 'Negocio', month: 79, note: 'El más elegido: toma pedidos, da turnos y contesta precios todo el día.' },
+    { name: 'Asistente de IA · Alto volumen (hasta 2.500 personas por mes)', short: 'Alto volumen', month: 149, note: 'Para locales con mucho movimiento: atiende y le pasa a tu equipo lo que hay que cerrar.' },
+  ];
   const boxes = [...document.querySelectorAll('.item input')];
+  const webs = [...document.querySelectorAll('.web input')];
+  const reach = document.getElementById('reach');
+  const reachOut = document.getElementById('reach-out');
+  const reachNote = document.getElementById('reach-note');
   const out = document.getElementById('total');
   const monthly = document.getElementById('monthly');
   const pedido = document.getElementById('pedido');
@@ -507,16 +555,21 @@
     requestAnimationFrame(step);
   }
   function updateTotal() {
-    const on = boxes.filter((b) => b.checked);
-    const once = on.reduce((s, b) => s + Number(b.dataset.price || 0), 0);
-    const month = on.reduce((s, b) => s + Number(b.dataset.month || 0), 0);
+    const web = webs.find((w) => w.checked);
+    const plan = PLANS[Number(reach.value)];
+    const extras = boxes.filter((b) => b.checked);
+    const once = Number(web.value) + extras.reduce((s, b) => s + Number(b.dataset.price || 0), 0);
+    const month = (plan ? plan.month : 0) + extras.reduce((s, b) => s + Number(b.dataset.month || 0), 0);
     animateTo(once);
-    const ask = on.some((b) => b.dataset.ask);
-    monthly.textContent = [month ? `+ USD ${month} por mes` : '', ask ? '+ asistente de IA (a consultar)' : ''].filter(Boolean).join(' · ');
-    const what = on.map((b) => b.dataset.name).join(', ');
+    monthly.textContent = month ? `+ USD ${month} por mes` : '';
+    reachOut.textContent = plan ? `${plan.short} · USD ${plan.month}/mes` : 'Sin asistente';
+    reachNote.innerHTML = plan ? `<strong>${plan.short}:</strong> ${plan.note} Instalación incluida.` : 'Movés la barra y ves el plan que te conviene. La instalación del asistente va incluida.';
+    const what = [web.dataset.name, plan ? plan.name : '', ...extras.map((b) => b.dataset.name)].filter(Boolean).join(', ');
     const forWhat = state.rubro ? ` para mi ${state.rubro.label}` : '';
-    pedido.href = WA + encodeURIComponent(`Hola Tars, quiero ${what}${forWhat}. Total: USD ${once}${month ? ` + USD ${month} por mes` : ''}${ask ? ' + el asistente de IA (a consultar)' : ''}.`);
+    pedido.href = WA + encodeURIComponent(`Hola Tars, quiero ${what}${forWhat}. Total: USD ${once} de pago único${month ? ` + USD ${month} por mes` : ''}.`);
   }
+  webs.forEach((w) => w.addEventListener('change', updateTotal));
+  reach.addEventListener('input', updateTotal);
   const totalBox = document.querySelector('.total');
   boxes.forEach((b) => b.addEventListener('change', () => {
     updateTotal();
