@@ -21,7 +21,12 @@ test.describe('Core Web Vitals', () => {
       Object.defineProperty(document, 'visibilityState', { value: 'hidden', configurable: true });
       document.dispatchEvent(new Event('visibilitychange'));
     });
-    const vitals = await page.evaluate(() => window.dataLayer.filter((e) => e.event === 'web_vitals'));
+    // web-vitals manda el LCP cuando el navegador queda ocioso: con la suite en
+    // paralelo puede tardar un poco, así que se espera a que lleguen los dos.
+    const read = () => page.evaluate(() => window.dataLayer.filter((e) => e.event === 'web_vitals'));
+    await expect.poll(async () => (await read()).map((v) => v.metric_name).sort().join(','), { timeout: 5000 })
+      .toMatch(/CLS.*LCP/);
+    const vitals = await read();
     const names = vitals.map((v) => v.metric_name);
     expect(names).toContain('LCP');
     expect(names).toContain('CLS');
