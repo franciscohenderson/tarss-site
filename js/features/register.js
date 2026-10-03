@@ -159,7 +159,17 @@ export function initRegister() {
     }
   }
 
-  form.addEventListener('change', () => render(true));
+  // Teclas con data-group (tipo de web, plan del asistente): una por grupo.
+  // Al prender una, se apagan las otras del mismo grupo antes de recalcular.
+  form.addEventListener('change', (event) => {
+    const key = event.target;
+    if (key.checked && key.dataset.group) {
+      form.querySelectorAll(`input[data-group="${key.dataset.group}"]`).forEach((other) => {
+        if (other !== key) other.checked = false;
+      });
+    }
+    render(true);
+  });
   form.addEventListener('submit', (event) => event.preventDefault());
 
   request.addEventListener('click', (event) => {

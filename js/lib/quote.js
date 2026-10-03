@@ -13,6 +13,12 @@
 
 export const CATALOG = Object.freeze({
   landing: Object.freeze({ id: 'landing', name: 'Landing Page', price: 149, billing: 'once' }),
+  'sitio-completo': Object.freeze({ id: 'sitio-completo', name: 'Sitio completo', price: 349, billing: 'once' }),
+  // Asistente de IA: abono mensual según cuántas personas escriben por mes.
+  // Como todo lo mensual, no se cobra online (payment-link lo deriva a WhatsApp).
+  'asistente-200': Object.freeze({ id: 'asistente-200', name: 'Asistente IA · 200 personas', price: 39, billing: 'monthly' }),
+  'asistente-800': Object.freeze({ id: 'asistente-800', name: 'Asistente IA · 800 personas', price: 79, billing: 'monthly' }),
+  'asistente-2500': Object.freeze({ id: 'asistente-2500', name: 'Asistente IA · 2.500 personas', price: 149, billing: 'monthly' }),
   mantenimiento: Object.freeze({ id: 'mantenimiento', name: 'Mantenimiento', price: 50, billing: 'monthly' }),
   'seo-local': Object.freeze({ id: 'seo-local', name: 'SEO Local', price: 80, billing: 'once' }),
 });
