@@ -470,6 +470,9 @@
     .tab { writing-mode: horizontal-tb; rotate: none; left: 20px; bottom: auto; top: 50%; translate: 0 -50%; font-size: 30px; }
     .tab small { display: inline; margin: 0 10px 0 0; }
     .inside { grid-template-columns: minmax(0, 1fr); }
+    /* Menos aire entre secciones: en pantalla chica se deslizaba mucho sin ver nada */
+    .sec { padding-block: 72px; }
+    .bento, .builder { margin-top: 36px; }
     /* Rubros en 2 × 2 (antes quedaba «Tienda» sola en la segunda fila) */
     .chooser { display: grid; grid-template-columns: 1fr 1fr; max-width: 360px; }
     .inside .mock { display: none; }
