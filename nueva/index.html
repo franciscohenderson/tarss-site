@@ -134,13 +134,57 @@
   .sec > h2 em { font-style: normal; color: var(--pink); }
   .lead { max-width: 52ch; margin-top: 20px; color: var(--muted); font: 500 clamp(17px, 1.4vw, 20px)/1.5 'LF'; }
 
-  /* Lo que te llevás: frases que se subrayan con tinta al entrar */
-  .gets { margin-top: 56px; display: grid; border-top: 1px solid var(--line); }
-  .get { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 32px; align-items: baseline; padding: 34px 0; border-bottom: 1px solid var(--line); }
-  .get strong { font: 800 clamp(26px, 2.6vw, 40px)/1.1 'LF'; letter-spacing: -0.03em; }
-  .get strong mark { background: linear-gradient(var(--pink), var(--pink)) 0 92% / 0% 0.18em no-repeat; color: inherit; transition: background-size 900ms var(--ease-out); }
-  .get.is-in strong mark { background-size: 100% 0.18em; }
-  .get p { color: var(--muted); font: 500 18px/1.55 'LF'; }
+  /* Lo que te llevás: mosaicos que muestran cada cosa (una animación chica la
+     primera vez que aparecen). Tamaños distintos: no es una fila de tarjetas. */
+  .bento { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 14px; margin-top: 56px; }
+  .tile { position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 10px; min-height: 360px; padding: clamp(22px, 2.4vw, 34px); border-radius: 26px; background: var(--bg2); }
+  .tile h3 { max-width: 15ch; font: 800 clamp(24px, 2.2vw, 34px)/1.05 'LF'; letter-spacing: -0.03em; }
+  .tile p { max-width: 34ch; color: var(--muted); font: 500 16px/1.5 'LF'; }
+  .t-phone { grid-column: span 2; grid-row: span 2; }
+  .t-chat { grid-column: span 4; }
+  .t-days { grid-column: span 2; }
+  .t-me { grid-column: span 2; background: var(--pink); color: #120a10; }
+  .t-me p { color: #3b0a26; }
+
+  /* Celular que sube */
+  .t-phone .mini { margin: auto auto -120px; width: min(250px, 80%); transform: translateY(60px); opacity: 0; transition: transform 900ms var(--ease-out), opacity 500ms var(--ease-out); }
+  .t-phone.is-in .mini { transform: none; opacity: 1; }
+  .t-phone .proof-phone { width: 100%; margin: 0; outline-width: 7px; }
+
+  /* Chat de WhatsApp */
+  .chat { margin-top: auto; display: grid; gap: 8px; max-width: 520px; width: 100%; align-self: flex-end; }
+  .msg { max-width: 78%; padding: 10px 14px 18px; border-radius: 16px; font: 500 15px/1.4 'LF'; position: relative; opacity: 0; transform: translateY(12px) scale(0.98); transition: opacity 400ms var(--ease-out), transform 500ms var(--ease-out); }
+  .msg small { position: absolute; right: 10px; bottom: 4px; font: 600 10px 'LF'; opacity: 0.6; }
+  .msg.in { justify-self: start; background: #26262b; border-top-left-radius: 4px; }
+  .msg.out { justify-self: end; background: #144d37; color: #e7fff3; border-top-right-radius: 4px; }
+  .t-chat.is-in .msg { opacity: 1; transform: none; }
+  .t-chat.is-in .msg:nth-child(2) { transition-delay: 700ms; }
+  .t-chat.is-in .msg:nth-child(3) { transition-delay: 1500ms; }
+  .typing { justify-self: end; display: flex; gap: 4px; padding: 12px 14px; border-radius: 16px; background: #144d37; opacity: 0; }
+  .typing i { width: 6px; height: 6px; border-radius: 50%; background: #9fe6c4; animation: dot 1s infinite; }
+  .typing i:nth-child(2) { animation-delay: 150ms; } .typing i:nth-child(3) { animation-delay: 300ms; }
+  @keyframes dot { 0%, 60%, 100% { opacity: 0.3; transform: none; } 30% { opacity: 1; transform: translateY(-3px); } }
+  .t-chat.is-in .typing { animation: blink 900ms linear 2300ms both; }
+  @keyframes blink { 0% { opacity: 0; } 15%, 85% { opacity: 1; } 100% { opacity: 0; } }
+
+  /* Línea de días */
+  .days { margin-top: auto; display: grid; gap: 10px; }
+  .day { display: grid; grid-template-columns: 54px 1fr; align-items: center; gap: 12px; font: 600 14px 'LF'; color: var(--muted); }
+  .day b { font: 900 18px 'BSD'; color: var(--fg); }
+  .day span { position: relative; height: 8px; border-radius: 99px; background: #26262b; overflow: hidden; }
+  .day span::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background: var(--pink); transform: scaleX(0); transform-origin: 0 50%; transition: transform 700ms var(--ease-out); }
+  .t-days.is-in .day span::after { transform: scaleX(1); }
+  .t-days.is-in .day:nth-child(2) span::after { transition-delay: 250ms; }
+  .t-days.is-in .day:nth-child(3) span::after { transition-delay: 500ms; }
+  .t-days.is-in .day:nth-child(4) span::after { transition-delay: 750ms; }
+  .t-days.is-in .day:nth-child(5) span::after { transition-delay: 1000ms; }
+  .day em { font-style: normal; grid-column: 2; margin-top: -4px; font-size: 12.5px; }
+
+  /* Una sola persona */
+  .t-me h3 { font: 900 clamp(40px, 4vw, 64px)/0.9 'BSD'; text-transform: uppercase; letter-spacing: 0; max-width: none; }
+  .t-me .btn { margin-top: auto; align-self: flex-start; background: #120a10; color: var(--fg); }
+  @media (hover: hover) { .t-me .btn:hover { background: var(--fg); color: #120a10; } }
+
 
   /* Armá tu precio */
   .builder { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 24px; margin-top: 56px; align-items: start; }
@@ -191,8 +235,11 @@
     .inside { grid-template-columns: minmax(0, 1fr); }
     .inside .mock { display: none; }
     .inside h1, .inside h2 { font-size: clamp(46px, 13vw, 72px); }
-    .get, .builder { grid-template-columns: minmax(0, 1fr); }
-    .get { gap: 10px; }
+    .builder { grid-template-columns: minmax(0, 1fr); }
+    .bento { grid-template-columns: minmax(0, 1fr); }
+    .t-phone, .t-chat, .t-days, .t-me { grid-column: auto; grid-row: auto; }
+    .tile { min-height: 0; }
+    .t-phone { min-height: 420px; }
     .total { position: static; }
   }
 
@@ -220,11 +267,26 @@
     <section class="sec" id="que">
       <h2>Lo que <em>te llevás</em></h2>
       <p class="lead" id="que-lead">Una web hecha para tu negocio, no una plantilla con tu logo.</p>
-      <div class="gets">
-        <div class="get"><strong>Una web que <mark>se ve bien en el celular</mark></strong><p>Que es desde donde te van a encontrar. Rápida aunque la señal no ayude.</p></div>
-        <div class="get"><strong>Cada pantalla <mark>termina en un mensaje</mark></strong><p>Botones de WhatsApp, reservas o pedidos: la idea es que te escriban, no que miren.</p></div>
-        <div class="get"><strong>Lista en <mark>3 a 5 días</mark></strong><p>Una landing en menos de una semana; un sitio de 4 o 5 páginas, en 7 a 10 días.</p></div>
-        <div class="get"><strong>Te atiende <mark>una sola persona</mark></strong><p>De principio a fin, sin pasarte de mano en mano. Propuesta en menos de 24 horas.</p></div>
+      <div class="bento">
+        <article class="tile t-phone"><h3>Se ve bien en el celular</h3><p>Que es desde donde te van a encontrar. Rápida aunque la señal no ayude.</p>
+          <div class="mini" aria-hidden="true"><div class="proof-phone"><div class="proof-screen" data-kind="restaurante"></div></div></div></article>
+        <article class="tile t-chat"><h3>Cada pantalla termina en un mensaje</h3><p>Botones de WhatsApp, reservas o pedidos: la idea es que te escriban, no que miren.</p>
+          <div class="chat" aria-hidden="true">
+            <div class="msg out">Hola! Vi la web, ¿tienen mesa para 4 el sábado?<small>21:02</small></div>
+            <div class="msg in">¡Hola! Sí, te reservo a las 21:30 junto al fuego.<small>21:03</small></div>
+            <div class="msg out">Genial, ahí estamos. ¡Gracias!<small>21:03</small></div>
+            <div class="typing"><i></i><i></i><i></i></div>
+          </div></article>
+        <article class="tile t-days"><h3>Lista en 3 a 5 días</h3><p>Una landing en menos de una semana; un sitio de 4 o 5 páginas, en 7 a 10 días.</p>
+          <div class="days" aria-hidden="true">
+            <div class="day"><b>Día 1</b><span></span><em>Propuesta</em></div>
+            <div class="day"><b>Día 2</b><span></span><em>Diseño</em></div>
+            <div class="day"><b>Día 3</b><span></span><em>Armado</em></div>
+            <div class="day"><b>Día 4</b><span></span><em>Ajustes</em></div>
+            <div class="day"><b>Día 5</b><span></span><em>Online</em></div>
+          </div></article>
+        <article class="tile t-me"><h3>Te atiende una sola persona</h3><p>Soy Francisco. Hago tu web de punta a punta y te respondo yo, sin pasarte de mano en mano. Propuesta en menos de 24 horas.</p>
+          <a class="btn" href="https://wa.me/5492612408064" target="_blank" rel="noopener">Escribime</a></article>
       </div>
     </section>
 
@@ -391,8 +453,13 @@
   /* Lo que te llevás: el subrayado de tinta entra una vez. */
   const io = new IntersectionObserver((entries) => entries.forEach((entry) => {
     if (entry.isIntersecting) { entry.target.classList.add('is-in'); io.unobserve(entry.target); }
-  }), { threshold: 0.6 });
-  document.querySelectorAll('.get').forEach((g) => io.observe(g));
+  }), { threshold: 0.35 });
+  document.querySelectorAll('.tile').forEach((t) => io.observe(t));
+  // Pantalla del celular del mosaico.
+  const mini = document.querySelector('.t-phone .proof-screen');
+  mini.innerHTML = KINDS.restaurante.screen('Brasa &amp; Vid');
+  const miniPhone = mini.parentElement;
+  new ResizeObserver(() => miniPhone.style.setProperty('--s', (miniPhone.clientWidth / 312).toFixed(4))).observe(miniPhone);
 
   /* Armá tu precio */
   const boxes = [...document.querySelectorAll('.item input')];
