@@ -228,7 +228,8 @@
 
   /* ===== Secciones ===== */
   .alias { position: relative; top: -80px; display: block; }
-  .sec { padding: clamp(80px, 13vh, 150px) clamp(16px, 6vw, 96px); }
+  /* En pantallas grandes el contenido no pasa de 1400 px: queda centrado. */
+  .sec { padding: clamp(80px, 13vh, 150px) max(clamp(16px, 6vw, 96px), calc((100% - 1400px) / 2)); }
   .sec > h2 { max-width: 16ch; font: 900 clamp(48px, 7vw, 116px)/0.88 'BSD'; text-transform: uppercase; text-wrap: balance; }
   .sec > h2 em { font-style: normal; color: var(--pink); }
   .lead { max-width: 52ch; margin-top: 20px; color: var(--muted); font: 500 clamp(17px, 1.4vw, 20px)/1.5 'LF'; }
@@ -279,8 +280,16 @@
   .t-chat.is-in .msg:nth-child(4) { transition-delay: 2300ms; }
   .t-chat.is-in .msg:nth-child(5) { transition-delay: 3100ms; }
   .t-chat { min-height: 480px; }
-  /* Escritorio: el texto a la izquierda y la charla a la derecha, sin huecos. */
-  @media (min-width: 861px) {
+  /* Tablet horizontal: celular y chat lado a lado; los días, abajo a lo ancho. */
+  @media (min-width: 861px) and (max-width: 1099px) {
+    .bento { grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); }
+    .t-phone { grid-column: 1; grid-row: 1; }
+    .t-chat { grid-column: 2; grid-row: 1; }
+    .t-days { grid-column: 1 / -1; }
+  }
+  /* Escritorio: el texto a la izquierda y la charla a la derecha, sin huecos.
+     (Entre 861 y 1099 px no hay lugar para las dos columnas: se apila.) */
+  @media (min-width: 1100px) {
     .t-chat { display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); grid-template-rows: auto auto 1fr; gap: 12px clamp(24px, 3vw, 44px); align-items: start; }
     .t-chat > .ai, .t-chat > h3, .t-chat > p { grid-column: 1; }
     .t-chat > .ai { justify-self: start; }
@@ -405,7 +414,7 @@
   footer .legal a:hover { color: var(--fg); text-decoration: underline; text-underline-offset: 4px; }
   footer .legal .regret { color: var(--pink); font-weight: 700; }
   .total .note a { color: inherit; font-weight: 700; }
-  footer { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding: 28px clamp(16px, 6vw, 96px); border-top: 1px solid var(--line); color: var(--muted); font: 500 13px 'LF'; }
+  footer { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding: 28px max(clamp(16px, 6vw, 96px), calc((100% - 1400px) / 2)); border-top: 1px solid var(--line); color: var(--muted); font: 500 13px 'LF'; }
 
   /* ===== Celular: los paneles se apilan; se abre uno por vez ===== */
   @media (max-width: 860px) {
