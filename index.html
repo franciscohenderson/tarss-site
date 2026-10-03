@@ -184,9 +184,9 @@
 
   /* ===== Portada: cinco paneles ===== */
   .hero { display: flex; gap: 8px; height: 100svh; min-height: 620px; padding: 76px 8px 8px; }
-  .panel { position: relative; flex: 1 1 0; min-width: 0; overflow: hidden; border-radius: 22px; background: var(--bg2); cursor: pointer; transition: flex-grow 700ms var(--ease-io); outline-offset: -3px; }
+  .panel { position: relative; flex: 1 1 0; min-width: 0; overflow: hidden; border-radius: 22px; background: var(--bg2); cursor: pointer; transition: flex-grow 520ms var(--ease-io); outline-offset: -3px; }
   .panel.is-open { flex-grow: 5.2; cursor: default; }
-  .panel img.photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) brightness(0.55) contrast(1.05); transform: scale(1.08); transition: filter 600ms var(--ease-out), transform 1200ms var(--ease-out); }
+  .panel img.photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) brightness(0.55) contrast(1.05); transform: scale(1.08); transition: filter 400ms var(--ease-out), transform 900ms var(--ease-out); }
   .panel.flip img.photo { scale: -1 1; }
   .panel.is-open img.photo { filter: none; transform: scale(1); }
   /* Degradé bajo el texto: fuerte abajo para que se lea aunque la foto sea clara
@@ -197,7 +197,7 @@
   /* Velo bajo el texto: la tinta sigue viva arriba y el texto chico se lee. */
   .panel[data-kind="tars"]::after { z-index: 2; background: linear-gradient(0deg, rgb(14 9 13 / 0.9), rgb(14 9 13 / 0.6) 38%, rgb(14 9 13 / 0) 66%); }
   /* Marca calada gigante: llena el panel de inicio sin competir con el título. */
-  .ghost { position: absolute; z-index: 1; left: clamp(14px, 2.4vw, 36px); top: 10px; font: 900 clamp(120px, 19vw, 330px)/0.82 'BSD', 'Arial Narrow', sans-serif-condensed, Impact, sans-serif; letter-spacing: 0.02em; color: transparent; -webkit-text-stroke: 1.5px rgb(255 72 176 / 0.55); pointer-events: none; user-select: none; opacity: 0; transition: opacity 500ms var(--ease-out) 200ms; }
+  .ghost { position: absolute; z-index: 1; left: clamp(14px, 2.4vw, 36px); top: 10px; font: 900 clamp(120px, 19vw, 330px)/0.82 'BSD', 'Arial Narrow', sans-serif-condensed, Impact, sans-serif; letter-spacing: 0.02em; color: transparent; -webkit-text-stroke: 1.5px rgb(255 72 176 / 0.55); pointer-events: none; user-select: none; opacity: 0; transition: opacity 360ms var(--ease-out) 120ms; }
   .panel.is-open .ghost { opacity: 1; }
 
   /* Etiqueta vertical (panel cerrado) */
@@ -207,12 +207,12 @@
 
   /* Contenido (panel abierto) */
   .inside { position: absolute; z-index: 3; left: clamp(20px, 3vw, 44px); right: clamp(20px, 3vw, 44px); bottom: clamp(22px, 4vh, 44px); display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 28px; opacity: 0; transform: translateY(18px); pointer-events: none; transition: opacity 260ms var(--ease-out), transform 260ms var(--ease-out); }
-  .panel.is-open .inside { opacity: 1; transform: none; pointer-events: auto; transition: opacity 500ms var(--ease-out) 260ms, transform 600ms var(--ease-out) 260ms; }
+  .panel.is-open .inside { opacity: 1; transform: none; pointer-events: auto; transition: opacity 300ms var(--ease-out) 160ms, transform 420ms var(--spring) 160ms; }
   .inside h1, .inside h2 { font: 900 clamp(52px, 7vw, 124px)/0.86 'BSD', 'Arial Narrow', sans-serif-condensed, Impact, sans-serif; text-transform: uppercase; letter-spacing: -0.005em; text-wrap: balance; }
   .inside h1 em, .inside h2 em { font-style: normal; color: var(--pink); }
   .inside p { text-wrap: pretty; max-width: 36ch; margin-top: 16px; color: #d9d4cb; font: 500 clamp(16px, 1.3vw, 19px)/1.5 'LF', system-ui, 'Segoe UI', Roboto, sans-serif; }
   .inside .row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
-  .inside .mock { width: clamp(170px, 14vw, 230px); transform: translateY(40px) rotate(4deg); opacity: 0; transition: transform 700ms var(--ease-out) 380ms, opacity 400ms var(--ease-out) 380ms; }
+  .inside .mock { width: clamp(170px, 14vw, 230px); transform: translateY(40px) rotate(4deg); opacity: 0; transition: transform 480ms var(--spring) 220ms, opacity 300ms var(--ease-out) 220ms; }
   .panel.is-open .inside .mock { transform: rotate(4deg); opacity: 1; }
   .inside .mock .proof-phone { width: 100%; margin: 0; outline-width: 7px; box-shadow: 0 30px 60px rgb(0 0 0 / 0.5); }
   .chooser { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
@@ -230,16 +230,16 @@
   @keyframes rise { from { opacity: 0; transform: translateY(26px); } }
   @keyframes panel-in { from { opacity: 0; transform: translateY(60px) scale(0.98); } }
   @media (prefers-reduced-motion: no-preference) {
-    .panel { animation: panel-in 900ms var(--ease-out) backwards; }
+    .panel { animation: panel-in 640ms var(--ease-out) backwards; }
     .panel:nth-child(2) { animation-delay: 70ms; }
     .panel:nth-child(3) { animation-delay: 140ms; }
     .panel:nth-child(4) { animation-delay: 210ms; }
     .panel:nth-child(5) { animation-delay: 280ms; }
     /* Al abrir: título, texto y botones suben escalonados. */
-    .panel.is-open .inside > div > * { animation: rise 700ms var(--ease-out) backwards; }
-    .panel.is-open .inside > div > :nth-child(1) { animation-delay: 260ms; }
-    .panel.is-open .inside > div > :nth-child(2) { animation-delay: 340ms; }
-    .panel.is-open .inside > div > :nth-child(3) { animation-delay: 420ms; }
+    .panel.is-open .inside > div > * { animation: rise 420ms var(--spring) backwards; }
+    .panel.is-open .inside > div > :nth-child(1) { animation-delay: 160ms; }
+    .panel.is-open .inside > div > :nth-child(2) { animation-delay: 210ms; }
+    .panel.is-open .inside > div > :nth-child(3) { animation-delay: 260ms; }
   }
   /* El celular de muestra se inclina en 3D siguiendo al mouse. */
   .inside { perspective: 1200px; }
@@ -290,7 +290,7 @@
 
   /* Celular que sube */
   /* El celular sale desde el borde de abajo: más grande y sin aire muerto. */
-  .t-phone .mini { margin: auto auto calc(-1 * clamp(22px, 2.4vw, 34px) - 70px); width: min(300px, 86%); transform: translateY(60px); opacity: 0; transition: transform 900ms var(--ease-out), opacity 500ms var(--ease-out); }
+  .t-phone .mini { margin: auto auto calc(-1 * clamp(22px, 2.4vw, 34px) - 70px); width: min(300px, 86%); transform: translateY(60px); opacity: 0; transition: transform 600ms var(--spring), opacity 360ms var(--ease-out); }
   .t-phone.is-in .mini { transform: none; opacity: 1; }
   .t-phone .proof-phone { width: 100%; margin: 0; outline-width: 7px; box-shadow: 0 30px 60px rgb(0 0 0 / 0.45); }
 
@@ -358,7 +358,7 @@
   .daycard .get small { font: 800 10px 'LF', system-ui, 'Segoe UI', Roboto, sans-serif; letter-spacing: 0.16em; text-transform: uppercase; color: var(--pink); }
   .daycard .next { grid-column: 1 / -1; justify-self: start; margin-top: 4px; padding: 0; border: 0; background: none; color: var(--pink); font: 800 14px 'LF', system-ui, 'Segoe UI', Roboto, sans-serif; cursor: pointer; }
   .daycard .next:hover { text-decoration: underline; text-underline-offset: 4px; }
-  .daycard.is-swap { animation: rise 420ms var(--ease-out); }
+  .daycard.is-swap { animation: rise 300ms var(--spring); }
   @media (max-width: 860px) {
     .daycard { grid-template-columns: minmax(0, 1fr); }
     .daycard .get { grid-column: 1; grid-row: auto; }
@@ -539,7 +539,7 @@
 
   /* Entradas al hacer scroll: suben 14 px y aparecen (solo lo que está abajo) */
   .rv { opacity: 0; translate: 0 14px; }
-  .rv.is-in { opacity: 1; translate: 0 0; transition: opacity 360ms var(--ease-out), translate 420ms var(--spring); transition-delay: var(--rd, 0ms); }
+  .rv.is-in { opacity: 1; translate: 0 0; transition: opacity 280ms var(--ease-out), translate 340ms var(--spring); transition-delay: var(--rd, 0ms); }
 
   @media (prefers-reduced-motion: reduce) {
     .rv { opacity: 1; translate: none; }
@@ -561,7 +561,7 @@
        (76 arriba + panel abierto + 4 cerrados de 76 + 4 huecos de 8 + 8 abajo),
        así lo de abajo no salta cuando aparecen los paneles (CLS). */
     .hero { flex-direction: column; height: auto; min-height: calc(76px + min(78svh, 640px) + 4 * 76px + 4 * 8px + 8px); padding-top: 76px; }
-    .panel { flex: none; height: 76px; transition: height 600ms var(--ease-io); }
+    .panel { flex: none; height: 76px; transition: height 460ms var(--ease-io); }
     .panel.is-open { height: min(78svh, 640px); }
     .tab { writing-mode: horizontal-tb; rotate: none; left: 20px; bottom: auto; top: 50%; translate: 0 -50%; font-size: 30px; }
     .tab small { display: inline; margin: 0 10px 0 0; }
