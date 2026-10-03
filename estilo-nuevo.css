@@ -1,0 +1,129 @@
+/* Tars · estilo nuevo para las páginas internas (servicios, contacto, blog,
+   artículos, privacidad, 404 y gracias). Se carga DESPUÉS de riso.css y lo
+   lleva al mismo mundo que la portada: barra superior, tinta casi negra,
+   rosa como único acento, botones redondeados y sin adornos de imprenta.
+   No cambia el HTML ni el JS: el cotizador y los formularios siguen igual. */
+
+:root,
+[data-theme="dark"],
+[data-theme="light"] {
+  color-scheme: dark;
+  --ink: #0e0e10;
+  --paper: #f3efe7;
+  --bg: #0e0e10;
+  --fg: #f3efe7;
+  --muted: #a7a29a;
+  --accent: #ff48b0;
+  --bg2: #17171a;
+  --line: rgb(243 239 231 / 0.14);
+  --layer-blend: screen;
+  --grain-opacity: 0;
+  --margin-w: 0px;
+  --rx: 0px;
+  --ry: 0px;
+}
+
+html { background: var(--bg); }
+body { padding-left: 0; padding-top: 68px; background: var(--bg); color: var(--fg); }
+body::after { display: none; } /* sin grano de papel */
+::selection { background: var(--accent); color: var(--bg); }
+
+/* --- Barra superior (escritorio) ------------------------------------------ */
+@media (min-width: 861px) {
+  .margin {
+    inset: 0 0 auto 0;
+    width: auto;
+    height: 68px;
+    flex-direction: row;
+    align-items: center;
+    gap: 28px;
+    padding: 0 clamp(16px, 3vw, 40px);
+    border: 0;
+    background: rgb(14 14 16 / 0.86);
+    backdrop-filter: saturate(140%) blur(12px);
+    box-shadow: 0 1px 0 var(--line);
+  }
+  .margin-brand { grid-auto-flow: column; margin-right: auto; font-size: 28px; letter-spacing: 0.03em; }
+  .margin-links { order: 2; flex-direction: row; gap: 26px; }
+  .margin-links a {
+    writing-mode: horizontal-tb;
+    transform: none;
+    min-width: 0;
+    padding: 6px 0;
+    font: 600 14px var(--text);
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--muted);
+  }
+  .margin-links a:hover,
+  .margin-links a.is-active,
+  .margin-links a[aria-current="page"] { color: var(--fg); text-shadow: none; }
+  .margin-actions { order: 3; margin: 0; flex-direction: row; }
+}
+
+/* --- Barra superior (celular): mismo fondo; el menú abierto, oscuro -------- */
+@media (max-width: 860px) {
+  body { padding-top: 64px; }
+  /* Fondo sólido (sin backdrop-filter): el desenfoque haría que el menú desplegable,
+     que es position: fixed, quede atrapado dentro de la barra. */
+  .margin { border-bottom: 0; background: var(--bg); box-shadow: 0 1px 0 var(--line); }
+  .margin-links { background: var(--bg); color: var(--fg); }
+  .margin-links a:hover,
+  .margin-links a.is-active { color: var(--accent); text-shadow: none; }
+}
+
+.theme-toggle,
+.reg-mark { display: none; }
+
+/* --- Botones --------------------------------------------------------------- */
+.btn { border: 0; border-radius: 999px; box-shadow: inset 0 0 0 1.5px var(--line); }
+.btn-pink { color: #120a10; box-shadow: none; }
+.btn-ink { background: var(--fg); color: var(--bg); box-shadow: none; }
+@media (hover: hover) {
+  .btn-pink:hover { background: var(--fg); color: var(--bg); }
+  .btn-line:hover { background: var(--bg2); color: var(--fg); box-shadow: inset 0 0 0 1.5px var(--fg); }
+  .btn-ink:hover { background: var(--accent); color: #120a10; }
+}
+
+/* --- Fuera los adornos de imprenta ----------------------------------------- */
+.stamp,
+.colophon-word,
+.tape { display: none !important; }
+.riso-word::before,
+.riso-word::after,
+[data-text]::before,
+[data-text]::after { display: none !important; }
+.display { letter-spacing: 0; }
+
+/* Líneas gruesas de tinta -> filetes finos */
+main section,
+main header,
+main article,
+.page-hero,
+.colophon { border-color: var(--line) !important; }
+main section,
+.page-hero { border-top-width: 1px !important; border-bottom-width: 1px !important; }
+
+/* Cajas y tarjetas: esquinas redondeadas como en la portada */
+.note, .demo, .key-cap, .ticket, .ticket-rail, .poster-sheet, .faq details, .contact-form, form fieldset,
+input:not([type="checkbox"]):not([type="radio"]), textarea, select { border-radius: 14px; }
+
+/* --- WhatsApp flotante: píldora rosa -------------------------------------- */
+.wa-stamp {
+  width: auto;
+  height: auto;
+  min-height: 48px;
+  padding: 0 20px;
+  border-radius: 999px;
+  border: 0;
+  transform: none;
+  font: 800 14px var(--text);
+  letter-spacing: 0;
+  text-transform: none;
+}
+@media (hover: hover) { .wa-stamp:hover { transform: translateY(-2px); } }
+
+/* --- Pie: links legales ---------------------------------------------------- */
+.colophon { background: var(--bg); border-top: 1px solid var(--line); }
+.colophon-copy a { color: var(--muted); }
+.colophon-copy .regret { color: var(--accent); font-weight: 700; }

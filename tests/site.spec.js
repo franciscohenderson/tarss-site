@@ -87,24 +87,7 @@ test.describe('Navegación', () => {
   });
 });
 
-test.describe('Modo oscuro', () => {
-  test('el botón cambia el tema y se recuerda entre páginas', async ({ page }) => {
-    await page.goto('/servicios.html');
-    const html = page.locator('html');
-    const toggle = page.locator('.theme-toggle');
-
-    const initial = await html.getAttribute('data-theme');
-    const next = initial === 'dark' ? 'light' : 'dark';
-
-    await toggle.click();
-    await expect(html).toHaveAttribute('data-theme', next);
-    await expect(toggle).toHaveAttribute('aria-label',
-      next === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro');
-
-    await page.goto('/contacto.html');
-    await expect(page.locator('html')).toHaveAttribute('data-theme', next);
-  });
-});
+// El sitio es solo oscuro desde el rediseño (2026-10): sin botón de tema.
 
 test.describe('Formulario de contacto', () => {
   async function fillForm(page) {
