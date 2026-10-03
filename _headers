@@ -24,3 +24,24 @@
 # Imágenes del sitio (pantallas de muestra): cambian poco.
 /img/*
   Cache-Control: public, max-age=2592000
+/estilo-nuevo.css
+  Cache-Control: public, max-age=3600, stale-while-revalidate=604800
+/legal.css
+  Cache-Control: public, max-age=3600, stale-while-revalidate=604800
+
+# Fotos de los rubros de la portada (lo más pesado del inicio): cambian poco.
+/prototipos/img/*
+  Cache-Control: public, max-age=2592000
+
+# Íconos
+/apple-touch-icon.png
+  Cache-Control: public, max-age=2592000
+/favicon.svg
+  Cache-Control: public, max-age=2592000
+
+# Seguridad básica para todo el sitio: nadie puede meter la web dentro de
+# otra página (clickjacking) y no se piden permisos de cámara, micrófono ni
+# ubicación.
+/*
+  X-Frame-Options: SAMEORIGIN
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
