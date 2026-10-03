@@ -429,7 +429,10 @@
 
   /* ===== Celular: los paneles se apilan; se abre uno por vez ===== */
   @media (max-width: 860px) {
-    .bar nav { display: none; }
+    /* Celular: de la navegación queda solo «Precios», lo que más se busca. */
+    .bar nav { gap: 0; margin-right: 6px; }
+    .bar nav a:not([href="#precio"]) { display: none; }
+    .bar nav a { padding: 12px 10px; font-size: 15px; color: var(--fg); }
     .hero { flex-direction: column; height: auto; min-height: 0; padding-top: 76px; }
     .panel { flex: none; height: 76px; transition: height 600ms var(--ease-io); }
     .panel.is-open { height: min(78svh, 640px); }
