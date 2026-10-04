@@ -9,9 +9,9 @@ compatibility_date = "2026-09-01"
 workers_dev = false
 
 [vars]
-DESTINO = "franciscohenderson456@gmail.com"
+DESTINO = "tars.webs@gmail.com"
 REMITENTE = "contacto@tars.com.ar"
 
 [[send_email]]
 name = "EMAIL"
-allowed_destination_addresses = ["franciscohenderson456@gmail.com"]
+allowed_destination_addresses = ["tars.webs@gmail.com"]
