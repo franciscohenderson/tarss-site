@@ -4,7 +4,8 @@
 const { test, expect } = require('@playwright/test');
 
 const EXPECTED = {
-  '/index.html': { loads: ['proof.js', 'track.js'], skips: ['register.js', 'contact-form.js', 'runaway.js'] },
+  // La portada es una página compilada aparte (assets/): no usa los módulos de js/features.
+  '/index.html': { loads: [], skips: ['proof.js', 'register.js', 'contact-form.js', 'runaway.js'] },
   '/servicios.html': { loads: ['register.js'], skips: ['contact-form.js', 'runaway.js'] },
   '/contacto.html': { loads: ['contact-form.js', 'toast.js'], skips: ['register.js', 'runaway.js'] },
   '/blog.html': { loads: [], skips: ['register.js', 'contact-form.js', 'runaway.js', 'toast.js'] },

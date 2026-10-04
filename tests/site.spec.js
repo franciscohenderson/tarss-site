@@ -31,7 +31,9 @@ test.describe('Todas las páginas', () => {
       expect(response?.status()).toBe(200);
       await expect(page).toHaveTitle(/Tars/);
       await expect(page.locator('h1')).toHaveCount(1);
-      if (h1) await expect(page.locator('h1')).toHaveAccessibleName(h1);
+      // Margen amplio: la portada tiene una entrada con contador y el contenido no se expone
+      // hasta que termina (con toda la suite en paralelo puede tardar varios segundos).
+      if (h1) await expect(page.locator('h1')).toHaveAccessibleName(h1, { timeout: 20000 });
       expect(errors).toEqual([]);
     });
 

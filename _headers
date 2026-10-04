@@ -45,3 +45,12 @@
 /*
   X-Frame-Options: SAMEORIGIN
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
+
+# Portada nueva: el código lleva un sello en el nombre (cambia con cada versión), así que se
+# guarda para siempre. Reels y fotos de rubros cambian poco.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+/reels/*
+  Cache-Control: public, max-age=2592000
+/rubros/*
+  Cache-Control: public, max-age=2592000
