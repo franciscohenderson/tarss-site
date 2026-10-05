@@ -14,6 +14,10 @@ test.describe('Core Web Vitals', () => {
     await expect.poll(() => page.evaluate(() =>
       performance.getEntriesByType('resource').some((r) => r.name.includes('web-vitals.attribution.js'))),
     { timeout: 20000 }).toBe(true); // margen: la suite corre en paralelo con un test de celular lento
+    // La portada tiene una entrada con contador: el contenido recién se pinta cuando termina.
+    // Sin esperar al titular, con la suite en paralelo a veces se «cambiaba de pestaña» antes
+    // de que hubiera nada que medir y el LCP no llegaba.
+    await expect(page.locator('h1')).toBeVisible({ timeout: 20000 });
     await page.mouse.click(5, 300); // una interacción: cierra el LCP y da un INP
     await page.waitForTimeout(300);
     // Simula que la persona cambia de pestaña: ahí se reportan los valores finales.
