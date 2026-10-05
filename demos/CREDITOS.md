@@ -15,3 +15,5 @@ Todas de Pexels (licencia Pexels, uso libre, sin atribución obligatoria). Se li
 - public/demos/lana/sweater.webp — Primitive Spaces — https://www.pexels.com/photo/close-up-of-warm-knitted-woolen-texture-35930596/
 - public/demos/lana/tapado.webp — https:\u002F\u002Fkaboompics.com\u002F — https://www.pexels.com/photo/wool-pattern-in-close-up-6634559/
 - public/demos/lana/bufanda.webp — Monstera Production — https://www.pexels.com/photo/closeup-of-knitted-sweater-sleeve-7794329/
+- public/demos/brasa/vino.webp — Valentin Ilas — https://www.pexels.com/photo/elegant-glass-of-rose-wine-with-soft-focus-33039018/
+- public/demos/brasa/hero.mp4 (video, recorte de 5 s) — Kuiyibo Campos — https://www.pexels.com/video/rustic-indoor-open-flame-grill-with-glowing-coals-32716800/
