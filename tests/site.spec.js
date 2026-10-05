@@ -12,6 +12,7 @@ const PAGES = [
   { path: '/articulo-landing-profesional.html', h1: /landing profesional/ },
   { path: '/articulo-sitio-en-celular.html', h1: /celular/ },
   { path: '/articulo-mantenimiento-web.html', h1: /mantenimiento web/ },
+  { path: '/articulo-cuanto-sale-una-web.html', h1: /Cuánto sale una página web/ },
   { path: '/articulo-asistente-ia-whatsapp.html', h1: /Asistente de IA/ },
 ];
 
