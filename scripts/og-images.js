@@ -23,7 +23,7 @@ if (!SITE) throw new Error('No encontré el canonical de index.html');
 
 // title: lo que va entre *asteriscos* sale en rosa. photos: franjas de rubros a la derecha (solo la portada).
 const PAGES = [
-  { file: 'index.html', image: 'inicio', kicker: 'Mendoza · webs a medida', title: 'Webs para *tu negocio*', size: 132, note: 'Con asistente de IA para tu WhatsApp · desde USD 149', photos: true },
+  { file: 'index.html', image: 'inicio', kicker: 'Todo el país · webs a medida', title: 'Webs para *tu negocio*', size: 132, note: 'Con asistente de IA para tu WhatsApp · desde USD 149', photos: true },
   { file: 'servicios.html', image: 'servicios', kicker: 'Landing · sitio completo · asistente de IA', title: 'Servicios *y precios*', size: 150, note: 'Qué incluye cada uno y cuánto sale' },
   { file: 'contacto.html', image: 'contacto', kicker: 'Propuesta en menos de 24 horas', title: '*Escribime*', size: 190, note: 'WhatsApp · email · formulario' },
   { file: 'blog.html', image: 'blog', kicker: 'Consejos para negocios', title: '*Blog*', size: 240, note: 'Webs que venden, celular y mantenimiento' },
