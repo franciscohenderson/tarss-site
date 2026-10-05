@@ -62,6 +62,28 @@ test.describe('Todas las páginas', () => {
   }
 });
 
+test.describe('Enlaces a secciones de la portada', () => {
+  // Servicios, blog y artículos enlazan a index.html#precio, #cotizador, #preguntas…
+  // Si la portada cambia y pierde una de esas anclas, el enlace deja a la persona arriba de todo.
+  test('cada ancla enlazada desde otra página existe en la portada', async ({ page }) => {
+    const anchors = new Set();
+    for (const { path } of PAGES.filter((entry) => entry.path !== '/index.html')) {
+      await page.goto(path);
+      const hrefs = await page.locator('a[href*="index.html#"], a[href^="/#"]').evaluateAll((links) =>
+        links.map((a) => a.getAttribute('href') || ''));
+      hrefs.forEach((href) => anchors.add(href.split('#')[1]));
+    }
+    expect(anchors.size).toBeGreaterThan(0);
+
+    await page.goto('/index.html');
+    // La portada arma su contenido con JavaScript: se espera a que exista.
+    await expect(page.locator('#main-content section').first()).toBeAttached({ timeout: 20000 });
+    for (const id of anchors) {
+      await expect(page.locator(`[id="${id}"]`), `falta el ancla #${id} en la portada`).toHaveCount(1);
+    }
+  });
+});
+
 test.describe('Navegación', () => {
   test('el enlace de salto lleva al contenido principal', async ({ page }) => {
     await page.goto('/index.html');
