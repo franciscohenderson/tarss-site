@@ -17,3 +17,11 @@ Todas de Pexels (licencia Pexels, uso libre, sin atribución obligatoria). Se li
 - public/demos/lana/bufanda.webp — Monstera Production — https://www.pexels.com/photo/closeup-of-knitted-sweater-sleeve-7794329/
 - public/demos/brasa/vino.webp — Valentin Ilas — https://www.pexels.com/photo/elegant-glass-of-rose-wine-with-soft-focus-33039018/
 - public/demos/brasa/hero.mp4 (video, recorte de 5 s) — Kuiyibo Campos — https://www.pexels.com/video/rustic-indoor-open-flame-grill-with-glowing-coals-32716800/
+
+## Piezas 3D (Poly Haven, licencia CC0)
+
+- Silla de barbero: «Barber Shop Chair 01», https://polyhaven.com/a/BarberShopChair_01
+- Fogón: «Stone Fire Pit», https://polyhaven.com/a/stone_fire_pit
+- Rueca: «Spinning Wheel 01», https://polyhaven.com/a/spinning_wheel_01
+
+Optimizadas con gltf-transform (texturas webp 1k y meshopt).
