@@ -7,13 +7,19 @@ const ENDPOINT = '/api/payment-link';
 
 let statusPromise = null;
 
-/* ¿Están habilitados los pagos online? Se consulta una vez por página. */
+/* ¿Están habilitados los pagos online? Se consulta una vez por página, pero
+   solo se recuerda una respuesta definitiva (200 o «no hay función»): un corte de
+   red o un 5xx devuelve { enabled: false, retry: true } y NO se cachea, así «Pagar»
+   no queda apagado toda la sesión por un fallo pasajero. */
 export function getPaymentStatus() {
   if (!statusPromise) {
     statusPromise = fetch(ENDPOINT, { headers: { Accept: 'application/json' } })
-      .then((response) => (response.ok ? response.json() : { enabled: false }))
+      .then((response) => {
+        if (response.status >= 500) throw new Error(`HTTP ${response.status}`);
+        return response.ok ? response.json() : { enabled: false };
+      })
       .then((data) => ({ enabled: data?.enabled === true, mode: data?.mode ?? 'off' }))
-      .catch(() => ({ enabled: false, mode: 'off' }));
+      .catch(() => { statusPromise = null; return { enabled: false, mode: 'off', retry: true }; });
   }
   return statusPromise;
 }

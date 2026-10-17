@@ -43,6 +43,9 @@ export const dolarApiUrl = (source) => `https://dolarapi.com/v1/dolares/${DOLARA
 const RATE_TIMEOUT_MS = 2500;
 const RATE_CACHE_MS = 10 * 60 * 1000;
 const RATE_MAX_FACTOR = 3; // rango aceptado: respaldo/3 .. respaldo*3
+// Sin respaldo no hay con qué comparar: se exige un rango absoluto de ARS por USD (frena 0,0001 o 10 millones).
+const RATE_ABS_MIN = 10;
+const RATE_ABS_MAX = 1_000_000;
 const rateCache = new Map();
 
 export function clearRateCache() {
@@ -84,12 +87,14 @@ export async function getExchangeRate(config, { fetchImpl = fetch, timeoutMs = R
 
     const live = await fetchLiveRate(key, fetchImpl, timeoutMs);
     const fallback = config.fallbackRate;
-    const plausible = live !== null && (fallback === null || (live >= fallback / RATE_MAX_FACTOR && live <= fallback * RATE_MAX_FACTOR));
+    const plausible = live !== null && (fallback === null
+      ? live >= RATE_ABS_MIN && live <= RATE_ABS_MAX
+      : live >= fallback / RATE_MAX_FACTOR && live <= fallback * RATE_MAX_FACTOR);
     if (plausible) {
       rateCache.set(key, { rate: live, expiresAt: now() + RATE_CACHE_MS });
       return { rate: live, source: `dolarapi-${key}` };
     }
-    if (live !== null) console.warn(`[cotizacion] DolarAPI dio ${live}, lejos del respaldo ${fallback}: se usa el respaldo.`);
+    if (live !== null) console.warn(`[cotizacion] DolarAPI dio ${live}, fuera de rango (respaldo ${fallback}): no se usa.`);
   }
 
   if (config.fallbackRate !== null) return { rate: config.fallbackRate, source: 'env' };
@@ -100,45 +105,72 @@ const REQUIRED = ['NAVE_CLIENT_ID', 'NAVE_CLIENT_SECRET', 'NAVE_AUDIENCE', 'NAVE
 
 /* Lee la configuración del entorno y decide el modo. */
 export function naveConfig(env = {}) {
-  const missing = REQUIRED.filter((key) => !env[key]);
-  const target = env.NAVE_ENV === 'production' ? 'production' : 'sandbox';
-  const currency = (env.NAVE_CURRENCY || 'ARS').toUpperCase();
+  const val = (key) => String(env[key] ?? '').trim(); // un espacio de más al pegar la variable no debe cambiar el modo ni la moneda
+  const missing = REQUIRED.filter((key) => !val(key));
+  const target = val('NAVE_ENV').toLowerCase() === 'production' ? 'production' : 'sandbox';
+  const currency = (val('NAVE_CURRENCY') || 'ARS').toUpperCase();
   const rate = Number(env.NAVE_USD_ARS_RATE);
-  const source = (env.NAVE_RATE_SOURCE || 'mep').toLowerCase();
+  const source = (val('NAVE_RATE_SOURCE') || 'mep').toLowerCase();
+  // En producción, faltar una credencial NO degrada a «mock» (mostraría «Pagar» sin cobrar nada): se apaga y se avisa.
+  const problems = [
+    ...(target === 'production' && missing.length ? [`NAVE_ENV=production con credenciales faltantes: ${missing.join(', ')}`] : []),
+    ...(['ARS', 'USD'].includes(currency) ? [] : [`NAVE_CURRENCY inválida (${currency}): usar ARS o USD`]),
+  ];
   return {
-    mode: missing.length ? 'mock' : target,
+    mode: target === 'production' && missing.length ? 'off' : (missing.length ? 'mock' : target),
     missing,
-    enabled: env.NAVE_ENABLED === 'true', // el botón «Pagar» solo aparece si esto es true
+    problems,
+    enabled: val('NAVE_ENABLED') === 'true' && problems.length === 0, // el botón «Pagar» solo aparece si esto es true
     urls: NAVE_URLS[target],
-    clientId: env.NAVE_CLIENT_ID,
-    clientSecret: env.NAVE_CLIENT_SECRET,
-    audience: env.NAVE_AUDIENCE,
-    posId: env.NAVE_POS_ID,
+    clientId: val('NAVE_CLIENT_ID'),
+    clientSecret: val('NAVE_CLIENT_SECRET'),
+    audience: val('NAVE_AUDIENCE'),
+    posId: val('NAVE_POS_ID'),
     currency,
     // Los precios del sitio están en USD. Si Nave cobra en pesos, la
     // cotización sale de DolarAPI en vivo y, si falla, de NAVE_USD_ARS_RATE
     // (ver getExchangeRate). Con NAVE_LIVE_RATE=false se usa solo la fija.
     fallbackRate: currency === 'USD' ? 1 : (Number.isFinite(rate) && rate > 0 ? rate : null),
     rateSource: RATE_SOURCES.includes(source) ? source : 'mep',
-    liveRate: currency !== 'USD' && env.NAVE_LIVE_RATE !== 'false',
-    notificationUrl: env.NAVE_NOTIFICATION_URL || null,
+    liveRate: currency !== 'USD' && val('NAVE_LIVE_RATE') !== 'false',
+    notificationUrl: val('NAVE_NOTIFICATION_URL') || null,
   };
 }
 
 /* Token OAuth máquina a máquina, cacheado hasta un minuto antes de vencer
    (un token por instancia del worker, no uno por cobro). */
 const tokenCache = new Map();
+const tokenKey = (config) => `${config.urls.token}|${config.clientId}`;
+const NAVE_TIMEOUT_MS = 8000;
 
-export async function getAccessToken(config, fetchImpl = fetch, now = Date.now) {
-  const key = `${config.urls.token}|${config.clientId}`;
+/* fetch hacia Nave con tope de tiempo y errores normalizados: una Nave colgada
+   o un corte de red son NaveError 502 (no un cuelgue ni un TypeError → 500).
+   Corre contra un temporizador propio por si fetch ignora la señal. */
+async function naveFetch(fetchImpl, url, init, timeoutMs) {
+  const controller = new AbortController();
+  let timer;
+  const timeout = new Promise((_, reject) => {
+    timer = setTimeout(() => { controller.abort(); reject(new NaveError('Nave no respondió a tiempo.', 502)); }, timeoutMs);
+  });
+  try {
+    return await Promise.race([fetchImpl(url, { ...init, signal: controller.signal }), timeout]);
+  } catch (error) {
+    throw error instanceof NaveError ? error : new NaveError('No se pudo conectar con Nave.', 502);
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+export async function getAccessToken(config, fetchImpl = fetch, now = Date.now, timeoutMs = NAVE_TIMEOUT_MS) {
+  const key = tokenKey(config);
   const cached = tokenCache.get(key);
   if (cached && cached.expiresAt > now()) return cached.token;
 
-  const response = await fetchImpl(config.urls.token, {
+  const response = await naveFetch(fetchImpl, config.urls.token, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
     body: JSON.stringify({ client_id: config.clientId, client_secret: config.clientSecret, audience: config.audience }),
-  });
+  }, timeoutMs);
   const data = await response.json().catch(() => ({}));
   if (!response.ok || !data.access_token) {
     throw new NaveError(`Nave rechazó la autenticación (HTTP ${response.status}).`, 502);
@@ -201,13 +233,21 @@ export function buildPaymentRequest(config, quote, { reference, buyer, siteUrl, 
 /* Crea el link de cobro. Devuelve { id, checkoutUrl, status, exchange }.
    La cotización se resuelve primero (nunca lanza si hay respaldo). */
 export async function createPaymentLink(config, quote, options, fetchImpl = fetch) {
+  const { timeoutMs = NAVE_TIMEOUT_MS, ...requestOptions } = options;
   const exchange = await getExchangeRate(config, { fetchImpl });
-  const token = await getAccessToken(config, fetchImpl);
-  const response = await fetchImpl(`${config.urls.api}/payment_request/ecommerce`, {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json', Accept: 'application/json' },
-    body: JSON.stringify(buildPaymentRequest(config, quote, { ...options, rate: exchange.rate })),
-  });
+  const body = JSON.stringify(buildPaymentRequest(config, quote, { ...requestOptions, rate: exchange.rate }));
+  let response;
+  for (let attempt = 0; ; attempt += 1) {
+    const token = await getAccessToken(config, fetchImpl, Date.now, timeoutMs);
+    response = await naveFetch(fetchImpl, `${config.urls.api}/payment_request/ecommerce`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json', Accept: 'application/json' },
+      body,
+    }, timeoutMs);
+    // Token revocado o vencido antes de tiempo: se descarta de la caché y se reintenta UNA vez (no queda envenenado hasta expirar).
+    if ((response.status === 401 || response.status === 403) && attempt === 0) { tokenCache.delete(tokenKey(config)); continue; }
+    break;
+  }
   const data = await response.json().catch(() => ({}));
   if (!response.ok || !data.checkout_url) {
     throw new NaveError(`Nave no pudo crear el cobro (HTTP ${response.status}).`, 502);

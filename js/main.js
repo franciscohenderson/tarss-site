@@ -49,7 +49,7 @@ const features = [
   ['#ticket-form', async () => {
     const register = (await import('./features/register.js?v=20261003b')).initRegister();
     // PDF y pago online: después de la registradora, usando su API.
-    (await import('./features/ticket-actions.js?v=20261003b')).initTicketActions(register);
+    (await import('./features/ticket-actions.js?v=20261017a')).initTicketActions(register);
   }],
   ['.hero-ink', () => import('./features/ink.js').then((m) => m.initInk())],
   ['#proof-form', () => import('./features/proof.js').then((m) => m.initProof())],

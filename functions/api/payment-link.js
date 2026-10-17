@@ -35,14 +35,28 @@ const json = (data, status = 200) => new Response(JSON.stringify(data), {
   headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' },
 });
 
+// Configuración insegura (ej. producción sin credenciales): el botón se apaga y queda el motivo en el log del servidor.
+const reportProblems = (config, env) => {
+  if (env?.NAVE_ENABLED === 'true' && config.problems.length) console.error('[payment-link] pagos deshabilitados:', config.problems.join(' | '));
+};
+
 export function onRequestGet({ env }) {
   const config = naveConfig(env);
+  reportProblems(config, env);
   return json({ enabled: config.enabled, mode: config.mode });
 }
 
 export async function onRequestPost({ request, env }, fetchImpl = fetch) {
   const config = naveConfig(env);
+  reportProblems(config, env);
   if (!config.enabled) return json({ error: 'Los pagos online no están habilitados.' }, 404);
+
+  // Anti-abuso cross-origin: solo el propio sitio, y con JSON (un <form> o un fetch «simple» ajeno no puede cumplirlo sin preflight).
+  const origin = request.headers.get('origin');
+  if (origin && origin !== new URL(request.url).origin) return json({ error: 'Origen no permitido.' }, 403);
+  if (!/^application\/json\b/i.test(request.headers.get('content-type') || '')) {
+    return json({ error: 'Content-Type debe ser application/json.' }, 415);
+  }
 
   // --- Validación del pedido ---
   const raw = await request.text();
