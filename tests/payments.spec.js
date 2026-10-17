@@ -9,9 +9,10 @@ const { pathToFileURL } = require('url');
 const nativeImport = new Function('specifier', 'return import(specifier)');
 const loadHandler = () => nativeImport(pathToFileURL(path.join(__dirname, '..', 'functions', 'api', 'payment-link.js')).href);
 
+const JSON_HEADERS = { 'Content-Type': 'application/json' };
 const call = async (body, env) => {
   const { onRequestPost } = await loadHandler();
-  const request = new Request('https://tars.test/api/payment-link', { method: 'POST', body: JSON.stringify(body) });
+  const request = new Request('https://tars.test/api/payment-link', { method: 'POST', headers: JSON_HEADERS, body: JSON.stringify(body) });
   return onRequestPost({ request, env });
 };
 
@@ -150,7 +151,7 @@ test.describe('Cotización USD -> ARS (híbrida)', () => {
   test('el link de pago se crea igual aunque DolarAPI esté caída', async () => {
     const { onRequestPost } = await loadHandler();
     const { impl } = fakeFetch(async () => { throw new Error('DNS caído'); });
-    const request = new Request('https://tars.test/api/payment-link', { method: 'POST', body: JSON.stringify({ services: ['landing', 'seo-local'] }) });
+    const request = new Request('https://tars.test/api/payment-link', { method: 'POST', headers: JSON_HEADERS, body: JSON.stringify({ services: ['landing', 'seo-local'] }) });
 
     const response = await onRequestPost({ request, env: ENV }, impl);
     const data = await response.json();
@@ -164,5 +165,138 @@ test.describe('Cotización USD -> ARS (híbrida)', () => {
     const { impl, calls } = fakeFetch(async () => Response.json({ venta: 1200 }));
     expect(await getExchangeRate(naveConfig({ ...ENV, NAVE_LIVE_RATE: 'false' }), { fetchImpl: impl })).toEqual({ rate: 1000, source: 'env' });
     expect(calls).toHaveLength(0);
+  });
+});
+
+/* ---------------------------------------------------------------------------
+   Blindaje (Titán): origen/Content-Type, configuración insegura, timeouts,
+   token revocado, piso de cotización y estado transitorio del cliente. */
+const postRaw = async (init, env = ENV, fetchImpl) => {
+  const { onRequestPost } = await loadHandler();
+  const request = new Request('https://tars.test/api/payment-link', { method: 'POST', body: JSON.stringify({ services: ['landing'] }), ...init });
+  return onRequestPost({ request, env }, fetchImpl);
+};
+const loadQuote = () => nativeImport(pathToFileURL(path.join(__dirname, '..', 'js', 'lib', 'quote.js')).href);
+
+test.describe('Blindaje del endpoint y de Nave', () => {
+  test.skip(({ isMobile }) => isMobile, 'lógica de servidor: alcanza con una corrida');
+  test.beforeEach(async () => { const n = await loadNave(); n.clearRateCache(); n.clearTokenCache(); });
+
+  test('exige Content-Type JSON (una página ajena no puede disparar un cobro con un POST «simple»)', async () => {
+    const { impl, calls } = fakeFetch(async () => Response.json({ venta: 1000 }));
+    for (const type of ['text/plain;charset=UTF-8', 'application/x-www-form-urlencoded']) {
+      const response = await postRaw({ headers: { 'Content-Type': type } }, ENV, impl);
+      expect(response.status).toBe(415);
+    }
+    expect(calls).toHaveLength(0); // ni siquiera se habló con Nave
+  });
+
+  test('rechaza un Origin distinto del sitio (403) y acepta el propio o su ausencia', async () => {
+    const { impl } = fakeFetch(async () => Response.json({ venta: 1000 }));
+    expect((await postRaw({ headers: { ...JSON_HEADERS, Origin: 'https://malo.example' } }, ENV, impl)).status).toBe(403);
+    expect((await postRaw({ headers: { ...JSON_HEADERS, Origin: 'https://tars.test' } }, ENV, impl)).status).toBe(200);
+    expect((await postRaw({ headers: JSON_HEADERS }, ENV, impl)).status).toBe(200);
+  });
+
+  test('NAVE_ENV=production con credenciales faltantes NO cae en «mock»: queda deshabilitado', async () => {
+    const { naveConfig } = await loadNave();
+    const roto = { ...ENV, NAVE_ENV: 'production', NAVE_CLIENT_SECRET: '' };
+    const cfg = naveConfig(roto);
+    expect(cfg.enabled).toBe(false);
+    expect(cfg.mode).not.toBe('mock');
+    const error = console.error; console.error = () => {};
+    try { expect((await postRaw({ headers: JSON_HEADERS }, roto)).status).toBe(404); } finally { console.error = error; }
+    // en sandbox el modo de prueba sigue funcionando como siempre
+    expect(naveConfig({ ...ENV, NAVE_CLIENT_SECRET: '' }).mode).toBe('mock');
+  });
+
+  test('NAVE_CURRENCY se normaliza y una moneda inválida deshabilita los cobros', async () => {
+    const { naveConfig } = await loadNave();
+    expect(naveConfig({ ...ENV, NAVE_CURRENCY: ' usd ' })).toMatchObject({ currency: 'USD', enabled: true });
+    expect(naveConfig({ ...ENV, NAVE_CURRENCY: 'EUR' }).enabled).toBe(false);
+  });
+
+  test('sin respaldo, una cotización absurda (0,0001, 5 o 10 millones) no se acepta', async () => {
+    const { naveConfig, getExchangeRate, clearRateCache } = await loadNave();
+    const sinRespaldo = naveConfig({ ...ENV, NAVE_USD_ARS_RATE: '' });
+    for (const venta of [0.0001, 5, 10_000_000]) {
+      clearRateCache();
+      const { impl } = fakeFetch(async () => Response.json({ venta }));
+      await expect(getExchangeRate(sinRespaldo, { fetchImpl: impl })).rejects.toThrow('Sin cotización');
+    }
+  });
+
+  test('Nave colgada: corta por timeout con NaveError 502 en vez de colgar el Worker', async () => {
+    const { naveConfig, createPaymentLink, NaveError } = await loadNave();
+    const { createQuote } = await loadQuote();
+    const cfg = naveConfig({ ...ENV, NAVE_LIVE_RATE: 'false' });
+    const started = Date.now();
+    const error = await createPaymentLink(cfg, createQuote(['landing']), { reference: 'r', siteUrl: 'https://t.test', timeoutMs: 100 }, () => new Promise(() => {})).catch((e) => e);
+    expect(error).toBeInstanceOf(NaveError);
+    expect(error.status).toBe(502);
+    expect(Date.now() - started).toBeLessThan(1500);
+  });
+
+  test('un corte de red hacia Nave es NaveError 502 (no un TypeError que termina en 500)', async () => {
+    const { naveConfig, createPaymentLink, NaveError } = await loadNave();
+    const { createQuote } = await loadQuote();
+    const cfg = naveConfig({ ...ENV, NAVE_LIVE_RATE: 'false' });
+    const error = await createPaymentLink(cfg, createQuote(['landing']), { reference: 'r', siteUrl: 'https://t.test' }, async () => { throw new TypeError('fetch failed'); }).catch((e) => e);
+    expect(error).toBeInstanceOf(NaveError);
+    expect(error.status).toBe(502);
+  });
+
+  test('token revocado (401): se descarta la caché y se reintenta una vez; si persiste, error sin bucle', async () => {
+    const { naveConfig, createPaymentLink, NaveError, clearTokenCache } = await loadNave();
+    const { createQuote } = await loadQuote();
+    const cfg = naveConfig({ ...ENV, NAVE_LIVE_RATE: 'false' });
+    const opts = { reference: 'r', siteUrl: 'https://t.test' };
+
+    let tokens = 0, creates = 0;
+    const revocadoUnaVez = async (url) => {
+      if (url.includes('apinaranja')) return Response.json({ access_token: `tok${++tokens}`, expires_in: 3600 });
+      creates++;
+      return creates === 1 ? new Response('{}', { status: 401 }) : Response.json({ id: 'pr_1', checkout_url: 'https://checkout.nave.test/pr_1' });
+    };
+    const link = await createPaymentLink(cfg, createQuote(['landing']), opts, revocadoUnaVez);
+    expect(link.checkoutUrl).toBe('https://checkout.nave.test/pr_1');
+    expect({ tokens, creates }).toEqual({ tokens: 2, creates: 2 });
+
+    clearTokenCache();
+    tokens = 0; creates = 0;
+    const siempre401 = async (url) => (url.includes('apinaranja') ? Response.json({ access_token: `tok${++tokens}`, expires_in: 3600 }) : (creates++, new Response('{}', { status: 401 })));
+    await expect(createPaymentLink(cfg, createQuote(['landing']), opts, siempre401)).rejects.toBeInstanceOf(NaveError);
+    expect(creates).toBe(2); // un reintento, no más
+  });
+});
+
+/* Cliente (js/lib/payments.js): un fallo transitorio no debe apagar «Pagar» toda la sesión. */
+const loadPayments = (n) => nativeImport(pathToFileURL(path.join(__dirname, '..', 'js', 'lib', 'payments.js')).href + `?t=${n}`);
+test.describe('Cliente de pagos', () => {
+  test.skip(({ isMobile }) => isMobile, 'lógica de módulo: alcanza con una corrida');
+  const realFetch = globalThis.fetch;
+  test.afterEach(() => { globalThis.fetch = realFetch; });
+
+  test('un error de red o 5xx no se cachea: la siguiente consulta se recupera', async () => {
+    const { getPaymentStatus } = await loadPayments('a');
+    globalThis.fetch = async () => { throw new TypeError('sin red'); };
+    expect((await getPaymentStatus()).enabled).toBe(false);
+    globalThis.fetch = async () => Response.json({ enabled: true, mode: 'sandbox' });
+    expect(await getPaymentStatus()).toMatchObject({ enabled: true, mode: 'sandbox' });
+
+    const second = await loadPayments('b');
+    globalThis.fetch = async () => new Response('{}', { status: 503 });
+    expect(await second.getPaymentStatus()).toMatchObject({ enabled: false, retry: true });
+    globalThis.fetch = async () => Response.json({ enabled: true, mode: 'sandbox' });
+    expect((await second.getPaymentStatus()).enabled).toBe(true);
+  });
+
+  test('«no hay función» (404) es definitivo: se cachea y no se vuelve a consultar', async () => {
+    const { getPaymentStatus } = await loadPayments('c');
+    let calls = 0;
+    globalThis.fetch = async () => { calls++; return new Response('nope', { status: 404 }); };
+    expect(await getPaymentStatus()).toMatchObject({ enabled: false });
+    await getPaymentStatus();
+    expect(calls).toBe(1);
   });
 });

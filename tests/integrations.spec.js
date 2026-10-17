@@ -59,7 +59,7 @@ test.describe('PDF y cobros (sin navegador)', () => {
   });
 
   const post = (body, env, fetchImpl) => load('functions/api/payment-link.js').then(({ onRequestPost }) =>
-    onRequestPost({ request: new Request('https://tars.test/api/payment-link', { method: 'POST', body: typeof body === 'string' ? body : JSON.stringify(body) }), env }, fetchImpl));
+    onRequestPost({ request: new Request('https://tars.test/api/payment-link', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: typeof body === 'string' ? body : JSON.stringify(body) }), env }, fetchImpl));
 
   test('GET: deshabilitado por defecto y en modo simulado sin claves', async () => {
     const { onRequestGet } = await load('functions/api/payment-link.js');

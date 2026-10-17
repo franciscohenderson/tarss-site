@@ -31,12 +31,15 @@ export function initTicketActions(register) {
     }
     if (!quote.isEmpty && !paymentsChecked && payButton) {
       paymentsChecked = true;
-      import('../lib/payments.js')
+      import('../lib/payments.js?v=20261017a')
         .then((m) => m.getPaymentStatus())
-        .then(({ enabled }) => {
+        .then(({ enabled, retry }) => {
+          // Fallo pasajero: se vuelve a preguntar en el próximo cambio del presupuesto (sin reintentar en bucle).
+          if (retry) { paymentsChecked = false; return; }
           payButton.hidden = !enabled;
           sync(register.getQuote());
-        });
+        })
+        .catch(() => { paymentsChecked = false; });
     }
   }
 
@@ -63,7 +66,7 @@ export function initTicketActions(register) {
     if (quote.oneTime === 0) return;
     setBusy(payButton, true, 'Generando link...');
     try {
-      const { requestPaymentLink } = await import('../lib/payments.js');
+      const { requestPaymentLink } = await import('../lib/payments.js?v=20261017a');
       const link = await requestPaymentLink(quote);
       trackEvent('begin_checkout', quoteAnalytics(quote));
       if (link.mock) {
@@ -72,6 +75,14 @@ export function initTicketActions(register) {
       window.location.assign(link.checkout_url);
     } catch (error) {
       showToast(error.message, { type: 'error' });
+      setBusy(payButton, false);
+      sync(register.getQuote());
+    }
+  });
+
+  // Al volver atrás desde el checkout el navegador restaura la página con el botón «Generando link...»: se libera.
+  window.addEventListener('pageshow', (event) => {
+    if (event.persisted && payButton?.classList.contains('is-busy')) {
       setBusy(payButton, false);
       sync(register.getQuote());
     }
