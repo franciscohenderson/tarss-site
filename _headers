@@ -41,10 +41,17 @@
 
 # Seguridad básica para todo el sitio: nadie puede meter la web dentro de
 # otra página (clickjacking) y no se piden permisos de cámara, micrófono ni
-# ubicación.
+# ubicación. Además: HSTS (siempre HTTPS) y una política de contenido (CSP) que solo deja
+# cargar scripts, estilos y conexiones de los servicios que el sitio usa de verdad (GTM, Analytics, Ads,
+# Meta, Formspree, DolarAPI, el asistente). Si se suma un servicio nuevo en GTM y deja de funcionar,
+# agregar su dominio acá.
 /*
   X-Frame-Options: SAMEORIGIN
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
+  Strict-Transport-Security: max-age=15552000
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://connect.facebook.net https://cdn.tailwindcss.com https://cdnjs.cloudflare.com https://www.googleadservices.com https://googleads.g.doubleclick.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; media-src 'self' blob:; connect-src 'self' https://www.googletagmanager.com https://*.google-analytics.com https://analytics.google.com https://*.analytics.google.com https://*.g.doubleclick.net https://www.google.com https://www.googleadservices.com https://www.facebook.com https://connect.facebook.net https://dolarapi.com https://formspree.io https://asistente.tars.com.ar; frame-src https://www.googletagmanager.com https://asistente.tars.com.ar https://*.g.doubleclick.net https://td.doubleclick.net; object-src 'none'; base-uri 'self'; form-action 'self' https://formspree.io https://wa.me; frame-ancestors 'self'
 
 # Portada nueva: el código lleva un sello en el nombre (cambia con cada versión), así que se
 # guarda para siempre. Reels y fotos de rubros cambian poco.
