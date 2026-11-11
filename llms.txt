@@ -1,6 +1,6 @@
 # Tars · Soluciones Digitales
 
-> Webs a medida para negocios de toda la Argentina con asistente de IA para WhatsApp: landing pages, sitios completos, mantenimiento web y SEO local.
+> Webs a medida para negocios de toda la Argentina con asistente de IA para WhatsApp: landing pages, sitios completos, mantenimiento web y SEO local. Cobertura nacional desde Mendoza, Argentina. Atención directa por WhatsApp (+54 9 261 240-8064) y correo electrónico (contacto@tars.com.ar).
 
 ## Servicios
 
@@ -10,15 +10,14 @@
 - [Mantenimiento Web y SEO Local](https://tars.com.ar/articulo-mantenimiento-web): Soporte continuo, alta velocidad en CDN Cloudflare, copias de seguridad y optimización en Google Maps.
 - [Precios y Tarifas](https://tars.com.ar/articulo-cuanto-sale-una-web): Guía de costos transparentes en USD y pesos argentinos con cotización oficial.
 
-## Contacto y Ubicación
+## Canales y Enlaces
 
-- Ubicación: Mendoza, Argentina (cobertura nacional a todo el país).
-- WhatsApp: +54 9 261 240-8064 (https://wa.me/5492612408064)
-- Email: contacto@tars.com.ar
-- Web oficial: https://tars.com.ar/
+- [Web Oficial](https://tars.com.ar/): Portada interactiva con catálogo de rubros y cotizador de proyectos.
+- [WhatsApp Directo](https://wa.me/5492612408064): Canal directo de atención inmediata y consultas comerciales.
+- [Formulario de Contacto](https://tars.com.ar/contacto): Formulario web para solicitar presupuesto formal y asesoramiento.
 
 ## Legales
 
-- [Términos y Condiciones](https://tars.com.ar/terminos)
-- [Política de Privacidad](https://tars.com.ar/privacidad)
-- [Modelo de Contrato](https://tars.com.ar/contrato)
+- [Términos y Condiciones](https://tars.com.ar/terminos): Términos legales del servicio.
+- [Política de Privacidad](https://tars.com.ar/privacidad): Política de privacidad y tratamiento de datos personales.
+- [Modelo de Contrato](https://tars.com.ar/contrato): Modelo contractual de prestación de servicios digitales.
