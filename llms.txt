@@ -1,0 +1,24 @@
+# Tars · Soluciones Digitales
+
+> Webs a medida para negocios de toda la Argentina con asistente de IA para WhatsApp: landing pages, sitios completos, mantenimiento web y SEO local.
+
+## Servicios
+
+- [Landing Pages](https://tars.com.ar/articulo-landing-profesional): Diseño de páginas de aterrizaje de alta conversión para campañas publicitarias (Google Ads y Meta Ads). Entrega en 3 a 5 días.
+- [Sitios Web Completos](https://tars.com.ar/servicios): Desarrollo de sitios corporativos de 4 a 5 páginas con catálogo, estructura optimizada y posicionamiento SEO. Entrega en 7 a 10 días.
+- [Asistente de IA para WhatsApp](https://tars.com.ar/articulo-asistente-ia-whatsapp): Agente inteligente 24/7 para atención de clientes, reservas, turnos y pedidos en WhatsApp oficial.
+- [Mantenimiento Web y SEO Local](https://tars.com.ar/articulo-mantenimiento-web): Soporte continuo, alta velocidad en CDN Cloudflare, copias de seguridad y optimización en Google Maps.
+- [Precios y Tarifas](https://tars.com.ar/articulo-cuanto-sale-una-web): Guía de costos transparentes en USD y pesos argentinos con cotización oficial.
+
+## Contacto y Ubicación
+
+- Ubicación: Mendoza, Argentina (cobertura nacional a todo el país).
+- WhatsApp: +54 9 261 240-8064 (https://wa.me/5492612408064)
+- Email: contacto@tars.com.ar
+- Web oficial: https://tars.com.ar/
+
+## Legales
+
+- [Términos y Condiciones](https://tars.com.ar/terminos)
+- [Política de Privacidad](https://tars.com.ar/privacidad)
+- [Modelo de Contrato](https://tars.com.ar/contrato)

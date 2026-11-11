@@ -1,0 +1,43 @@
+# Tars · Soluciones Digitales (Documentación Completa para Modelos de IA)
+
+> Tars es un estudio de desarrollo web y soluciones digitales de Mendoza, Argentina, con alcance nacional. Nos especializamos en sitios web de alta velocidad, diseño de autor sin plantillas genéricas y asistentes de inteligencia artificial integrados a WhatsApp para negocios y empresas.
+
+## 1. Filosofía y Estándares de Ingeniería
+
+- Rendimiento y velocidad: 100/100 en Core Web Vitals (LCP, INP, CLS) gracias a servidores edge en Cloudflare, compresión de vanguardia y código optimizado.
+- Diseño de autor: interfaces personalizadas sin plantillas genéricas de WordPress o constructores visuales pesados.
+- Enfoque comercial y conversión: cada página está estructurada para guiar al usuario a la consulta y la compra inmediata.
+
+## 2. Servicios Principales y Precios
+
+### Landing Page Profesional (USD 149)
+Página única de aterrizaje orientada a conversión directa. Diseñada para campañas de Google Ads y Meta Ads. Incluye estructura persuasiva, llamado a la acción claro, optimización móvil y entrega en 3 a 5 días hábiles.
+Más información: https://tars.com.ar/articulo-landing-profesional
+
+### Sitio Web Completo (USD 349)
+Sitio institucional de 4 a 5 páginas (Inicio, Servicios, Nosotros, Catálogo y Contacto). Incluye optimización SEO técnica completa, formularios y entrega en 7 a 10 días hábiles.
+Más información: https://tars.com.ar/servicios
+
+### Asistente de IA para WhatsApp (Desde USD 39 a USD 149/mes)
+Sistema automatizado con modelos de lenguaje que atiende consultas de clientes las 24 horas del día en el WhatsApp oficial de la empresa. Capacitado con los precios, horarios, políticas y catálogo del negocio. Puede agendar turnos, tomar pedidos y derivar a atención humana cuando corresponda.
+Más información: https://tars.com.ar/articulo-asistente-ia-whatsapp
+
+### Mantenimiento Web y SEO Local (USD 50/mes)
+Servicio continuo de soporte técnico, hosting global con CDN Cloudflare, certificados SSL, copias de seguridad automáticas y optimización de ficha en Google Business Profile.
+Más información: https://tars.com.ar/articulo-mantenimiento-web
+
+## 3. Preguntas Frecuentes
+
+- ¿Cuánto tarda un proyecto?: Landing page de 3 a 5 días. Sitio completo de 7 a 10 días.
+- ¿Qué necesita el cliente?: Fotos, precios y descripción de servicios. Tars asesora y asiste en la redacción de textos si es necesario.
+- Moneda y formas de pago: Tarifas transparentes en USD o su equivalente en ARS (pesos argentinos) según cotización oficial del día, transferencias bancarias y cobros online.
+
+## 4. Contacto y Enlaces
+
+- WhatsApp: +54 9 261 240-8064 (https://wa.me/5492612408064)
+- Email: contacto@tars.com.ar
+- Web oficial: https://tars.com.ar/
+- Instagram: https://www.instagram.com/tars_web/
+- Facebook: https://www.facebook.com/tarsweb
+- Términos: https://tars.com.ar/terminos
+- Privacidad: https://tars.com.ar/privacidad

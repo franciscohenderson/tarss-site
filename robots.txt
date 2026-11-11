@@ -7,5 +7,6 @@ Disallow: /404.html
 Disallow: /gracias
 Disallow: /gracias.html
 Allow: /
+Content-Signal: search=yes, ai-input=yes, ai-train=no
 
 Sitemap: https://tars.com.ar/sitemap.xml
